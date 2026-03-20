@@ -39,7 +39,12 @@ function HomePage() {
   const [isHovering, setIsHovering] = useState(false);
   const [hasMoved, setHasMoved] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
-
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [service, setService] = useState('Sosyal Medya & Tasarım');
+  const [message, setMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
