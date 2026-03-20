@@ -863,7 +863,6 @@ function HomePage() {
       <Footer />
     </div>
   );
-}
 
   const getCategoryColor = (category: string) => {
     const colors: Record<string, string> = {
