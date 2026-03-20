@@ -1738,7 +1738,10 @@ function HomePage() {
 function App() {
   const navigate = useNavigate();
 
-  return (
+return (
+  <>
+    <ScrollToTop />
+
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/hizmet/sosyal-medya-tasarim" element={<SosyalMedyaTasarim onBack={() => navigate('/')} />} />
@@ -1748,6 +1751,7 @@ function App() {
       <Route path="/blog/:slug" element={<BlogDetail />} />
 
       <Route path="/admin/login" element={<AdminLogin />} />
+
       <Route
         path="/admin"
         element={
@@ -1765,8 +1769,8 @@ function App() {
         <Route path="pricing" element={<AdminPricing />} />
       </Route>
     </Routes>
-  );
-}
+  </>
+);
 
 export default App;
 
