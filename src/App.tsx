@@ -865,28 +865,6 @@ function HomePage() {
   );
 }
 
-function HomePage() {
-  const navigate = useNavigate();
-  const [activeAccordion, setActiveAccordion] = useState<number | null>(null);
-  const { blogs, loading } = useBlogs();
-  const { content, loading: contentLoading } = useContent('homepage');
-  const { services: dbServices, loading: servicesLoading } = useServiceCards();
-  const { packages: dbPackages, loading: packagesLoading } = usePricingCards();
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [startY, setStartY] = useState(0);
-  const [scrollLeftPos, setScrollLeftPos] = useState(0);
-  const [isHovering, setIsHovering] = useState(false);
-  const [hasMoved, setHasMoved] = useState(false);
-  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
-
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   const getCategoryColor = (category: string) => {
     const colors: Record<string, string> = {
       'Sosyal Medya': 'bg-pink-100 text-pink-700 border-pink-300',
