@@ -895,8 +895,8 @@ function App() {
         <Route path="services" element={<AdminServices />} />
         <Route path="pricing" element={<AdminPricing />} />
       </Route>
-    </Routes>
-  );
+</Routes>
+</>
+);
 }
-
 export default App;
