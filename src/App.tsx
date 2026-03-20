@@ -1710,40 +1710,38 @@ function HomePage() {
 }
 
 function App() {
-  const navigate = useNavigate();
+  return (
+    <>
+      <ScrollToTop />
 
-return (
-  <>
-    <ScrollToTop />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/hizmet/sosyal-medya-tasarim" element={<SosyalMedyaTasarim />} />
+        <Route path="/hizmet/web-tasarim" element={<WebTasarim />} />
+        <Route path="/hizmet/dijital-pazarlama" element={<DijitalPazarlama />} />
+        <Route path="/hizmet/seo-analitik" element={<SeoAnalitik />} />
+        <Route path="/blog/:slug" element={<BlogDetail />} />
 
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/hizmet/sosyal-medya-tasarim" element={<SosyalMedyaTasarim onBack={() => navigate('/')} />} />
-      <Route path="/hizmet/web-tasarim" element={<WebTasarim onBack={() => navigate('/')} />} />
-      <Route path="/hizmet/dijital-pazarlama" element={<DijitalPazarlama onBack={() => navigate('/')} />} />
-      <Route path="/hizmet/seo-analitik" element={<SeoAnalitik onBack={() => navigate('/')} />} />
-      <Route path="/blog/:slug" element={<BlogDetail />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
 
-      <Route path="/admin/login" element={<AdminLogin />} />
-
-      <Route
-        path="/admin"
-        element={
-          <ProtectedRoute>
-            <AdminLayout />
-          </ProtectedRoute>
-        }
-      >
-        <Route path="dashboard" element={<AdminDashboard />} />
-        <Route path="blogs" element={<AdminBlogs />} />
-        <Route path="blogs/new" element={<AdminBlogForm />} />
-        <Route path="blogs/edit/:id" element={<AdminBlogForm />} />
-        <Route path="content" element={<AdminContent />} />
-        <Route path="services" element={<AdminServices />} />
-        <Route path="pricing" element={<AdminPricing />} />
-      </Route>
-    </Routes>
-  </>
-);
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <AdminLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="blogs" element={<AdminBlogs />} />
+          <Route path="blogs/new" element={<AdminBlogForm />} />
+          <Route path="blogs/edit/:id" element={<AdminBlogForm />} />
+          <Route path="content" element={<AdminContent />} />
+          <Route path="services" element={<AdminServices />} />
+          <Route path="pricing" element={<AdminPricing />} />
+        </Route>
+      </Routes>
+    </>
+  );
 }
 export default App;
