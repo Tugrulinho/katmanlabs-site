@@ -47,7 +47,7 @@ function Footer() {
             <h4 className="text-accent-light font-semibold mb-4">İletişim</h4>
             <ul className="space-y-2">
               <li className="text-gray-300">info@katmanlabs.com</li>
-              <li className="text-gray-300">+90 500 123 45 67</li>
+              <li className="text-gray-300">+90 542 844 55 70</li>
             </ul>
           </div>
         </div>
