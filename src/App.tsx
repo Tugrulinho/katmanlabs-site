@@ -868,32 +868,7 @@ function HomePage() {
 function App() {
   const navigate = useNavigate();
 
-import { useState, useEffect, useRef } from 'react';
-import { Routes, Route, useNavigate, Link } from 'react-router-dom';
-import { ArrowRight, Check, Layers, Globe, TrendingUp, Users, BarChart3, Target, Zap, Clock, Award, Star, Mail, Phone, MessageCircle, ChevronRight, ChevronDown, BookOpen, Plus, Minus, HelpCircle, Instagram, Facebook, Linkedin, Youtube, Search } from 'lucide-react';
-import { useBlogs } from './hooks/useBlogs';
-import { useContent } from './hooks/useContent';
-import { useServiceCards } from './hooks/useServiceCards';
-import { usePricingCards } from './hooks/usePricingCards';
-import StatCard from './components/StatCard';
-import RotatingText from './components/RotatingText';
-import Navbar from './components/Navbar';
-import SplineScene from './components/SplineScene';
-import Footer from './components/Footer';
-import WebTasarim from './pages/WebTasarim';
-import DijitalPazarlama from './pages/DijitalPazarlama';
-import SeoAnalitik from './pages/SeoAnalitik';
-import SosyalMedyaTasarim from './pages/SosyalMedyaTasarim';
-import BlogDetail from './pages/BlogDetail';
-import ProtectedRoute from './components/ProtectedRoute';
-import AdminLayout from './components/AdminLayout';
-import AdminLogin from './pages/AdminLogin';
-import AdminDashboard from './pages/AdminDashboard';
-import AdminBlogs from './pages/AdminBlogs';
-import AdminBlogForm from './pages/AdminBlogForm';
-import AdminContent from './pages/AdminContent';
-import AdminServices from './pages/AdminServices';
-import AdminPricing from './pages/AdminPricing';
+
 
 function HomePage() {
   const navigate = useNavigate();
