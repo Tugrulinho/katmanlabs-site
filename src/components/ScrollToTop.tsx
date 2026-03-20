@@ -5,12 +5,9 @@ export default function ScrollToTop() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    console.log("scroll çalıştı");
-
     window.scrollTo(0, 0);
-
-    const el = document.querySelector('*');
-    console.log("ilk element:", el);
+    document.documentElement.scrollTo(0, 0);
+    document.body.scrollTo(0, 0);
   }, [pathname]);
 
   return null;
