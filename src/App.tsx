@@ -24,7 +24,7 @@ import AdminBlogForm from './pages/AdminBlogForm';
 import AdminContent from './pages/AdminContent';
 import AdminServices from './pages/AdminServices';
 import AdminPricing from './pages/AdminPricing';
-
+import ScrollToTop from './components/ScrollToTop';
 function HomePage() {
   const navigate = useNavigate();
   const [activeAccordion, setActiveAccordion] = useState<number | null>(null);
@@ -868,6 +868,8 @@ function App() {
   const navigate = useNavigate();
 
   return (
+  <>
+    <ScrollToTop />
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/hizmet/sosyal-medya-tasarim" element={<SosyalMedyaTasarim onBack={() => navigate('/')} />} />
