@@ -1680,8 +1680,6 @@ function HomePage() {
       <Footer />
     </div>
   );
-}
-
 function App() {
   return (
     <>
