@@ -1,0 +1,139 @@
+import { useState } from 'react';
+import { Calendar, X, Clock } from 'lucide-react';
+
+interface MeetingSchedulerProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    date: '',
+    time: ''
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log('Meeting scheduled:', formData);
+    alert('Toplantı talebiniz alındı! En kısa sürede sizinle iletişime geçeceğiz.');
+    onClose();
+    setFormData({ firstName: '', lastName: '', email: '', date: '', time: '' });
+  };
+
+  const timeSlots = [
+    '09:00', '10:00', '11:00', '12:00', '13:00',
+    '14:00', '15:00', '16:00', '17:00', '18:00'
+  ];
+
+  if (!isOpen) return null;
+
+  return (
+    <>
+      <div
+        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 transition-opacity"
+        onClick={onClose}
+      />
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
+        <div
+          className="bg-white rounded-2xl shadow-2xl max-w-md w-full pointer-events-auto transform transition-all scale-100 animate-scale-up"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="bg-gradient-to-r from-pink-600 to-orange-600 p-6 rounded-t-2xl relative">
+            <button
+              onClick={onClose}
+              className="absolute top-4 right-4 w-8 h-8 bg-white/20 hover:bg-white/30 rounded-lg flex items-center justify-center transition-colors"
+            >
+              <X className="w-5 h-5 text-white" />
+            </button>
+            <h3 className="text-2xl font-bold text-white mb-2">Toplantı Planla</h3>
+            <p className="text-white/90 text-sm">Size uygun bir tarih ve saat seçin</p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="p-6 space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Ad</label>
+                <input
+                  type="text"
+                  required
+                  value={formData.firstName}
+                  onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                  className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:border-pink-500 focus:outline-none transition-colors"
+                  placeholder="Adınız"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Soyad</label>
+                <input
+                  type="text"
+                  required
+                  value={formData.lastName}
+                  onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                  className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:border-pink-500 focus:outline-none transition-colors"
+                  placeholder="Soyadınız"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Email</label>
+              <input
+                type="email"
+                required
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:border-pink-500 focus:outline-none transition-colors"
+                placeholder="email@ornek.com"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Tarih</label>
+              <div className="relative">
+                <input
+                  type="date"
+                  required
+                  value={formData.date}
+                  onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                  min={new Date().toISOString().split('T')[0]}
+                  className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:border-pink-500 focus:outline-none transition-colors"
+                />
+                <Calendar className="absolute right-3 top-3 w-5 h-5 text-gray-400 pointer-events-none" />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Saat</label>
+              <div className="relative">
+                <select
+                  required
+                  value={formData.time}
+                  onChange={(e) => setFormData({ ...formData, time: e.target.value })}
+                  className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:border-pink-500 focus:outline-none transition-colors appearance-none"
+                >
+                  <option value="">Saat seçin</option>
+                  {timeSlots.map((time) => (
+                    <option key={time} value={time}>{time}</option>
+                  ))}
+                </select>
+                <Clock className="absolute right-3 top-3 w-5 h-5 text-gray-400 pointer-events-none" />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              className="w-full py-3 bg-gradient-to-r from-pink-600 to-orange-600 text-white rounded-lg font-semibold hover:scale-105 transition-transform shadow-lg"
+            >
+              Toplantı Talebi Gönder
+            </button>
+          </form>
+        </div>
+      </div>
+    </>
+  );
+}
+
+export default MeetingScheduler;
