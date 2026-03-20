@@ -865,11 +865,6 @@ function HomePage() {
   );
 }
 
-function App() {
-  const navigate = useNavigate();
-
-
-
 function HomePage() {
   const navigate = useNavigate();
   const [activeAccordion, setActiveAccordion] = useState<number | null>(null);
