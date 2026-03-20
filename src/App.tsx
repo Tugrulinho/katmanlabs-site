@@ -51,7 +51,50 @@ function HomePage() {
       element.scrollIntoView({ behavior: 'smooth' });
     }
   };
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
 
+  if (!name || !email || !message) {
+    alert('Lütfen ad, email ve mesaj alanlarını doldurun.');
+    return;
+  }
+
+  try {
+    setIsSubmitting(true);
+
+    const res = await fetch('/api/contact', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name,
+        email,
+        phone,
+        service,
+        message,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok && data.success) {
+      alert('Mesajınız gönderildi.');
+      setName('');
+      setEmail('');
+      setPhone('');
+      setService('Sosyal Medya & Tasarım');
+      setMessage('');
+    } else {
+      alert(data.error || 'Mesaj gönderilemedi.');
+    }
+  } catch (error) {
+    console.error('Form gönderim hatası:', error);
+    alert('Bir hata oluştu. Lütfen tekrar deneyin.');
+  } finally {
+    setIsSubmitting(false);
+  }
+};
   const getCategoryColor = (category: string) => {
     const colors: Record<string, string> = {
       'Sosyal Medya': 'bg-pink-100 text-pink-700 border-pink-300',
