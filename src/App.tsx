@@ -868,7 +868,6 @@ function HomePage() {
 function App() {
   const navigate = useNavigate();
 
-  import ScrollToTop from './components/ScrollToTop';
 import { useState, useEffect, useRef } from 'react';
 import { Routes, Route, useNavigate, Link } from 'react-router-dom';
 import { ArrowRight, Check, Layers, Globe, TrendingUp, Users, BarChart3, Target, Zap, Clock, Award, Star, Mail, Phone, MessageCircle, ChevronRight, ChevronDown, BookOpen, Plus, Minus, HelpCircle, Instagram, Facebook, Linkedin, Youtube, Search } from 'lucide-react';
