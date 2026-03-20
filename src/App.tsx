@@ -792,7 +792,7 @@ function HomePage() {
                   </div>
                   <div>
                     <div className="font-semibold text-primary-dark mb-1">Telefon</div>
-                    <a href={`tel:${content.contact_phone || '+905001234567'}`} className="text-primary hover:text-secondary transition-colors">{content.contact_phone || '+90 500 123 45 67'}</a>
+                    <a href={`tel:${content.contact_phone || '+905428445570'}`} className="text-primary hover:text-secondary transition-colors">{content.contact_phone || '+90 542 844 55 70'}</a>
                   </div>
                 </div>
 
@@ -802,7 +802,7 @@ function HomePage() {
                   </div>
                   <div>
                     <div className="font-semibold text-primary-dark mb-1">WhatsApp</div>
-                    <a href={`https://wa.me/${content.contact_whatsapp || '905001234567'}`} target="_blank" rel="noopener noreferrer" className="text-primary hover:text-secondary transition-colors">Hemen Mesaj Gönder</a>
+                    <a href={`https://wa.me/${content.contact_whatsapp || '905428445570'}`} target="_blank" rel="noopener noreferrer" className="text-primary hover:text-secondary transition-colors">Hemen Mesaj Gönder</a>
                   </div>
                 </div>
               </div>
@@ -810,7 +810,7 @@ function HomePage() {
               <div className="mt-8 p-6 bg-gradient-cta rounded-xl text-white">
                 <h3 className="font-bold text-xl mb-2">{content.contact_consultation_title || 'Ücretsiz Danışmanlık'}</h3>
                 <p className="mb-4">{content.contact_consultation_text || 'İlk görüşme tamamen ücretsiz. Projeniz hakkında konuşalım ve size özel bir yol haritası çıkaralım.'}</p>
-                <a href={`https://wa.me/${content.contact_whatsapp || '905001234567'}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3 bg-white text-primary rounded-lg font-semibold hover:scale-105 transition-transform">
+                <a href={`https://wa.me/${content.contact_whatsapp || '905428445570'}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3 bg-white text-primary rounded-lg font-semibold hover:scale-105 transition-transform">
                   <MessageCircle className="w-5 h-5" />
                   {content.contact_consultation_button || 'WhatsApp ile İletişime Geç'}
                 </a>
