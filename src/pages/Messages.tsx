@@ -42,6 +42,7 @@ export default function Messages() {
   const res = await fetch('/api/messages');
   const data = await res.json();
   setMessages(data);
+   window.dispatchEvent(new Event('focus'));
 }}
             style={{
               border: '1px solid #ddd',
