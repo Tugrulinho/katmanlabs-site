@@ -16,6 +16,7 @@ import {
 export default function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [messages, setMessages] = useState<any[]>([]);
+  const unreadCount = messages.filter((msg) => msg.is_read === false).length;
   const navigate = useNavigate();
   const location = useLocation();
   useEffect(() => {
