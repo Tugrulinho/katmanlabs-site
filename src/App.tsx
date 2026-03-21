@@ -826,7 +826,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                 {content.contact_description || 'Dijital dönüşümünüze bugün başlayın. Size özel bir strateji geliştirmek için heyecanlıyız.'}
               </p>
 
-              <form className="space-y-6" onSubmit={handleSubmit}>
+             <div className="space-y-6">
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
                     <Mail className="w-6 h-6 text-primary" />
@@ -856,7 +856,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                     <a href={`https://wa.me/${content.contact_whatsapp || '905428445570'}`} target="_blank" rel="noopener noreferrer" className="text-primary hover:text-secondary transition-colors">Hemen Mesaj Gönder</a>
                   </div>
                 </div>
-              </form>
+             </div>
 
               <div className="mt-8 p-6 bg-gradient-cta rounded-xl text-white">
                 <h3 className="font-bold text-xl mb-2">{content.contact_consultation_title || 'Ücretsiz Danışmanlık'}</h3>
@@ -869,7 +869,7 @@ const handleSubmit = async (e: React.FormEvent) => {
             </div>
 
             <div className="bg-gray-50 p-8 rounded-2xl">
-              <form className="space-y-6">
+             <form className="space-y-6" onSubmit={handleSubmit}>
                 <div>
                   <label className="block text-sm font-semibold text-primary mb-2">İsim Soyisim</label>
                   <input
