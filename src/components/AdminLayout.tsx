@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate, Outlet, useLocation } from 'react-router-dom';
 import { signOut } from '../lib/auth';
 import {
@@ -15,8 +15,14 @@ import {
 
 export default function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [messages, setMessages] = useState<any[]>([]);
   const navigate = useNavigate();
   const location = useLocation();
+  useEffect(() => {
+  fetch('/api/messages')
+    .then(res => res.json())
+    .then(data => setMessages(data));
+}, []);
 
   const handleSignOut = async () => {
     try {
@@ -107,7 +113,27 @@ export default function AdminLayout() {
 
       <main className="pt-16 lg:pl-64">
         <div className="p-4 sm:p-6 lg:p-8">
+          <>
           <Outlet />
+
+<div style={{ padding: '20px' }}>
+  <h2>Mesajlar</h2>
+
+ {messages.length === 0 ? (
+  <p>Henüz mesaj yok</p>
+) : (
+  messages.map((msg) => (
+    <div key={msg.id} style={{ border: '1px solid #ccc', marginBottom: '10px', padding: '10px' }}>
+      <p><b>İsim:</b> {msg.name}</p>
+      <p><b>Email:</b> {msg.email}</p>
+      <p><b>Telefon:</b> {msg.phone}</p>
+      <p><b>Hizmet:</b> {msg.service}</p>
+      <p><b>Mesaj:</b> {msg.message}</p>
+    </div>
+  ))
+)}
+</div>
+            </>
         </div>
       </main>
     </div>
