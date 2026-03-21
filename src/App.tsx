@@ -53,6 +53,7 @@ function HomePage() {
   };
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
+  console.log('FORM SUBMIT ÇALIŞTI');
 
   if (!name || !email || !message) {
     alert('Lütfen ad, email ve mesaj alanlarını doldurun.');
@@ -78,6 +79,8 @@ const handleSubmit = async (e: React.FormEvent) => {
 
     const data = await res.json();
 
+    console.log('API RESPONSE:', data);
+
     if (res.ok && data.success) {
       alert('Mesajınız gönderildi.');
       setName('');
@@ -89,8 +92,8 @@ const handleSubmit = async (e: React.FormEvent) => {
       alert(data.error || 'Mesaj gönderilemedi.');
     }
   } catch (error) {
-    console.error('Form gönderim hatası:', error);
-    alert('Bir hata oluştu. Lütfen tekrar deneyin.');
+    console.error('FORM HATASI:', error);
+    alert('Bir hata oluştu.');
   } finally {
     setIsSubmitting(false);
   }
