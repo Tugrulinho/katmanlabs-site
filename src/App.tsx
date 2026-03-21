@@ -823,7 +823,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                 {content.contact_description || 'Dijital dönüşümünüze bugün başlayın. Size özel bir strateji geliştirmek için heyecanlıyız.'}
               </p>
 
-              <div className="space-y-6">
+              <form className="space-y-6" onSubmit={handleSubmit}>
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
                     <Mail className="w-6 h-6 text-primary" />
@@ -869,22 +869,44 @@ const handleSubmit = async (e: React.FormEvent) => {
               <form className="space-y-6">
                 <div>
                   <label className="block text-sm font-semibold text-primary mb-2">İsim Soyisim</label>
-                  <input type="text" className="w-full px-4 py-3 border-2 border-accent-light/50 rounded-lg focus:border-secondary focus:outline-none transition-colors" placeholder="Adınız" />
+                  <input
+  type="text"
+  value={name}
+  onChange={(e) => setName(e.target.value)}
+  className="w-full px-4 py-3 border-2 border-accent-light/50 rounded-lg focus:border-secondary focus:outline-none transition-colors"
+  placeholder="Adınız"
+/>
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-primary mb-2">Email</label>
-                  <input type="email" className="w-full px-4 py-3 border-2 border-accent-light/50 rounded-lg focus:border-secondary focus:outline-none transition-colors" placeholder="email@ornek.com" />
+                  <input
+  type="email"
+  value={email}
+  onChange={(e) => setEmail(e.target.value)}
+  className="w-full px-4 py-3 border-2 border-accent-light/50 rounded-lg focus:border-secondary focus:outline-none transition-colors"
+  placeholder="email@ornek.com"
+                    />
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-primary mb-2">Telefon</label>
-                  <input type="tel" className="w-full px-4 py-3 border-2 border-accent-light/50 rounded-lg focus:border-secondary focus:outline-none transition-colors" placeholder="+90 500 000 00 00" />
+                  <input
+  type="tel"
+  value={phone}
+  onChange={(e) => setPhone(e.target.value)}
+  className="w-full px-4 py-3 border-2 border-accent-light/50 rounded-lg focus:border-secondary focus:outline-none transition-colors"
+  placeholder="+90 500 000 00 00"
+                  />
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-primary mb-2">Hangi hizmetlerle ilgileniyorsunuz?</label>
-                  <select className="w-full px-4 py-3 border-2 border-accent-light/50 rounded-lg focus:border-secondary focus:outline-none transition-colors">
+                 <select
+  value={service}
+  onChange={(e) => setService(e.target.value)}
+  className="w-full px-4 py-3 border-2 border-accent-light/50 rounded-lg focus:border-secondary focus:outline-none transition-colors"
+>
                     <option>Sosyal Medya & Tasarım</option>
                     <option>Web Tasarım & Geliştirme</option>
                     <option>Dijital Pazarlama</option>
@@ -895,12 +917,23 @@ const handleSubmit = async (e: React.FormEvent) => {
 
                 <div>
                   <label className="block text-sm font-semibold text-primary mb-2">Mesajınız</label>
-                  <textarea rows={4} className="w-full px-4 py-3 border-2 border-accent-light/50 rounded-lg focus:border-secondary focus:outline-none transition-colors" placeholder="Projeniz hakkında bize biraz bilgi verin..."></textarea>
+               <textarea
+  value={message}
+  onChange={(e) => setMessage(e.target.value)}
+  rows={4}
+  className="w-full px-4 py-3 border-2 border-accent-light/50 rounded-lg focus:border-secondary focus:outline-none transition-colors"
+  placeholder="Projeniz hakkında bize biraz bilgi verin..."
+></textarea>
                 </div>
 
-                <button type="submit" className="w-full py-4 bg-gradient-cta text-white rounded-lg font-semibold hover:scale-105 transition-transform shadow-lg flex items-center justify-center gap-2">
-                  Gönder <ArrowRight className="w-5 h-5" />
-                </button>
+              <button
+  type="submit"
+  disabled={isSubmitting}
+  className="w-full py-4 bg-gradient-cta text-white rounded-lg font-semibold hover:scale-105 transition-transform shadow-lg flex items-center justify-center gap-2 disabled:opacity-50"
+>
+  {isSubmitting ? 'Gönderiliyor...' : 'Gönder'}
+  <ArrowRight className="w-5 h-5" />
+</button>
               </form>
             </div>
           </div>
