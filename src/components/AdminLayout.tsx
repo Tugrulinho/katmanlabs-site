@@ -40,6 +40,7 @@ export default function AdminLayout() {
     { path: '/admin/content', icon: Settings, label: 'Site Content' },
     { path: '/admin/services', icon: Grid3x3, label: 'Service Cards' },
     { path: '/admin/pricing', icon: Package, label: 'Pricing Cards' },
+    { path: '/admin/messages', icon: FileText, label: 'Mesajlar' },
   ];
 
   return (
