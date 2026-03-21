@@ -64,6 +64,10 @@ useEffect(() => {
 }, []);
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
+  if (!cfToken) {
+  alert('Doğrulama başarısız');
+  return;
+}
   console.log('FORM SUBMIT ÇALIŞTI');
 
   if (!name || !email || !message) {
