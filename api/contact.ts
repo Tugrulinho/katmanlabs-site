@@ -50,7 +50,25 @@ const verifyRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/si
 const verifyData = await verifyRes.json();
 
 if (!verifyData.success) {
+  
   return res.status(400).json({ error: 'Bot doğrulama başarısız' });
+}
+    const { error: dbError } = await supabase
+  .from('contact_messages')
+  .insert([
+    {
+      name,
+      email,
+      phone,
+      service,
+      message,
+      is_read: false,
+      status: 'new',
+    },
+  ]);
+
+if (dbError) {
+  console.error('DB ERROR:', dbError);
 }
 if (website) {
   return res.status(400).json({ error: 'Spam tespit edildi' });
