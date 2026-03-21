@@ -1,3 +1,4 @@
+const [selectedMessage, setSelectedMessage] = useState<any | null>(null);
 import { useEffect, useState } from 'react';
 
 export default function Messages() {
@@ -26,6 +27,7 @@ useEffect(() => {
         messages.map((msg) => (
           <div
   key={msg.id}
+  onClick={() => setSelectedMessage(msg)}
   style={{
     border: '1px solid #ddd',
     marginBottom: '10px',
