@@ -19,10 +19,20 @@ export default function AdminLayout() {
   const unreadCount = messages.filter((msg) => msg.is_read === false).length;
   const navigate = useNavigate();
   const location = useLocation();
-  useEffect(() => {
-  fetch('/api/messages')
-    .then(res => res.json())
-    .then(data => setMessages(data));
+ useEffect(() => {
+  const loadMessages = () => {
+    fetch('/api/messages')
+      .then((res) => res.json())
+      .then((data) => setMessages(data));
+  };
+
+  loadMessages();
+
+  window.addEventListener('focus', loadMessages);
+
+  return () => {
+    window.removeEventListener('focus', loadMessages);
+  };
 }, []);
 
   const handleSignOut = async () => {
