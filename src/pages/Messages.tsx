@@ -24,7 +24,17 @@ useEffect(() => {
         <p>Henüz mesaj yok</p>
       ) : (
         messages.map((msg) => (
-          <div key={msg.id} style={{ border: '1px solid #ccc', marginBottom: '10px', padding: '10px' }}>
+          <div
+  key={msg.id}
+  style={{
+    border: '1px solid #ddd',
+    marginBottom: '10px',
+    padding: '12px',
+    borderRadius: '8px',
+    backgroundColor: msg.is_read ? '#fff' : '#eef6ff',
+    fontWeight: msg.is_read ? 'normal' : '600'
+  }}
+>
             <p><b>İsim:</b> {msg.name}</p>
             <p><b>Email:</b> {msg.email}</p>
             <p><b>Telefon:</b> {msg.phone}</p>
