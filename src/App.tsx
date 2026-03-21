@@ -44,6 +44,7 @@ function HomePage() {
   const [phone, setPhone] = useState('');
   const [service, setService] = useState('Sosyal Medya & Tasarım');
   const [message, setMessage] = useState('');
+  const [website, setWebsite] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
