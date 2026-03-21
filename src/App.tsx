@@ -1010,6 +1010,7 @@ function App() {
         <Route path="content" element={<AdminContent />} />
         <Route path="services" element={<AdminServices />} />
         <Route path="pricing" element={<AdminPricing />} />
+        <Route path="messages" element={<Messages />} />
       </Route>
 </Routes>
 </>
