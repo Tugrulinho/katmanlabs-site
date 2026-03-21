@@ -1,8 +1,28 @@
 import { Resend } from 'resend';
+const rateLimitMap = new Map();
 
+const RATE_LIMIT = 3;
+const WINDOW_MS = 30 * 1000;
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export default async function handler(req: any, res: any) {
+  const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+
+const now = Date.now();
+const userData = rateLimitMap.get(ip) || { count: 0, last: now };
+
+if (now - userData.last > WINDOW_MS) {
+  userData.count = 1;
+  userData.last = now;
+} else {
+  userData.count += 1;
+}
+
+rateLimitMap.set(ip, userData);
+
+if (userData.count > RATE_LIMIT) {
+  return res.status(429).json({ error: 'Çok fazla istek attınız, biraz bekleyin.' });
+}
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
