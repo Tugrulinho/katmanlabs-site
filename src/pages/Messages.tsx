@@ -7,9 +7,6 @@ export default function Messages() {
   useEffect(() => {
     const load = async () => {
       // önce hepsini read yap (geçici çözüm)
-      await fetch('/api/messages', {
-        method: 'POST',
-      });
 
       // sonra verileri çek
       const res = await fetch('/api/messages');
