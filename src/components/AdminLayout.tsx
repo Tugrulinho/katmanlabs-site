@@ -86,21 +86,26 @@ export default function AdminLayout() {
             const isActive = location.pathname === item.path;
 
             return (
-              <Link
-                key={item.path}
-                to={item.path}
-                onClick={() => setSidebarOpen(false)}
-                className={`
-                  flex items-center gap-3 px-4 py-3 rounded-lg transition-colors font-medium
-                  ${isActive
-                    ? 'bg-blue-50 text-blue-700'
-                    : 'text-slate-700 hover:bg-slate-100'
-                  }
-                `}
-              >
-                <Icon className="w-5 h-5" />
-                {item.label}
-              </Link>
+  <Link
+  key={item.path}
+  to={item.path}
+  onClick={() => setSidebarOpen(false)}
+  className={`
+    flex items-center justify-between px-4 py-3 rounded-lg transition-colors font-medium
+    ${isActive ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-slate-100'}
+  `}
+>
+  <div className="flex items-center gap-3">
+    <Icon className="w-5 h-5" />
+    <span>{item.label}</span>
+  </div>
+
+  {item.path === '/admin/messages' && unreadCount > 0 && (
+    <span className="bg-red-500 text-white text-xs font-semibold min-w-[20px] h-5 flex items-center justify-center rounded-full px-2">
+      {unreadCount}
+    </span>
+  )}
+</Link>
             );
           })}
         </nav>
