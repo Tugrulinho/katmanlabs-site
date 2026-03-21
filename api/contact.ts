@@ -1,10 +1,14 @@
+import { createClient } from '@supabase/supabase-js';
 import { Resend } from 'resend';
 const rateLimitMap = new Map();
 
 const RATE_LIMIT = 3;
 const WINDOW_MS = 30 * 1000;
 const resend = new Resend(process.env.RESEND_API_KEY);
-
+const supabase = createClient(
+  process.env.SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
 export default async function handler(req: any, res: any) {
   const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
