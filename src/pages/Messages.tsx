@@ -3,15 +3,18 @@ import { useEffect, useState } from 'react';
 export default function Messages() {
   const [messages, setMessages] = useState<any[]>([]);
 
-  useEffect(() => {
-    fetch('/api/messages')
-      .then((res) => res.json())
-      .then((data) => setMessages(data));
-  }, []);
 useEffect(() => {
-  fetch('/api/messages/read', {
-    method: 'POST',
-  });
+  const load = async () => {
+    await fetch('/api/messages', {
+      method: 'POST',
+    });
+
+    const res = await fetch('/api/messages');
+    const data = await res.json();
+    setMessages(data);
+  };
+
+  load();
 }, []);
   return (
     <div style={{ padding: '20px' }}>
