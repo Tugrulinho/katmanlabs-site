@@ -930,7 +930,16 @@ const handleSubmit = async (e: React.FormEvent) => {
   placeholder="Projeniz hakkında bize biraz bilgi verin..."
 ></textarea>
                 </div>
-
+<div style={{ display: 'none' }}>
+  <label>Website</label>
+  <input
+    type="text"
+    value={website}
+    onChange={(e) => setWebsite(e.target.value)}
+    autoComplete="off"
+    tabIndex={-1}
+  />
+</div>
               <button
   type="submit"
   disabled={isSubmitting}
