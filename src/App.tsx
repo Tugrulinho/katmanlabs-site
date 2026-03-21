@@ -53,6 +53,15 @@ function HomePage() {
       element.scrollIntoView({ behavior: 'smooth' });
     }
   };
+useEffect(() => {
+  window.onTurnstileSuccess = (token) => {
+    setCfToken(token);
+     };
+  const script = document.createElement('script');
+  script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+  script.async = true;
+  document.body.appendChild(script);
+}, []);
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
   console.log('FORM SUBMIT ÇALIŞTI');
