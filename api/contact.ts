@@ -8,8 +8,10 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
-    const { name, email, phone, service, message } = req.body;
-
+    const { name, email, phone, service, message, website } = req.body;
+if (website) {
+  return res.status(400).json({ error: 'Spam tespit edildi' });
+}
     if (!name || !email || !message) {
       return res.status(400).json({ error: 'Eksik alan var' });
     }
