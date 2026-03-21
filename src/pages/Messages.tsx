@@ -8,7 +8,11 @@ export default function Messages() {
       .then((res) => res.json())
       .then((data) => setMessages(data));
   }, []);
-
+useEffect(() => {
+  fetch('/api/messages/read', {
+    method: 'POST',
+  });
+}, []);
   return (
     <div style={{ padding: '20px' }}>
       <h2>Mesajlar</h2>
