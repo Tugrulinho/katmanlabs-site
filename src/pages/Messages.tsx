@@ -30,7 +30,7 @@ export default function Messages() {
  onClick={async () => {
   setSelectedMessage(msg);
 
-  await fetch('/api/messages/read-one', {
+  await fetch('/api/read-one', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
