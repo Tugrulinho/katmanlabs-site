@@ -28,7 +28,26 @@ if (userData.count > RATE_LIMIT) {
   }
 
   try {
-    const { name, email, phone, service, message, website } = req.body;
+    const { name, email, phone, service, message, website, cfToken } = req.body;
+    if (!cfToken) {
+  return res.status(400).json({ error: 'Doğrulama yok' });
+      }
+const verifyRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    secret: process.env.TURNSTILE_SECRET_KEY,
+    response: cfToken,
+  }),
+});
+
+const verifyData = await verifyRes.json();
+
+if (!verifyData.success) {
+  return res.status(400).json({ error: 'Bot doğrulama başarısız' });
+}
 if (website) {
   return res.status(400).json({ error: 'Spam tespit edildi' });
 }
