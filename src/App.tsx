@@ -856,7 +856,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                     <a href={`https://wa.me/${content.contact_whatsapp || '905428445570'}`} target="_blank" rel="noopener noreferrer" className="text-primary hover:text-secondary transition-colors">Hemen Mesaj Gönder</a>
                   </div>
                 </div>
-              </div>
+              </form>
 
               <div className="mt-8 p-6 bg-gradient-cta rounded-xl text-white">
                 <h3 className="font-bold text-xl mb-2">{content.contact_consultation_title || 'Ücretsiz Danışmanlık'}</h3>
