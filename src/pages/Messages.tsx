@@ -27,7 +27,22 @@ export default function Messages() {
         messages.map((msg) => (
           <div
             key={msg.id}
-            onClick={() => setSelectedMessage(msg)}
+ onClick={async () => {
+  setSelectedMessage(msg);
+
+  await fetch('/api/messages/read-one', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ id: msg.id })
+  });
+
+  // tekrar çek (UI güncellensin)
+  const res = await fetch('/api/messages');
+  const data = await res.json();
+  setMessages(data);
+}}
             style={{
               border: '1px solid #ddd',
               marginBottom: '10px',
