@@ -67,5 +67,36 @@ console.log('RESEND ERROR:', error);
 if (error) {
   return res.status(500).json({ error: error.message || 'Mail gönderilemedi' });
 }
+await resend.emails.send({
+  from: 'KatmanLabs <info@katmanlabs.com>',
+  to: email,
+  subject: 'Mesajınız bize ulaştı',
+  html: `
+    <div style="font-family: Arial, sans-serif; color: #111827; line-height: 1.6; padding: 24px; background: #f9fafb;">
+      <div style="max-width: 640px; margin: 0 auto; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden;">
+        <div style="background: linear-gradient(135deg, #1e3a8a, #7c3aed); padding: 20px 24px;">
+          <h2 style="margin: 0; color: #ffffff; font-size: 22px;">Mesajınız Alındı</h2>
+          <p style="margin: 8px 0 0; color: #e9d5ff; font-size: 14px;">KatmanLabs ile iletişime geçtiğiniz için teşekkür ederiz.</p>
+        </div>
 
+        <div style="padding: 24px;">
+          <p style="margin-top: 0;">Merhaba ${name},</p>
+
+          <p>Mesajınız bize ulaştı. En kısa sürede dönüş sağlayacağız.</p>
+
+          <div style="margin: 24px 0; padding: 16px; background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 10px;">
+            <div style="font-weight: 700; margin-bottom: 8px;">Gönderdiğiniz bilgiler</div>
+            <p style="margin: 6px 0;"><strong>İsim:</strong> ${name}</p>
+            <p style="margin: 6px 0;"><strong>Email:</strong> ${email}</p>
+            <p style="margin: 6px 0;"><strong>Telefon:</strong> ${phone || '-'}</p>
+            <p style="margin: 6px 0;"><strong>Hizmet:</strong> ${service || '-'}</p>
+            <p style="margin: 6px 0;"><strong>Mesaj:</strong><br/>${message}</p>
+          </div>
+
+          <p style="margin-bottom: 0;">KatmanLabs</p>
+        </div>
+      </div>
+    </div>
+  `,
+});
 return res.status(200).json({ success: true, id: data?.id });
