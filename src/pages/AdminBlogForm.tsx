@@ -79,7 +79,7 @@ export default function AdminBlogForm() {
       const { data, error } = await supabase
         .from('blogs')
         .update(blogData)
-        .eq('id', id)
+        .eq('id', '6cd4ee89-ad77-4e41-be08-4de22cd242f1')
         .select();
 
       console.log('UPDATE RESULT:', data, error, id);
