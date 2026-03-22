@@ -58,7 +58,7 @@ function DijitalPazarlama({ onBack }: DijitalPazarlamaProps) {
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
-      <div className="bg-gradient-to-br from-secondary via-secondary/90 to-zinc-900 text-white py-20 pt-32 min-h-[500px] flex items-center">
+      <div className="bg-[url('/images/dijital-pazarlama-hero-mobile.png')] md:bg-[url('/images/dijital-pazarlama-hero-desktop.png')] bg-cover bg-center text-white py-20 pt-32 min-h-[500px] flex items-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <button
             onClick={onBack}
