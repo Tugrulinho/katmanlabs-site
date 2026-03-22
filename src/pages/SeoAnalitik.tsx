@@ -63,7 +63,7 @@ function SeoAnalitik({ onBack }: SeoAnalitikProps) {
     <div className="min-h-screen bg-white">
       <Navbar />
 
-      <div className="bg-gradient-to-br from-accent via-accent/90 to-zinc-900 text-white py-20 pt-32 min-h-[500px] flex items-center">
+      <div className="bg-[url('/images/seo-analitik-hero-mobile.png')] md:bg-[url('/images/seo-analitik-hero-desktop.png')] bg-cover bg-center text-white py-20 pt-32 min-h-[500px] flex items-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <button
             onClick={onBack}
