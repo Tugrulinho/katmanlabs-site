@@ -99,6 +99,7 @@ try {
 } finally {
   setLoading(false);
 }
+};
   const categories = [
     'Sosyal Medya Yönetimi',
     'Web Tasarim',
