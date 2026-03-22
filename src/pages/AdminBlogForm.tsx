@@ -73,19 +73,22 @@ export default function AdminBlogForm() {
         published_at: publish ? new Date().toISOString() : formData.published_at,
       };
 
-   if (isEdit) {
+  if (isEdit) {
+  console.log('ID:', id);
+
   const { data, error } = await supabase
     .from('blogs')
     .update(blogData)
     .eq('id', id)
     .select();
 
-  console.log('UPDATE RESULT:', data, error, id, blogData);
+  console.log('UPDATE RESULT:', data, error, id);
 
   if (error) {
     console.log('UPDATE ERROR:', error);
     throw error;
   }
+}
 
 } else {
   const { error } = await supabase
