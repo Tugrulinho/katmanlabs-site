@@ -58,7 +58,7 @@ function WebTasarim({ onBack }: WebTasarimProps) {
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
-     bg-[url('/images/web-tasarim-hero-mobile.png')] md:bg-[url('/images/web-tasarim-hero-desktop.png')] bg-cover bg-center
+     <div className="bg-[url('/images/web-tasarim-hero-mobile.png')] md:bg-[url('/images/web-tasarim-hero-desktop.png')] bg-cover bg-center text-white py-20 pt-32 min-h-[500px] flex items-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <button
             onClick={onBack}
