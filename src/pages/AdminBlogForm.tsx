@@ -67,45 +67,41 @@ export default function AdminBlogForm() {
     setError('');
     setLoading(true);
 
-    try {
-      const blogData = {
-        ...formData,
-        published_at: publish ? new Date().toISOString() : formData.published_at,
-      };
+  try {
+  const blogData = {
+    ...formData,
+    published_at: publish ? new Date().toISOString() : formData.published_at,
+  };
 
   if (isEdit) {
-  console.log('ID:', id);
+    console.log('ID:', id);
 
-  const { data, error } = await supabase
-    .from('blogs')
-    .update(blogData)
-    .eq('id', id)
-    .select();
+    const { data, error } = await supabase
+      .from('blogs')
+      .update(blogData)
+      .eq('id', id)
+      .select();
 
-  console.log('UPDATE RESULT:', data, error, id);
+    console.log('UPDATE RESULT:', data, error, id);
 
-  if (error) {
-    console.log('UPDATE ERROR:', error);
-    throw error;
+    if (error) throw error;
+
+  } else {
+    const { error } = await supabase
+      .from('blogs')
+      .insert([blogData]);
+
+    if (error) throw error;
   }
+
+  // navigate('/admin/blogs');
+
+} catch (err) {
+  console.error('Error saving blog:', err);
+  setError(err instanceof Error ? err.message : 'Failed to save blog');
+} finally {
+  setLoading(false);
 }
-
-} else {
-  const { error } = await supabase
-    .from('blogs')
-    .insert([blogData]);
-
-  if (error) throw error;
-}
-
-// navigate('/admin/blogs');
-    } catch (err) {
-      console.error('Error saving blog:', err);
-      setError(err instanceof Error ? err.message : 'Failed to save blog');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const categories = [
     'Sosyal Medya Yönetimi',
