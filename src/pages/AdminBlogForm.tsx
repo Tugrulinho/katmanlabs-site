@@ -67,7 +67,7 @@ const handleSubmit = async (e: FormEvent, publish = false) => {
   setError('');
   setLoading(true);
 
- try {
+try {
   const blogData = {
     ...formData,
     published_at: publish ? new Date().toISOString() : formData.published_at,
