@@ -372,8 +372,8 @@ text-white py-20 pt-32 min-h-[500px] flex items-center
               <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-2xl blur-3xl"></div>
               <div className="relative">
                 <img
-                  src="https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=600"
-                  alt="Düzen ve süreklilik"
+                  src="/images/sosyal-medya-section-1.png"
+                  alt="Hedefe ulaşmak için planlı ve adım adım ilerlemeyi temsil eden strateji görseli"
                   className="rounded-2xl shadow-2xl w-full h-[600px] object-cover"
                 />
               </div>
