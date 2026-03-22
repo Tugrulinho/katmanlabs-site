@@ -60,8 +60,8 @@ function SosyalMedyaTasarim({ onBack }: SosyalMedyaTasarimProps) {
 
      <div className="
 relative
-bg-[url('/images/sosyal-medya-hero-mobile.webp')]
-md:bg-[url('/images/sosyal-medya-hero-desktop.webp')]
+bg-[url('/images/sosyal-medya-hero-mobile.png')]
+md:bg-[url('/images/sosyal-medya-hero-desktop.png')]
 bg-cover 
 bg-center 
 text-white py-20 pt-32 min-h-[500px] flex items-center
