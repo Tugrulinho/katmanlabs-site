@@ -58,8 +58,16 @@ function SosyalMedyaTasarim({ onBack }: SosyalMedyaTasarimProps) {
     <div className="min-h-screen bg-white">
       <Navbar />
 
-      <div className="bg-gradient-to-br from-pink-600 via-rose-600 to-orange-600 text-white py-20 pt-32 min-h-[500px] flex items-center">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+     <div className="
+relative
+bg-[url('/images/sosyal-medya-hero-mobile.webp')]
+md:bg-[url('/images/sosyal-medya-hero-desktop.webp')]
+bg-cover 
+bg-center 
+text-white py-20 pt-32 min-h-[500px] flex items-center
+">
+       <div className="absolute inset-0 bg-black/50"></div>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <button
             onClick={onBack}
             className="flex items-center gap-2 text-white/90 hover:text-white transition-colors mb-8"
