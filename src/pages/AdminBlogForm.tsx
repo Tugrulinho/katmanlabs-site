@@ -1,6 +1,6 @@
 import { useEffect, useState, FormEvent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { supabase, Blog } from '../lib/supabase';
+import type { Blog } from '../lib/supabase';
 import { generateSlug } from '../lib/blogUtils';
 import { Save, X, Eye, FileText } from 'lucide-react';
 
@@ -35,32 +35,41 @@ export default function AdminBlogForm() {
     }
   }, [formData.title, autoGenerateSlug]);
 
-  const fetchBlog = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('blogs')
-        .select('*')
-        .eq('id', id)
-        .maybeSingle();
+ const fetchBlog = async () => {
+  try {
+    setLoading(true);
+    setError('');
 
-      if (error) throw error;
-      if (!data) throw new Error('Blog not found');
+    const response = await fetch(`/api/blog?id=${id}`);
+    const result = await response.json();
 
-      setFormData({
-        title: data.title,
-        slug: data.slug,
-        excerpt: data.excerpt || '',
-        content: data.content || '',
-        category: data.category,
-        image_url: data.image_url,
-        published_at: data.published_at,
-      });
-      setAutoGenerateSlug(false);
-    } catch (err) {
-      console.error('Error fetching blog:', err);
-      setError('Failed to load blog');
+    if (!response.ok) {
+      throw new Error(result.error || 'Blog getirilemedi');
     }
-  };
+
+    const data = result.blog;
+
+    if (!data) {
+      throw new Error('Blog not found');
+    }
+
+    setFormData({
+      title: data.title || '',
+      slug: data.slug || '',
+      excerpt: data.excerpt || '',
+      content: data.content || '',
+      category: data.category || '',
+      image_url: data.image_url || '',
+      published_at: data.published_at || null,
+    });
+
+    setAutoGenerateSlug(false);
+  } catch (err: any) {
+    setError(err.message || 'Blog yüklenirken hata oluştu');
+  } finally {
+    setLoading(false);
+  }
+};
 
 const handleSubmit = async (e: FormEvent, publish = false) => {
   e.preventDefault();
