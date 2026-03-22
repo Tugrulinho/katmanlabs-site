@@ -95,7 +95,7 @@ export default function AdminBlogForm() {
   if (error) throw error;
 }
 
-navigate('/admin/blogs');
+// navigate('/admin/blogs');
     } catch (err) {
       console.error('Error saving blog:', err);
       setError(err instanceof Error ? err.message : 'Failed to save blog');
