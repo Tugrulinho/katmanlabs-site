@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { supabase, Blog } from '../lib/supabase';
+import type { Blog } from '../lib/supabase';
 import { Search, Filter, Trash2, CreditCard as Edit, Eye, EyeOff, Calendar, PlusCircle } from 'lucide-react';
 
 export default function AdminBlogs() {
@@ -21,13 +21,13 @@ export default function AdminBlogs() {
 
   const fetchBlogs = async () => {
     try {
-      const { data, error } = await supabase
-        .from('blogs')
-        .select('*')
-        .order('created_at', { ascending: false });
+      const res = await fetch('/api/blogs');
+const result = await res.json();
 
-      if (error) throw error;
-      setBlogs(data || []);
+if (!res.ok) throw new Error(result.error);
+
+setBlogs(result.blogs || []);
+
     } catch (error) {
       console.error('Error fetching blogs:', error);
     } finally {
