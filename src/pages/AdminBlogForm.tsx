@@ -67,35 +67,38 @@ const handleSubmit = async (e: FormEvent, publish = false) => {
   setError('');
   setLoading(true);
 
-  try {
-    const blogData = {
-      ...formData,
-      published_at: publish ? new Date().toISOString() : formData.published_at,
-    };
+ try {
+  const blogData = {
+    ...formData,
+    published_at: publish ? new Date().toISOString() : formData.published_at,
+  };
 
-    if (isEdit) {
-      const { error } = await supabase
-        .from('blogs')
-        .update(blogData)
-        .eq('id', id);
+  const res = await fetch('/api/blog', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      id,
+      blogData,
+      isEdit,
+    }),
+  });
 
-      if (error) throw error;
-    } else {
-      const { error } = await supabase
-        .from('blogs')
-        .insert([blogData]);
+  const result = await res.json();
 
-      if (error) throw error;
-    }
-
-    navigate('/admin/blogs');
-  } catch (err) {
-    console.error('Error saving blog:', err);
-    setError(err instanceof Error ? err.message : 'Failed to save blog');
-  } finally {
-    setLoading(false);
+  if (!res.ok) {
+    throw new Error(result.error);
   }
-};
+
+  navigate('/admin/blogs');
+
+} catch (err) {
+  console.error('Error saving blog:', err);
+  setError(err instanceof Error ? err.message : 'Failed to save blog');
+} finally {
+  setLoading(false);
+}
   const categories = [
     'Sosyal Medya Yönetimi',
     'Web Tasarim',
