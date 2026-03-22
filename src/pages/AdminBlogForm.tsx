@@ -62,46 +62,49 @@ export default function AdminBlogForm() {
     }
   };
 
-  const handleSubmit = async (e: FormEvent, publish = false) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
+ const handleSubmit = async (e: FormEvent, publish = false) => {
+  e.preventDefault();
+  setError('');
+  setLoading(true);
 
   try {
-  const blogData = {
-    ...formData,
-    published_at: publish ? new Date().toISOString() : formData.published_at,
-  };
+    const blogData = {
+      ...formData,
+      published_at: publish ? new Date().toISOString() : formData.published_at,
+    };
 
-  if (isEdit) {
-    console.log('ID:', id);
+    if (isEdit) {
+      console.log('ID:', id);
 
-    const { data, error } = await supabase
-      .from('blogs')
-      .update(blogData)
-      .eq('id', id)
-      .select();
+      const { data, error } = await supabase
+        .from('blogs')
+        .update(blogData)
+        .eq('id', id)
+        .select();
 
-    console.log('UPDATE RESULT:', data, error, id);
+      console.log('UPDATE RESULT:', data, error, id);
 
-    if (error) throw error;
+      if (error) {
+        throw error;
+      }
+    } else {
+      const { error } = await supabase
+        .from('blogs')
+        .insert([blogData]);
 
-  } else {
-    const { error } = await supabase
-      .from('blogs')
-      .insert([blogData]);
+      if (error) {
+        throw error;
+      }
+    }
 
-    if (error) throw error;
+    // navigate('/admin/blogs');
+  } catch (err) {
+    console.error('Error saving blog:', err);
+    setError(err instanceof Error ? err.message : 'Failed to save blog');
+  } finally {
+    setLoading(false);
   }
-
-  // navigate('/admin/blogs');
-
-} catch (err) {
-  console.error('Error saving blog:', err);
-  setError(err instanceof Error ? err.message : 'Failed to save blog');
-} finally {
-  setLoading(false);
-}
+};
 
   const categories = [
     'Sosyal Medya Yönetimi',
