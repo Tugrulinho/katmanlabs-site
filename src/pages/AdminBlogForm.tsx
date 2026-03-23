@@ -326,9 +326,8 @@ try {
               className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none font-mono text-sm"
               placeholder="Write your blog content here..."
             />
-</div>
           </div>
-        </div>
+          </div>
 
         <div className="flex items-center justify-between bg-white rounded-xl shadow-sm border border-slate-200 p-6">
           <div className="flex items-center gap-3">
