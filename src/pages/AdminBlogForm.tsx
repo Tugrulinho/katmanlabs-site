@@ -93,7 +93,23 @@ const [formData, setFormData] = useState({
   category: data.category || '',
   published_at: data.published_at || null,
 });
+// JSON varsa blocks'a aktar 
+if (data.content_json) {
+  try {
+    const parsed =
+      typeof data.content_json === 'string'
+        ? JSON.parse(data.content_json)
+        : data.content_json;
 
+    if (Array.isArray(parsed)) {
+      setBlocks(parsed);
+    } else {
+      setBlocks([parsed]);
+    }
+  } catch (err) {
+    console.error('JSON parse hatası:', err);
+  }
+}
     setAutoGenerateSlug(false);
   } catch (err: any) {
     setError(err.message || 'Blog yüklenirken hata oluştu');
