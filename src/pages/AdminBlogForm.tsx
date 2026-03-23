@@ -338,6 +338,13 @@ try {
   >
     Paragraf Ekle
   </button>
+  <div className="mt-4 space-y-2">
+  {blocks.map((block, index) => (
+    <div key={index} className="p-3 border rounded bg-white">
+      {block.type} - {block.type === 'paragraph' ? block.text : ''}
+    </div>
+  ))}
+</div>
 </div>
         <div className="flex items-center justify-between bg-white rounded-xl shadow-sm border border-slate-200 p-6">
           <div className="flex items-center gap-3">
