@@ -64,15 +64,26 @@ const [formData, setFormData] = useState({
       throw new Error('Blog not found');
     }
 
-    setFormData({
-      title: data.title || '',
-      slug: data.slug || '',
-      excerpt: data.excerpt || '',
-      content: data.content || '',
-      category: data.category || '',
-      image_url: data.image_url || '',
-      published_at: data.published_at || null,
-    });
+   setFormData({
+  title: data.title || '',
+  slug: data.slug || '',
+  excerpt: data.excerpt || '',
+
+  // eski sistem
+  content: data.content || '',
+  image_url: data.image_url || '',
+
+  // yeni sistem
+  content_json: data.content_json || null,
+  featured_image_url: data.featured_image_url || '',
+  meta_title: data.meta_title || '',
+  meta_description: data.meta_description || '',
+  og_image_url: data.og_image_url || '',
+  status: data.status || 'draft',
+
+  category: data.category || '',
+  published_at: data.published_at || null,
+});
 
     setAutoGenerateSlug(false);
   } catch (err: any) {
