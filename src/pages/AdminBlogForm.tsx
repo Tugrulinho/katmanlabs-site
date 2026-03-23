@@ -54,7 +54,12 @@ const [formData, setFormData] = useState({
       setFormData((prev) => ({ ...prev, slug: generateSlug(prev.title) }));
     }
   }, [formData.title, autoGenerateSlug]);
-
+useEffect(() => {
+  setFormData((prev) => ({
+    ...prev,
+    content_json: blocks,
+  }));
+}, [blocks]);
  const fetchBlog = async () => {
   try {
     setLoading(true);
