@@ -328,7 +328,17 @@ try {
             />
           </div>
           </div>
-
+<div className="mt-6">
+  <button
+    type="button"
+    onClick={() =>
+      setBlocks([...blocks, { type: 'paragraph', text: '' }])
+    }
+    className="px-4 py-2 bg-blue-500 text-white rounded"
+  >
+    Paragraf Ekle
+  </button>
+</div>
         <div className="flex items-center justify-between bg-white rounded-xl shadow-sm border border-slate-200 p-6">
           <div className="flex items-center gap-3">
             {formData.published_at ? (
