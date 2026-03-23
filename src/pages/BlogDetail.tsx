@@ -151,11 +151,39 @@ function BlogDetail() {
             <article className="prose prose-lg max-w-none">
              {blog.content_json ? (
   <div className="text-gray-700 leading-relaxed space-y-6">
-    <p className="text-lg leading-relaxed">
-      {typeof blog.content_json === 'string'
-        ? JSON.parse(blog.content_json).text
-        : blog.content_json.text}
-    </p>
+    {(typeof blog.content_json === 'string'
+      ? JSON.parse(blog.content_json)
+      : blog.content_json
+    ).map((block: any, index: number) => {
+      if (block.type === 'paragraph') {
+        return (
+          <p key={index} className="text-lg leading-relaxed">
+            {block.text}
+          </p>
+        );
+      }
+
+      if (block.type === 'heading') {
+        return (
+          <h2 key={index} className="text-2xl font-bold mt-8 mb-4">
+            {block.text}
+          </h2>
+        );
+      }
+
+      if (block.type === 'image') {
+        return (
+          <img
+            key={index}
+            src={block.url}
+            alt=""
+            className="w-full rounded-xl"
+          />
+        );
+      }
+
+      return null;
+    })}
   </div>
 ) : blog.content ? (
   <div className="text-gray-700 leading-relaxed space-y-6">
