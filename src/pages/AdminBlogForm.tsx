@@ -33,6 +33,15 @@ const [formData, setFormData] = useState({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [autoGenerateSlug, setAutoGenerateSlug] = useState(true);
+  const [blocks, setBlocks] = useState<
+  Array<
+    | { type: 'paragraph'; text: string }
+    | { type: 'heading'; text: string }
+    | { type: 'image'; url: string }
+  >
+>([
+  { type: 'paragraph', text: '' },
+]);
 
   useEffect(() => {
     if (isEdit) {
