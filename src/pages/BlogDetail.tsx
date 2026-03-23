@@ -149,19 +149,27 @@ function BlogDetail() {
         <div className="grid lg:grid-cols-3 gap-12">
           <div className="lg:col-span-2">
             <article className="prose prose-lg max-w-none">
-              {blog.content ? (
-                <div className="text-gray-700 leading-relaxed space-y-6">
-                  {blog.content.split('\n\n').map((paragraph, index) => (
-                    <p key={index} className="text-lg leading-relaxed">
-                      {paragraph}
-                    </p>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-12 bg-gray-50 rounded-xl">
-                  <p className="text-gray-500">İçerik henüz eklenmemiş.</p>
-                </div>
-              )}
+             {blog.content_json ? (
+  <div className="text-gray-700 leading-relaxed space-y-6">
+    <p className="text-lg leading-relaxed">
+      {typeof blog.content_json === 'string'
+        ? JSON.parse(blog.content_json).text
+        : blog.content_json.text}
+    </p>
+  </div>
+) : blog.content ? (
+  <div className="text-gray-700 leading-relaxed space-y-6">
+    {blog.content.split('\n\n').map((paragraph, index) => (
+      <p key={index} className="text-lg leading-relaxed">
+        {paragraph}
+      </p>
+    ))}
+  </div>
+) : (
+  <div className="text-center py-12 bg-gray-50 rounded-xl">
+    <p className="text-gray-500">İçerik henüz eklenmemiş.</p>
+  </div>
+)}
             </article>
 
             <div className={`mt-12 p-8 bg-gradient-to-br ${colors.gradient} rounded-2xl text-white`}>
