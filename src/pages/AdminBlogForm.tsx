@@ -9,15 +9,26 @@ export default function AdminBlogForm() {
   const navigate = useNavigate();
   const isEdit = !!id;
 
-  const [formData, setFormData] = useState({
-    title: '',
-    slug: '',
-    excerpt: '',
-    content: '',
-    category: '',
-    image_url: '',
-    published_at: null as string | null,
-  });
+const [formData, setFormData] = useState({
+  title: '',
+  slug: '',
+  excerpt: '',
+
+  // eski sistem
+  content: '',
+  image_url: '',
+
+  // yeni sistem
+  content_json: null as any,
+  featured_image_url: '',
+  meta_title: '',
+  meta_description: '',
+  og_image_url: '',
+  status: 'draft' as 'draft' | 'published',
+
+  category: '',
+  published_at: null as string | null,
+});
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
