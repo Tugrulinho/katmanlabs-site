@@ -1012,6 +1012,13 @@ function App() {
         <Route path="pricing" element={<AdminPricing />} />
         <Route path="messages" element={<Messages />} />
       </Route>
+<Route path="/admin-v2" element={
+  <ProtectedRoute>
+    <div>Admin V2 Layout</div>
+  </ProtectedRoute>
+}>
+  <Route index element={<div>Admin V2 Dashboard</div>} />
+</Route>
 </Routes>
 </>
 );
