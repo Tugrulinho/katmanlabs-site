@@ -326,31 +326,91 @@ try {
               className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none font-mono text-sm"
               placeholder="Write your blog content here..."
             />
-            <div className="mt-6">
-  <label className="block text-sm font-medium text-slate-700 mb-2">
-    Content JSON (Yeni Sistem)
-  </label>
-
-  <textarea
-    value={formData.content_json ? JSON.stringify(formData.content_json, null, 2) : ''}
-    onChange={(e) => {
-      try {
-        setFormData({
-          ...formData,
-          content_json: JSON.parse(e.target.value),
-        });
-      } catch (err) {
-        // JSON hatası varsa hiçbir şey yapma
-      }
-    }}
-    rows={10}
-    className="w-full px-4 py-2 border border-slate-300 rounded-lg font-mono text-sm"
-    placeholder='{"type":"paragraph","text":"Test içerik"}'
-  />
 </div>
           </div>
         </div>
+<div className="mt-6">
+  <label className="block text-sm font-medium text-slate-700 mb-3">
+    İçerik Editörü
+  </label>
+  <div className="space-y-4">
+    {blocks.map((block, index) => (
+      <div key={index} className="border border-slate-300 rounded-lg p-4 bg-slate-50">
+        <div className="flex items-center gap-2 mb-3">
+          <select
+            value={block.type}
+            onChange={(e) => {
+              const newBlocks = [...blocks];
+              const value = e.target.value as 'paragraph' | 'heading' | 'image';
 
+              if (value === 'image') {
+                newBlocks[index] = { type: 'image', url: '' };
+              } else {
+                newBlocks[index] = { type: value, text: 'text' in block ? block.text : '' };
+              }
+
+              setBlocks(newBlocks);
+            }}
+            className="px-3 py-2 border border-slate-300 rounded-lg bg-white"
+          >
+            <option value="paragraph">Paragraf</option>
+            <option value="heading">Başlık</option>
+            <option value="image">Görsel</option>
+          </select>
+
+          <button
+            type="button"
+            onClick={() => {
+              const newBlocks = blocks.filter((_, i) => i !== index);
+              setBlocks(newBlocks.length ? newBlocks : [{ type: 'paragraph', text: '' }]);
+            }}
+            className="px-3 py-2 text-sm bg-red-100 text-red-700 rounded-lg hover:bg-red-200"
+          >
+            Sil
+          </button>
+        </div>
+
+        {block.type === 'image' ? (
+          <input
+            type="text"
+            value={block.url}
+            onChange={(e) => {
+              const newBlocks = [...blocks];
+              newBlocks[index] = { ...block, url: e.target.value };
+              setBlocks(newBlocks);
+            }}
+            placeholder="Görsel URL"
+            className="w-full px-4 py-2 border border-slate-300 rounded-lg bg-white"
+          />
+        ) : block.type === 'heading' ? (
+          <input
+            type="text"
+            value={block.text}
+            onChange={(e) => {
+              const newBlocks = [...blocks];
+              newBlocks[index] = { ...block, text: e.target.value };
+              setBlocks(newBlocks);
+            }}
+            placeholder="Başlık metni"
+            className="w-full px-4 py-2 border border-slate-300 rounded-lg bg-white text-xl font-semibold"
+          />
+        ) : (
+          <textarea
+            value={block.text}
+            onChange={(e) => {
+              const newBlocks = [...blocks];
+              newBlocks[index] = { ...block, text: e.target.value };
+              setBlocks(newBlocks);
+            }}
+            rows={5}
+            placeholder="Paragraf metni"
+            className="w-full px-4 py-2 border border-slate-300 rounded-lg bg-white"
+          />
+        )}
+      </div>
+    ))}
+  </div>
+</div>
         <div className="flex items-center justify-between bg-white rounded-xl shadow-sm border border-slate-200 p-6">
           <div className="flex items-center gap-3">
             {formData.published_at ? (
