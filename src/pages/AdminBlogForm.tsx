@@ -99,10 +99,23 @@ const handleSubmit = async (e: FormEvent, publish = false) => {
   setLoading(true);
 
 try {
-  const blogData = {
-    ...formData,
-    published_at: publish ? new Date().toISOString() : formData.published_at,
-  };
+ const blogData = {
+  ...formData,
+
+  status: publish ? 'published' : formData.status,
+  published_at: publish ? new Date().toISOString() : formData.published_at,
+
+  // eski sistem şimdilik kalsın
+  content: formData.content,
+  image_url: formData.image_url,
+
+  // yeni sistem
+  content_json: formData.content_json,
+  featured_image_url: formData.featured_image_url,
+  meta_title: formData.meta_title,
+  meta_description: formData.meta_description,
+  og_image_url: formData.og_image_url,
+};
 
   const res = await fetch('/api/blog', {
     method: 'POST',
