@@ -14,9 +14,21 @@ export interface Blog {
   title: string;
   slug: string;
   excerpt: string | null;
+
+  // ESKİ (geri uyumluluk için kalıyor)
   content: string | null;
-  category: string;
   image_url: string;
+
+  // YENİ SİSTEM
+  content_json: any | null;
+  featured_image_url: string | null;
+  meta_title: string | null;
+  meta_description: string | null;
+  og_image_url: string | null;
+  status: 'draft' | 'published';
+
+  category: string;
   published_at: string | null;
   created_at: string;
+  updated_at: string;
 }
