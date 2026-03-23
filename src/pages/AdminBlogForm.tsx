@@ -340,9 +340,23 @@ try {
   </button>
   <div className="mt-4 space-y-2">
   {blocks.map((block, index) => (
-    <div key={index} className="p-3 border rounded bg-white">
-      {block.type} - {block.type === 'paragraph' ? block.text : ''}
-    </div>
+   <div key={index} className="p-3 border rounded bg-white">
+  {block.type === 'paragraph' && (
+    <textarea
+      value={block.text}
+      onChange={(e) => {
+        const newBlocks = [...blocks];
+        newBlocks[index] = {
+          ...block,
+          text: e.target.value,
+        };
+        setBlocks(newBlocks);
+      }}
+      className="w-full border p-2 rounded"
+      rows={3}
+    />
+  )}
+</div>
   ))}
 </div>
 </div>
