@@ -1,3 +1,5 @@
+import Link from "@tiptap/extension-link";
+import Underline from "@tiptap/extension-underline";
 import { useEffect } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -10,7 +12,7 @@ export default function RichTextEditor({
   onChange: (value: string) => void;
 }) {
   const editor = useEditor({
-    extensions: [StarterKit],
+    extensions: [StarterKit, Underline, Link],
     content: content || "",
     immediatelyRender: false,
     onUpdate: ({ editor }) => {
