@@ -56,7 +56,7 @@ export default function RichTextEditor({
   if (!editor) return null;
 
   return (
-    <div className="border rounded bg-white overflow-hidden">
+    <div className="border rounded bg-white">
       <div className="sticky top-0 z-20 flex flex-wrap gap-2 p-2 border-b bg-gray-50">
         <button
           type="button"
