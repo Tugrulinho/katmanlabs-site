@@ -1,3 +1,4 @@
+import Image from "@tiptap/extension-image";
 import Blockquote from "@tiptap/extension-blockquote";
 import Link from "@tiptap/extension-link";
 import Underline from "@tiptap/extension-underline";
@@ -13,7 +14,7 @@ export default function RichTextEditor({
   onChange: (value: string) => void;
 }) {
   const editor = useEditor({
-    extensions: [StarterKit, Underline, Link, Blockquote],
+    extensions: [StarterKit, Underline, Link, Blockquote, Image],
     content: content || "",
     immediatelyRender: false,
     onUpdate: ({ editor }) => {
@@ -104,6 +105,18 @@ export default function RichTextEditor({
           className="px-3 py-1 border rounded text-sm"
         >
           Liste
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            const url = prompt("Görsel URL gir");
+            if (!url) return;
+            editor.chain().focus().setImage({ src: url }).run();
+          }}
+          className="px-3 py-1 border rounded text-sm"
+        >
+          Image
         </button>
       </div>
 
