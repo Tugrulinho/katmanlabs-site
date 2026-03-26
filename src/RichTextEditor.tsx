@@ -121,6 +121,26 @@ export default function RichTextEditor({
 
         <button
           type="button"
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 3 }).run()
+          }
+          className="px-3 py-1 border rounded text-sm"
+        >
+          H3
+        </button>
+
+        <button
+          type="button"
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 4 }).run()
+          }
+          className="px-3 py-1 border rounded text-sm"
+        >
+          H4
+        </button>
+
+        <button
+          type="button"
           onClick={() => editor.chain().focus().toggleBulletList().run()}
           className="px-3 py-1 border rounded text-sm"
         >
