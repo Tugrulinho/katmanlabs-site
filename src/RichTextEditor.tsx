@@ -52,6 +52,41 @@ export default function RichTextEditor({
         >
           Italic
         </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleUnderline().run()}
+          className="px-3 py-1 border rounded text-sm"
+        >
+          Underline
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            const url = prompt("Link URL gir");
+            if (!url) return;
+            editor.chain().focus().setLink({ href: url }).run();
+          }}
+          className="px-3 py-1 border rounded text-sm"
+        >
+          Link
+        </button>
+
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().unsetLink().run()}
+          className="px-3 py-1 border rounded text-sm"
+        >
+          Unlink
+        </button>
+
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleBlockquote().run()}
+          className="px-3 py-1 border rounded text-sm"
+        >
+          Quote
+        </button>
 
         <button
           type="button"
