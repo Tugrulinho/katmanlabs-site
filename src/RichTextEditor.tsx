@@ -57,7 +57,7 @@ export default function RichTextEditor({
 
   return (
     <div className="border rounded bg-white overflow-hidden">
-      <div className="flex flex-wrap gap-2 p-2 border-b bg-gray-50">
+      <div className="sticky top-0 z-20 flex flex-wrap gap-2 p-2 border-b bg-gray-50">
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleBold().run()}
