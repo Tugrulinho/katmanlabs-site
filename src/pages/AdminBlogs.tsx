@@ -1,14 +1,24 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import type { Blog } from '../lib/supabase';
-import { Search, Filter, Trash2, CreditCard as Edit, Eye, EyeOff, Calendar, PlusCircle } from 'lucide-react';
+import { supabase } from "../lib/supabase";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import type { Blog } from "../lib/supabase";
+import {
+  Search,
+  Filter,
+  Trash2,
+  CreditCard as Edit,
+  Eye,
+  EyeOff,
+  Calendar,
+  PlusCircle,
+} from "lucide-react";
 
 export default function AdminBlogs() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [filteredBlogs, setFilteredBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("all");
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
   useEffect(() => {
@@ -21,15 +31,14 @@ export default function AdminBlogs() {
 
   const fetchBlogs = async () => {
     try {
-      const res = await fetch('/api/blogs');
-const result = await res.json();
+      const res = await fetch("/api/blogs");
+      const result = await res.json();
 
-if (!res.ok) throw new Error(result.error);
+      if (!res.ok) throw new Error(result.error);
 
-setBlogs(result.blogs || []);
-
+      setBlogs(result.blogs || []);
     } catch (error) {
-      console.error('Error fetching blogs:', error);
+      console.error("Error fetching blogs:", error);
     } finally {
       setLoading(false);
     }
@@ -42,11 +51,11 @@ setBlogs(result.blogs || []);
       filtered = filtered.filter(
         (blog) =>
           blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          blog.excerpt?.toLowerCase().includes(searchTerm.toLowerCase())
+          blog.excerpt?.toLowerCase().includes(searchTerm.toLowerCase()),
       );
     }
 
-    if (categoryFilter !== 'all') {
+    if (categoryFilter !== "all") {
       filtered = filtered.filter((blog) => blog.category === categoryFilter);
     }
 
@@ -55,41 +64,53 @@ setBlogs(result.blogs || []);
 
   const handleDelete = async (id: string) => {
     try {
-      const { error } = await supabase.from('blogs').delete().eq('id', id);
+      const res = await fetch("/api/blog", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id }),
+      });
 
-      if (error) throw error;
+      const result = await res.json();
+
+      console.log("DELETE API RESULT:", result);
+
+      if (!res.ok) throw new Error(result.error);
 
       setBlogs(blogs.filter((blog) => blog.id !== id));
       setDeleteConfirm(null);
     } catch (error) {
-      console.error('Error deleting blog:', error);
-      alert('Failed to delete blog');
+      console.error("Error deleting blog:", error);
+      alert("Failed to delete blog");
     }
   };
 
   const togglePublish = async (blog: Blog) => {
     try {
-      const newPublishedAt = blog.published_at ? null : new Date().toISOString();
+      const newPublishedAt = blog.published_at
+        ? null
+        : new Date().toISOString();
 
       const { error } = await supabase
-        .from('blogs')
+        .from("blogs")
         .update({ published_at: newPublishedAt })
-        .eq('id', blog.id);
+        .eq("id", blog.id);
 
       if (error) throw error;
 
       setBlogs(
         blogs.map((b) =>
-          b.id === blog.id ? { ...b, published_at: newPublishedAt } : b
-        )
+          b.id === blog.id ? { ...b, published_at: newPublishedAt } : b,
+        ),
       );
     } catch (error) {
-      console.error('Error toggling publish status:', error);
-      alert('Failed to update blog status');
+      console.error("Error toggling publish status:", error);
+      alert("Failed to update blog status");
     }
   };
 
-  const categories = ['all', ...new Set(blogs.map((b) => b.category))];
+  const categories = ["all", ...new Set(blogs.map((b) => b.category))];
 
   if (loading) {
     return (
@@ -106,7 +127,9 @@ setBlogs(result.blogs || []);
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">Blog Management</h1>
+          <h1 className="text-3xl font-bold text-slate-900 mb-2">
+            Blog Management
+          </h1>
           <p className="text-slate-600">Manage all your blog posts</p>
         </div>
         <Link
@@ -139,7 +162,7 @@ setBlogs(result.blogs || []);
             >
               {categories.map((cat) => (
                 <option key={cat} value={cat}>
-                  {cat === 'all' ? 'All Categories' : cat}
+                  {cat === "all" ? "All Categories" : cat}
                 </option>
               ))}
             </select>
@@ -176,7 +199,10 @@ setBlogs(result.blogs || []);
               </thead>
               <tbody className="divide-y divide-slate-200">
                 {filteredBlogs.map((blog) => (
-                  <tr key={blog.id} className="hover:bg-slate-50 transition-colors">
+                  <tr
+                    key={blog.id}
+                    className="hover:bg-slate-50 transition-colors"
+                  >
                     <td className="px-6 py-4">
                       <div className="flex items-start gap-3">
                         {blog.image_url && (
@@ -187,7 +213,9 @@ setBlogs(result.blogs || []);
                           />
                         )}
                         <div>
-                          <div className="font-semibold text-slate-900">{blog.title}</div>
+                          <div className="font-semibold text-slate-900">
+                            {blog.title}
+                          </div>
                           <div className="text-sm text-slate-500 line-clamp-1">
                             {blog.excerpt}
                           </div>
@@ -215,7 +243,7 @@ setBlogs(result.blogs || []);
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-1 text-sm text-slate-500">
                         <Calendar className="w-4 h-4" />
-                        {new Date(blog.created_at).toLocaleDateString('tr-TR')}
+                        {new Date(blog.created_at).toLocaleDateString("tr-TR")}
                       </div>
                     </td>
                     <td className="px-6 py-4">
@@ -223,7 +251,7 @@ setBlogs(result.blogs || []);
                         <button
                           onClick={() => togglePublish(blog)}
                           className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
-                          title={blog.published_at ? 'Unpublish' : 'Publish'}
+                          title={blog.published_at ? "Unpublish" : "Publish"}
                         >
                           {blog.published_at ? (
                             <EyeOff className="w-4 h-4 text-slate-600" />
