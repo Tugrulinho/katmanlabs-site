@@ -170,7 +170,7 @@ function BlogDetail() {
             <article className="prose prose-lg max-w-none">
               {blog.content ? (
                 <div
-                  className="text-gray-700 leading-relaxed space-y-6"
+                  className="blog-content text-gray-700 leading-relaxed"
                   dangerouslySetInnerHTML={{ __html: blog.content }}
                 />
               ) : null}
