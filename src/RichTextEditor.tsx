@@ -144,6 +144,43 @@ export default function RichTextEditor({
         >
           Divider
         </button>
+        <button
+          type="button"
+          onClick={() =>
+            editor
+              .chain()
+              .focus()
+              .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
+              .run()
+          }
+          className="px-3 py-1 border rounded text-sm"
+        >
+          Table
+        </button>
+
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().addColumnAfter().run()}
+          className="px-3 py-1 border rounded text-sm"
+        >
+          Col+
+        </button>
+
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().addRowAfter().run()}
+          className="px-3 py-1 border rounded text-sm"
+        >
+          Row+
+        </button>
+
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().deleteTable().run()}
+          className="px-3 py-1 border rounded text-sm"
+        >
+          DelTable
+        </button>
       </div>
 
       <div className="p-3">
