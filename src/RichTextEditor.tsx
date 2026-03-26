@@ -1,3 +1,4 @@
+import Blockquote from "@tiptap/extension-blockquote";
 import Link from "@tiptap/extension-link";
 import Underline from "@tiptap/extension-underline";
 import { useEffect } from "react";
@@ -12,7 +13,7 @@ export default function RichTextEditor({
   onChange: (value: string) => void;
 }) {
   const editor = useEditor({
-    extensions: [StarterKit, Underline, Link],
+    extensions: [StarterKit, Underline, Link, Blockquote],
     content: content || "",
     immediatelyRender: false,
     onUpdate: ({ editor }) => {
