@@ -1,3 +1,7 @@
+import Table from "@tiptap/extension-table";
+import TableRow from "@tiptap/extension-table-row";
+import TableHeader from "@tiptap/extension-table-header";
+import TableCell from "@tiptap/extension-table-cell";
 import HorizontalRule from "@tiptap/extension-horizontal-rule";
 import Image from "@tiptap/extension-image";
 import Blockquote from "@tiptap/extension-blockquote";
@@ -22,6 +26,12 @@ export default function RichTextEditor({
       Blockquote,
       Image,
       HorizontalRule,
+      Table.configure({
+        resizable: true,
+      }),
+      TableRow,
+      TableHeader,
+      TableCell,
     ],
     content: content || "",
     immediatelyRender: false,
