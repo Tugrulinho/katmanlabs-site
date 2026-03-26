@@ -45,12 +45,7 @@ export default function AdminBlogForm() {
       setFormData((prev) => ({ ...prev, slug: generateSlug(prev.title) }));
     }
   }, [formData.title, autoGenerateSlug]);
-  useEffect(() => {
-    setFormData((prev) => ({
-      ...prev,
-      content_json: blocks,
-    }));
-  }, [blocks]);
+
   const fetchBlog = async () => {
     try {
       setLoading(true);
@@ -328,111 +323,7 @@ export default function AdminBlogForm() {
             />
           </div>
         </div>
-        <div className="mt-6">
-          <button
-            type="button"
-            onClick={() =>
-              setBlocks([...blocks, { type: "paragraph", text: "" }])
-            }
-            className="px-4 py-2 bg-blue-500 text-white rounded"
-          >
-            Paragraf Ekle
-          </button>
-          <div className="mt-4 space-y-2">
-            {blocks.map((block, index) => (
-              <div
-                key={index}
-                className="p-4 border border-slate-300 rounded-lg bg-white space-y-3"
-              >
-                <div className="flex items-center justify-between gap-3">
-                  <select
-                    value={block.type}
-                    onChange={(e) => {
-                      const value = e.target.value as
-                        | "paragraph"
-                        | "heading"
-                        | "image";
-                      const newBlocks = [...blocks];
 
-                      if (value === "image") {
-                        newBlocks[index] = { type: "image", url: "" };
-                      } else {
-                        newBlocks[index] = {
-                          type: value,
-                          text: "text" in block ? block.text : "",
-                        };
-                      }
-
-                      setBlocks(newBlocks);
-                    }}
-                    className="px-3 py-2 border border-slate-300 rounded bg-white"
-                  >
-                    <option value="paragraph">Paragraf</option>
-                    <option value="heading">Başlık</option>
-                    <option value="image">Görsel</option>
-                  </select>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const newBlocks = blocks.filter((_, i) => i !== index);
-                      setBlocks(
-                        newBlocks.length
-                          ? newBlocks
-                          : [{ type: "paragraph", text: "" }],
-                      );
-                    }}
-                    className="px-3 py-2 text-sm bg-red-100 text-red-700 rounded hover:bg-red-200"
-                  >
-                    Sil
-                  </button>
-                </div>
-
-                {block.type === "paragraph" && (
-                  <textarea
-                    value={block.text}
-                    onChange={(e) => {
-                      const newBlocks = [...blocks];
-                      newBlocks[index] = { ...block, text: e.target.value };
-                      setBlocks(newBlocks);
-                    }}
-                    className="w-full border p-3 rounded"
-                    rows={4}
-                    placeholder="Paragraf metni"
-                  />
-                )}
-
-                {block.type === "heading" && (
-                  <input
-                    type="text"
-                    value={block.text}
-                    onChange={(e) => {
-                      const newBlocks = [...blocks];
-                      newBlocks[index] = { ...block, text: e.target.value };
-                      setBlocks(newBlocks);
-                    }}
-                    className="w-full border p-3 rounded text-xl font-semibold"
-                    placeholder="Başlık metni"
-                  />
-                )}
-
-                {block.type === "image" && (
-                  <input
-                    type="text"
-                    value={block.url}
-                    onChange={(e) => {
-                      const newBlocks = [...blocks];
-                      newBlocks[index] = { ...block, url: e.target.value };
-                      setBlocks(newBlocks);
-                    }}
-                    className="w-full border p-3 rounded"
-                    placeholder="Görsel URL"
-                  />
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
         <div className="flex items-center justify-between bg-white rounded-xl shadow-sm border border-slate-200 p-6">
           <div className="flex items-center gap-3">
             {formData.published_at ? (
