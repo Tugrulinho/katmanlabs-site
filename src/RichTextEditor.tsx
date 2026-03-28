@@ -149,6 +149,14 @@ export default function RichTextEditor({
 
         <button
           type="button"
+          onClick={() => editor.chain().focus().toggleOrderedList().run()}
+          className="px-3 py-1 border rounded text-sm"
+        >
+          Numaralı Liste
+        </button>
+
+        <button
+          type="button"
           onClick={() => {
             const url = prompt("Görsel URL gir");
             if (!url) return;
