@@ -1,3 +1,6 @@
+import TextStyle from "@tiptap/extension-text-style";
+import Color from "@tiptap/extension-color";
+import Highlight from "@tiptap/extension-highlight";
 import TextAlign from "@tiptap/extension-text-align";
 import {
   Table,
@@ -25,6 +28,9 @@ export default function RichTextEditor({
     extensions: [
       StarterKit,
       Underline,
+      Highlight,
+      TextStyle,
+      Color,
       Link,
       Blockquote,
       Image,
@@ -85,6 +91,32 @@ export default function RichTextEditor({
           className="px-3 py-1 border rounded text-sm"
         >
           Underline
+        </button>
+
+        <select
+          onChange={(e) =>
+            editor.chain().focus().setColor(e.target.value).run()
+          }
+          className="px-3 py-1 border rounded text-sm"
+          defaultValue=""
+        >
+          <option value="" disabled>
+            Renk
+          </option>
+          <option value="#000000">Siyah</option>
+          <option value="#ef4444">Kırmızı</option>
+          <option value="#22c55e">Yeşil</option>
+          <option value="#3b82f6">Mavi</option>
+          <option value="#f59e0b">Sarı</option>
+          <option value="#a855f7">Mor</option>
+        </select>
+
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().unsetColor().run()}
+          className="px-3 py-1 border rounded text-sm"
+        >
+          Renk Sıfırla
         </button>
 
         <button
@@ -158,6 +190,30 @@ export default function RichTextEditor({
           className="px-3 py-1 border rounded text-sm"
         >
           H4
+        </button>
+
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().undo().run()}
+          className="px-3 py-1 border rounded text-sm"
+        >
+          Undo
+        </button>
+
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().redo().run()}
+          className="px-3 py-1 border rounded text-sm"
+        >
+          Redo
+        </button>
+
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleHighlight().run()}
+          className="px-3 py-1 border rounded text-sm"
+        >
+          Highlight
         </button>
 
         <button
