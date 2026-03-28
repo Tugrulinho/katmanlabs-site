@@ -1,3 +1,4 @@
+import TextAlign from "@tiptap/extension-text-align";
 import {
   Table,
   TableRow,
@@ -28,6 +29,11 @@ export default function RichTextEditor({
       Blockquote,
       Image,
       HorizontalRule,
+
+      TextAlign.configure({
+        types: ["heading", "paragraph"],
+      }),
+
       Table.configure({
         resizable: true,
       }),
@@ -84,9 +90,24 @@ export default function RichTextEditor({
         <button
           type="button"
           onClick={() => {
-            const url = prompt("Link URL gir");
-            if (!url) return;
-            editor.chain().focus().setLink({ href: url }).run();
+            const previousUrl = editor.getAttributes("link").href;
+            const url = prompt("Link URL gir", previousUrl || "");
+
+            if (url === null) return;
+
+            if (url === "") {
+              editor.chain().focus().unsetLink().run();
+              return;
+            }
+
+            editor
+              .chain()
+              .focus()
+              .setLink({
+                href: url,
+                target: "_blank",
+              })
+              .run();
           }}
           className="px-3 py-1 border rounded text-sm"
         >
@@ -160,7 +181,10 @@ export default function RichTextEditor({
           onClick={() => {
             const url = prompt("Görsel URL gir");
             if (!url) return;
-            editor.chain().focus().setImage({ src: url }).run();
+
+            const alt = prompt("Görsel alt metni gir") || "";
+
+            editor.chain().focus().setImage({ src: url, alt }).run();
           }}
           className="px-3 py-1 border rounded text-sm"
         >
@@ -202,6 +226,46 @@ export default function RichTextEditor({
           className="px-3 py-1 border rounded text-sm"
         >
           Row+
+        </button>
+
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().deleteColumn().run()}
+          className="px-3 py-1 border rounded text-sm"
+        >
+          Col-
+        </button>
+
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().deleteRow().run()}
+          className="px-3 py-1 border rounded text-sm"
+        >
+          Row-
+        </button>
+
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().setTextAlign("left").run()}
+          className="px-3 py-1 border rounded text-sm"
+        >
+          Left
+        </button>
+
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().setTextAlign("center").run()}
+          className="px-3 py-1 border rounded text-sm"
+        >
+          Center
+        </button>
+
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().setTextAlign("right").run()}
+          className="px-3 py-1 border rounded text-sm"
+        >
+          Right
         </button>
 
         <button
