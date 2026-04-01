@@ -55,7 +55,11 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
       if (!res.ok) {
         throw new Error("Mail gönderilemedi");
       }
+      setCfToken("");
 
+      if ((window as any).turnstile) {
+        (window as any).turnstile.reset();
+      }
       alert(
         "Toplantı talebiniz alındı. En kısa sürede sizinle iletişime geçeceğiz.",
       );
@@ -71,6 +75,11 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
       });
     } catch (err) {
       console.error(err);
+      setCfToken("");
+
+      if ((window as any).turnstile) {
+        (window as any).turnstile.reset();
+      }
       alert("Bir hata oluştu. Lütfen tekrar deneyin.");
     }
   };
