@@ -17,6 +17,12 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
     date: "",
     time: "",
   });
+  const normalizeDate = (date: string) => {
+    if (!date.includes(".")) return date;
+
+    const [day, month, year] = date.split(".");
+    return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+  };
   useEffect(() => {
     (window as any).onTurnstileSuccess = (token: string) => {
       setCfToken(token);
@@ -33,7 +39,7 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
       return;
     }
 
-    fetch(`/api/contact?date=${formData.date}`)
+    fetch(`/api/contact?date=${normalizeDate(formData.date)}`)
       .then((res) => res.json())
       .then((data) => {
         const times = Array.isArray(data)
