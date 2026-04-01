@@ -186,7 +186,41 @@ function BlogDetail() {
                 Dijital dünyada başarılı olmak için profesyonel destek alın.
               </p>
               <button
-                onClick={() => navigate("/#contact")}
+                onClick={() => {
+                  if (location.pathname !== "/") {
+                    navigate("/");
+
+                    setTimeout(() => {
+                      const el = document.getElementById("contact-anchor");
+                      if (el) {
+                        const navbar = document.querySelector("nav");
+                        const navbarHeight = navbar ? navbar.offsetHeight : 120;
+                        const yOffset = -navbarHeight + 60;
+
+                        const y =
+                          el.getBoundingClientRect().top +
+                          window.pageYOffset +
+                          yOffset;
+
+                        window.scrollTo({ top: y, behavior: "smooth" });
+                      }
+                    }, 200);
+                  } else {
+                    const el = document.getElementById("contact-anchor");
+                    if (el) {
+                      const navbar = document.querySelector("nav");
+                      const navbarHeight = navbar ? navbar.offsetHeight : 120;
+                      const yOffset = -navbarHeight + 60;
+
+                      const y =
+                        el.getBoundingClientRect().top +
+                        window.pageYOffset +
+                        yOffset;
+
+                      window.scrollTo({ top: y, behavior: "smooth" });
+                    }
+                  }
+                }}
                 className="px-8 py-4 bg-white text-primary rounded-full font-semibold hover:scale-105 transition-transform"
               >
                 Bizimle İletişime Geçin
