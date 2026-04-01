@@ -1,14 +1,34 @@
+import { useNavigate, useLocation } from "react-router-dom";
 import { Layers } from "lucide-react";
 import { Link } from "react-router-dom";
 
 function Footer() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const handleContactClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    const contactSection = document.getElementById("contact");
-    if (contactSection) {
-      contactSection.scrollIntoView({ behavior: "smooth" });
+
+    if (location.pathname !== "/") {
+      navigate("/");
+
+      setTimeout(() => {
+        const el = document.getElementById("contact-anchor");
+        if (el) {
+          const yOffset = -120;
+          const y =
+            el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+          window.scrollTo({ top: y, behavior: "smooth" });
+        }
+      }, 200);
     } else {
-      window.location.href = "/#contact";
+      const el = document.getElementById("contact-anchor");
+      if (el) {
+        const yOffset = -120;
+        const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+        window.scrollTo({ top: y, behavior: "smooth" });
+      }
     }
   };
 
@@ -89,6 +109,7 @@ function Footer() {
               <li>
                 <a
                   href="/#contact-anchor"
+                  onClick={handleContactClick}
                   className="text-gray-300 hover:text-accent transition-colors"
                 >
                   İletişim
