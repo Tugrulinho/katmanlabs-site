@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Calendar, X, Clock } from 'lucide-react';
+import { useState } from "react";
+import { Calendar, X, Clock } from "lucide-react";
 
 interface MeetingSchedulerProps {
   isOpen: boolean;
@@ -8,24 +8,62 @@ interface MeetingSchedulerProps {
 
 function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    date: '',
-    time: ''
+    firstName: "",
+    lastName: "",
+    email: "",
+    date: "",
+    time: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Meeting scheduled:', formData);
-    alert('Toplantı talebiniz alındı! En kısa sürede sizinle iletişime geçeceğiz.');
-    onClose();
-    setFormData({ firstName: '', lastName: '', email: '', date: '', time: '' });
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: `${formData.firstName} ${formData.lastName}`,
+          email: formData.email,
+          message: `Toplantı Talebi\nTarih: ${formData.date}\nSaat: ${formData.time}`,
+          type: "meeting",
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Mail gönderilemedi");
+      }
+
+      alert(
+        "Toplantı talebiniz alındı. En kısa sürede sizinle iletişime geçeceğiz.",
+      );
+
+      onClose();
+
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        date: "",
+        time: "",
+      });
+    } catch (err) {
+      console.error(err);
+      alert("Bir hata oluştu. Lütfen tekrar deneyin.");
+    }
   };
 
   const timeSlots = [
-    '09:00', '10:00', '11:00', '12:00', '13:00',
-    '14:00', '15:00', '16:00', '17:00', '18:00'
+    "09:00",
+    "10:00",
+    "11:00",
+    "12:00",
+    "13:00",
+    "14:00",
+    "15:00",
+    "16:00",
+    "17:00",
+    "18:00",
   ];
 
   if (!isOpen) return null;
@@ -48,30 +86,42 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
             >
               <X className="w-5 h-5 text-white" />
             </button>
-            <h3 className="text-2xl font-bold text-white mb-2">Toplantı Planla</h3>
-            <p className="text-white/90 text-sm">Size uygun bir tarih ve saat seçin</p>
+            <h3 className="text-2xl font-bold text-white mb-2">
+              Toplantı Planla
+            </h3>
+            <p className="text-white/90 text-sm">
+              Size uygun bir tarih ve saat seçin
+            </p>
           </div>
 
           <form onSubmit={handleSubmit} className="p-6 space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Ad</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Ad
+                </label>
                 <input
                   type="text"
                   required
                   value={formData.firstName}
-                  onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, firstName: e.target.value })
+                  }
                   className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:border-pink-500 focus:outline-none transition-colors"
                   placeholder="Adınız"
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Soyad</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Soyad
+                </label>
                 <input
                   type="text"
                   required
                   value={formData.lastName}
-                  onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, lastName: e.target.value })
+                  }
                   className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:border-pink-500 focus:outline-none transition-colors"
                   placeholder="Soyadınız"
                 />
@@ -79,26 +129,34 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Email</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Email
+              </label>
               <input
                 type="email"
                 required
                 value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
                 className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:border-pink-500 focus:outline-none transition-colors"
                 placeholder="email@ornek.com"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Tarih</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Tarih
+              </label>
               <div className="relative">
                 <input
                   type="date"
                   required
                   value={formData.date}
-                  onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                  min={new Date().toISOString().split('T')[0]}
+                  onChange={(e) =>
+                    setFormData({ ...formData, date: e.target.value })
+                  }
+                  min={new Date().toISOString().split("T")[0]}
                   className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:border-pink-500 focus:outline-none transition-colors"
                 />
                 <Calendar className="absolute right-3 top-3 w-5 h-5 text-gray-400 pointer-events-none" />
@@ -106,17 +164,23 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Saat</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Saat
+              </label>
               <div className="relative">
                 <select
                   required
                   value={formData.time}
-                  onChange={(e) => setFormData({ ...formData, time: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, time: e.target.value })
+                  }
                   className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-lg focus:border-pink-500 focus:outline-none transition-colors appearance-none"
                 >
                   <option value="">Saat seçin</option>
                   {timeSlots.map((time) => (
-                    <option key={time} value={time}>{time}</option>
+                    <option key={time} value={time}>
+                      {time}
+                    </option>
                   ))}
                 </select>
                 <Clock className="absolute right-3 top-3 w-5 h-5 text-gray-400 pointer-events-none" />
