@@ -46,6 +46,9 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
           message: `Toplantı Talebi\nTarih: ${formData.date}\nSaat: ${formData.time}`,
           website: website,
           cfToken: cfToken,
+
+          meeting_date: formData.date,
+          meeting_time: formData.time,
         }),
       });
 
