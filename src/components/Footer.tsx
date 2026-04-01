@@ -14,7 +14,7 @@ function Footer() {
       setTimeout(() => {
         const el = document.getElementById("contact-anchor");
         if (el) {
-          const yOffset = -120;
+          const yOffset = -180;
           const y =
             el.getBoundingClientRect().top + window.pageYOffset + yOffset;
 
