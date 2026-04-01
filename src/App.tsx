@@ -1,3 +1,4 @@
+import FloatingMeetingButton from "./components/FloatingMeetingButton";
 import Messages from "./pages/Messages";
 import { useState, useEffect, useRef } from "react";
 import { Routes, Route, useNavigate, Link } from "react-router-dom";
@@ -1307,6 +1308,7 @@ function App() {
           <Route index element={<div>Admin V2 Dashboard</div>} />
         </Route>
       </Routes>
+      <FloatingMeetingButton />
     </>
   );
 }
