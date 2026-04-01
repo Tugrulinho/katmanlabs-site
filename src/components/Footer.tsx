@@ -16,7 +16,7 @@ function Footer() {
         if (el) {
           const navbar = document.querySelector("nav");
           const navbarHeight = navbar ? navbar.offsetHeight : 120;
-          const yOffset = -navbarHeight - 20;
+          const yOffset = -navbarHeight + 20;
           const y =
             el.getBoundingClientRect().top + window.pageYOffset + yOffset;
 
