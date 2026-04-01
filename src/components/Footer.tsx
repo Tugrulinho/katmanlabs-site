@@ -88,7 +88,7 @@ function Footer() {
               </li>
               <li>
                 <a
-                  href="/#contact"
+                  href="/#contact-anchor"
                   className="text-gray-300 hover:text-accent transition-colors"
                 >
                   İletişim
