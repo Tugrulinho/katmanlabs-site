@@ -1,3 +1,4 @@
+import { google } from "googleapis";
 import { createClient } from "@supabase/supabase-js";
 import { Resend } from "resend";
 const rateLimitMap = new Map();
@@ -9,11 +10,34 @@ const supabase = createClient(
   process.env.SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!,
 );
+const oAuth2Client = new google.auth.OAuth2(
+  process.env.GOOGLE_CLIENT_ID,
+  process.env.GOOGLE_CLIENT_SECRET,
+);
+
+oAuth2Client.setCredentials({
+  refresh_token: process.env.GOOGLE_REFRESH_TOKEN,
+});
+
+const calendar = google.calendar({ version: "v3", auth: oAuth2Client });
 export default async function handler(req: any, res: any) {
   const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
 
   const now = Date.now();
   const userData = rateLimitMap.get(ip) || { count: 0, last: now };
+  const {
+    name,
+    email,
+    phone,
+    service,
+    message,
+    website,
+    cfToken,
+    meeting_date,
+    meeting_time,
+  } = req.body;
+  const startDateTime = new Date(`${meeting_date}T${meeting_time}:00`);
+  const endDateTime = new Date(startDateTime.getTime() + 30 * 60000);
 
   if (now - userData.last > WINDOW_MS) {
     userData.count = 1;
@@ -46,19 +70,28 @@ export default async function handler(req: any, res: any) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
+  const event = {
+    summary: `Yeni Toplantı - ${name}`,
+    description: `Email: ${email}`,
+    start: {
+      dateTime: startDateTime.toISOString(),
+      timeZone: "Europe/Istanbul",
+    },
+    end: {
+      dateTime: endDateTime.toISOString(),
+      timeZone: "Europe/Istanbul",
+    },
+    attendees: [{ email }],
+    conferenceData: {
+      createRequest: {
+        requestId: Date.now().toString(),
+        conferenceSolutionKey: { type: "hangoutsMeet" },
+      },
+    },
+  };
 
   try {
-    const {
-      name,
-      email,
-      phone,
-      service,
-      message,
-      website,
-      cfToken,
-      meeting_date,
-      meeting_time,
-    } = req.body;
+    const { name, email, meeting_date, meeting_time } = req.body;
     if (!cfToken) {
       return res.status(400).json({ error: "Doğrulama yok" });
     }
@@ -96,6 +129,33 @@ export default async function handler(req: any, res: any) {
     if (existingMeeting) {
       return res.status(400).json({ error: "Bu saat dolu" });
     }
+    const event = {
+      summary: `Yeni Toplantı - ${name}`,
+      description: `Email: ${email}`,
+      start: {
+        dateTime: startDateTime.toISOString(),
+        timeZone: "Europe/Istanbul",
+      },
+      end: {
+        dateTime: endDateTime.toISOString(),
+        timeZone: "Europe/Istanbul",
+      },
+      attendees: [{ email }],
+      conferenceData: {
+        createRequest: {
+          requestId: Date.now().toString(),
+          conferenceSolutionKey: { type: "hangoutsMeet" },
+        },
+      },
+    };
+
+    const calendarResponse = await calendar.events.insert({
+      calendarId: process.env.GOOGLE_CALENDAR_ID,
+      requestBody: event,
+      conferenceDataVersion: 1,
+    });
+
+    const meetLink = calendarResponse.data.hangoutLink;
     const { error: meetingInsertError } = await supabase
       .from("meetings")
       .insert([
@@ -104,6 +164,7 @@ export default async function handler(req: any, res: any) {
           email,
           meeting_date,
           meeting_time,
+          meet_link: meetLink,
         },
       ]);
 
@@ -218,7 +279,11 @@ export default async function handler(req: any, res: any) {
     </div>
   `,
     });
-    return res.status(200).json({ success: true, id: data?.id });
+    return res.status(200).json({
+      success: true,
+      id: data?.id,
+      meetLink,
+    });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: "Sunucu hatası" });
