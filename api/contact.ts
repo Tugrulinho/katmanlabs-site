@@ -25,19 +25,6 @@ export default async function handler(req: any, res: any) {
 
   const now = Date.now();
   const userData = rateLimitMap.get(ip) || { count: 0, last: now };
-  const {
-    name,
-    email,
-    phone,
-    service,
-    message,
-    website,
-    cfToken,
-    meeting_date,
-    meeting_time,
-  } = req.body;
-  const startDateTime = new Date(`${meeting_date}T${meeting_time}:00`);
-  const endDateTime = new Date(startDateTime.getTime() + 30 * 60000);
 
   if (now - userData.last > WINDOW_MS) {
     userData.count = 1;
@@ -70,28 +57,22 @@ export default async function handler(req: any, res: any) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
-  const event = {
-    summary: `Yeni Toplantı - ${name}`,
-    description: `Email: ${email}`,
-    start: {
-      dateTime: startDateTime.toISOString(),
-      timeZone: "Europe/Istanbul",
-    },
-    end: {
-      dateTime: endDateTime.toISOString(),
-      timeZone: "Europe/Istanbul",
-    },
-    attendees: [{ email }],
-    conferenceData: {
-      createRequest: {
-        requestId: Date.now().toString(),
-        conferenceSolutionKey: { type: "hangoutsMeet" },
-      },
-    },
-  };
 
   try {
-    const { name, email, meeting_date, meeting_time } = req.body;
+    const {
+      name,
+      email,
+      phone,
+      service,
+      message,
+      website,
+      cfToken,
+      meeting_date,
+      meeting_time,
+    } = req.body;
+
+    const startDateTime = new Date(`${meeting_date}T${meeting_time}:00`);
+    const endDateTime = new Date(startDateTime.getTime() + 30 * 60000);
     if (!cfToken) {
       return res.status(400).json({ error: "Doğrulama yok" });
     }
@@ -129,6 +110,7 @@ export default async function handler(req: any, res: any) {
     if (existingMeeting) {
       return res.status(400).json({ error: "Bu saat dolu" });
     }
+
     const event = {
       summary: `Yeni Toplantı - ${name}`,
       description: `Email: ${email}`,
