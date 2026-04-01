@@ -29,6 +29,20 @@ export default async function handler(req: any, res: any) {
       .status(429)
       .json({ error: "Çok fazla istek attınız, biraz bekleyin." });
   }
+  if (req.method === "GET") {
+    const { date } = req.query;
+
+    const { data, error } = await supabase
+      .from("meetings")
+      .select("meeting_time")
+      .eq("meeting_date", date);
+
+    if (error) {
+      return res.status(500).json({ error: "Saatler alınamadı" });
+    }
+
+    return res.status(200).json(data);
+  }
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }

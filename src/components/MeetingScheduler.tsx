@@ -9,6 +9,7 @@ interface MeetingSchedulerProps {
 function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
   const [cfToken, setCfToken] = useState("");
   const [website, setWebsite] = useState("");
+  const [bookedTimes, setBookedTimes] = useState<string[]>([]);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -26,7 +27,24 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
     script.async = true;
     document.body.appendChild(script);
   }, []);
+  useEffect(() => {
+    if (!formData.date) {
+      setBookedTimes([]);
+      return;
+    }
 
+    fetch(`/api/contact?date=${formData.date}`)
+      .then((res) => res.json())
+      .then((data) => {
+        const times = Array.isArray(data)
+          ? data.map((item: any) => item.meeting_time)
+          : [];
+        setBookedTimes(times);
+      })
+      .catch(() => {
+        setBookedTimes([]);
+      });
+  }, [formData.date]);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!cfToken) {
@@ -210,8 +228,12 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
                 >
                   <option value="">Saat seçin</option>
                   {timeSlots.map((time) => (
-                    <option key={time} value={time}>
-                      {time}
+                    <option
+                      key={time}
+                      value={time}
+                      disabled={bookedTimes.includes(time)}
+                    >
+                      {time} {bookedTimes.includes(time) ? "(dolu)" : ""}
                     </option>
                   ))}
                 </select>
