@@ -53,7 +53,8 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
       });
 
       if (!res.ok) {
-        throw new Error("Mail gönderilemedi");
+        const errorData = await res.json();
+        throw new Error(errorData.error || "Bir hata oluştu");
       }
       setCfToken("");
 
@@ -80,7 +81,7 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
       if ((window as any).turnstile) {
         (window as any).turnstile.reset();
       }
-      alert("Bir hata oluştu. Lütfen tekrar deneyin.");
+      alert("Seçtiğiniz saat dolu olabilir. Lütfen başka bir saat deneyin.");
     }
   };
 
