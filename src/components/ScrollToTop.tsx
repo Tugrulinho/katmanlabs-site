@@ -10,7 +10,11 @@ export default function ScrollToTop() {
 
       if (element) {
         setTimeout(() => {
-          element.scrollIntoView({ behavior: "smooth" });
+          const yOffset = -100;
+          const y =
+            element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+          window.scrollTo({ top: y, behavior: "smooth" });
         }, 100);
       }
 
