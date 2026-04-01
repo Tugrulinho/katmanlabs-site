@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Calendar, X, Clock } from "lucide-react";
 
 interface MeetingSchedulerProps {
@@ -7,6 +7,8 @@ interface MeetingSchedulerProps {
 }
 
 function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
+  const [cfToken, setCfToken] = useState("");
+  const [website, setWebsite] = useState("");
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -14,9 +16,23 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
     date: "",
     time: "",
   });
+  useEffect(() => {
+    (window as any).onTurnstileSuccess = (token: string) => {
+      setCfToken(token);
+    };
+
+    const script = document.createElement("script");
+    script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+    script.async = true;
+    document.body.appendChild(script);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!cfToken) {
+      alert("Doğrulama başarısız");
+      return;
+    }
 
     try {
       const res = await fetch("/api/contact", {
@@ -28,8 +44,8 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
           phone: "Toplantı Talebi", // geçici
           service: "Toplantı Planlama",
           message: `Toplantı Talebi\nTarih: ${formData.date}\nSaat: ${formData.time}`,
-          website: "",
-          cfToken: "", // şimdilik boş (hata devam edecek ama bu normal)
+          website: website,
+          cfToken: cfToken,
         }),
       });
 
@@ -189,7 +205,21 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
                 <Clock className="absolute right-3 top-3 w-5 h-5 text-gray-400 pointer-events-none" />
               </div>
             </div>
-
+            <div style={{ display: "none" }}>
+              <label>Website</label>
+              <input
+                type="text"
+                value={website}
+                onChange={(e) => setWebsite(e.target.value)}
+                autoComplete="off"
+                tabIndex={-1}
+              />
+            </div>
+            <div
+              className="cf-turnstile"
+              data-sitekey="0x4AAAAAACt8xcbnaubosl1H"
+              data-callback="onTurnstileSuccess"
+            />
             <button
               type="submit"
               className="w-full py-3 bg-gradient-to-r from-pink-600 to-orange-600 text-white rounded-lg font-semibold hover:scale-105 transition-transform shadow-lg"
