@@ -195,7 +195,7 @@ function BlogDetail() {
                       if (el) {
                         const navbar = document.querySelector("nav");
                         const navbarHeight = navbar ? navbar.offsetHeight : 120;
-                        const yOffset = -navbarHeight + 80;
+                        const yOffset = -navbarHeight + 60;
 
                         const y =
                           el.getBoundingClientRect().top +
@@ -210,7 +210,7 @@ function BlogDetail() {
                     if (el) {
                       const navbar = document.querySelector("nav");
                       const navbarHeight = navbar ? navbar.offsetHeight : 120;
-                      const yOffset = -navbarHeight + 80;
+                      const yOffset = -navbarHeight + 60;
 
                       const y =
                         el.getBoundingClientRect().top +
