@@ -1,9 +1,22 @@
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import { Calendar } from "lucide-react";
 import MeetingScheduler from "./MeetingScheduler";
 
 export default function FloatingMeetingButton() {
   const [isSchedulerOpen, setIsSchedulerOpen] = useState(false);
+  const location = useLocation();
+
+  const hiddenPaths = [
+    "/hizmet/sosyal-medya-tasarim",
+    "/hizmet/web-tasarim",
+    "/hizmet/dijital-pazarlama",
+    "/hizmet/seo-analitik",
+  ];
+
+  if (hiddenPaths.includes(location.pathname)) {
+    return null;
+  }
 
   return (
     <>
