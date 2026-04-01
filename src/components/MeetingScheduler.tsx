@@ -25,8 +25,11 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
         body: JSON.stringify({
           name: `${formData.firstName} ${formData.lastName}`,
           email: formData.email,
+          phone: "Toplantı Talebi", // geçici
+          service: "Toplantı Planlama",
           message: `Toplantı Talebi\nTarih: ${formData.date}\nSaat: ${formData.time}`,
-          type: "meeting",
+          website: "",
+          cfToken: "", // şimdilik boş (hata devam edecek ama bu normal)
         }),
       });
 
