@@ -67,6 +67,7 @@ function HomePage() {
   const [scrollLeftPos, setScrollLeftPos] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
   const [hasMoved, setHasMoved] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -82,6 +83,16 @@ function HomePage() {
       element.scrollIntoView({ behavior: "smooth" });
     }
   };
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
   useEffect(() => {
     window.onTurnstileSuccess = (token) => {
       setCfToken(token);
@@ -801,7 +812,7 @@ function HomePage() {
             </div>
           ) : blogs.length > 0 ? (
             <div className="grid md:grid-cols-2 gap-8">
-              {blogs.slice(0, 4).map((blog) => (
+              {blogs.slice(0, isMobile ? 2 : 4).map((blog) => (
                 <Link
                   key={blog.id}
                   to={`/blog/${blog.slug}`}
