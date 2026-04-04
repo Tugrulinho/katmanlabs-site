@@ -23,7 +23,7 @@ interface WebTasarimProps {
 function WebTasarim({ onBack }: WebTasarimProps) {
   const [isSchedulerOpen, setIsSchedulerOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
-  const { blogs, loading } = useBlogsByCategory("Web Tasarim");
+  const { blogs, loading } = useBlogsByCategory("Web Tasarım");
 
   const sections = [
     { id: "web-tasarim-neden", label: "Web Tasarım Neden Önemli" },
