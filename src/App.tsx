@@ -144,14 +144,17 @@ function HomePage() {
       setIsSubmitting(false);
     }
   };
-  const getCategoryColor = (category: string) => {
+  const getBlogBadgeColor = (category: string) => {
     const colors: Record<string, string> = {
-      "Sosyal Medya": "bg-pink-100 text-pink-700 border-pink-300",
-      "Web Tasarım": "bg-blue-100 text-blue-700 border-blue-300",
-      "Dijital Pazarlama": "bg-orange-100 text-orange-700 border-orange-300",
-      SEO: "bg-green-100 text-green-700 border-green-300",
-      Genel: "bg-gray-100 text-gray-700 border-gray-300",
+      "Sosyal Medya Yönetimi": "bg-pink-500",
+      "Web Tasarım": "bg-blue-500",
+      "Dijital Pazarlama": "bg-purple-500",
+      SEO: "bg-green-500",
+      Analitik: "bg-cyan-500",
+      "İçerik Üretimi": "bg-orange-500",
+      Genel: "bg-gray-500",
     };
+
     return colors[category] || colors["Genel"];
   };
 
@@ -793,31 +796,46 @@ function HomePage() {
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
           </div>
         ) : blogs.length > 0 ? (
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {blogs.slice(0, 4).map((blog, index) => (
-                <Link
-                  key={index}
-                  to={`/blog/${blog.slug}`}
-                  className="group bg-gray-50 rounded-xl p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-200"
-                >
-                  <div
-                    className={`inline-block px-3 py-1 rounded-full text-xs font-medium border mb-4 ${getCategoryColor(blog.category)}`}
+          <div className="grid md:grid-cols-2 gap-8">
+            {blogs.slice(0, 4).map((blog) => (
+              <Link
+                key={blog.id}
+                to={`/blog/${blog.slug}`}
+                className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
+              >
+                <div className="relative h-48 overflow-hidden">
+                  <img
+                    src={blog.image_url}
+                    alt={blog.title}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                  <span
+                    className={`absolute bottom-4 left-4 px-3 py-1 text-white text-xs font-semibold rounded-full ${getBlogBadgeColor(blog.category)}`}
                   >
                     {blog.category}
-                  </div>
-                  <h3 className="text-xl font-bold text-primary-dark mb-3 line-clamp-2 group-hover:text-secondary transition-colors">
+                  </span>
+                </div>
+
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-primary-dark mb-2 group-hover:text-secondary transition-colors">
                     {blog.title}
                   </h3>
-                  <p className="text-gray-600 line-clamp-3">{blog.excerpt}</p>
-                </Link>
-              ))}
-            </div>
+                  <p className="text-gray-600 mb-4 line-clamp-2">
+                    {blog.excerpt}
+                  </p>
+                  <div className="flex items-center text-secondary font-semibold">
+                    Devamını Oku
+                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-2 transition-transform" />
+                  </div>
+                </div>
+              </Link>
+            ))}
           </div>
         ) : (
-          <div className="text-center py-20 text-gray-400">
-            <p>Blog yazıları yükleniyor...</p>
-          </div>
+          <p className="text-center text-gray-500">
+            Henüz blog yazısı bulunmamaktadır.
+          </p>
         )}
       </section>
 
