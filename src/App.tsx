@@ -776,8 +776,8 @@ function HomePage() {
         id="blog-gallery"
         className="py-20 bg-gradient-to-b from-gray-50 to-white"
       >
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-          <div className="text-center">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent-light/20 rounded-full text-primary mb-4">
               <BookOpen className="w-4 h-4" />
               <span className="text-sm font-medium">
