@@ -82,7 +82,8 @@ function Navbar() {
 
   const getCategoryColor = (category: string) => {
     const colors: Record<string, string> = {
-      "Sosyal Medya": "bg-pink-500/30 text-pink-200 border-pink-400/50",
+      "Sosyal Medya Yönetimi":
+        "bg-pink-500/30 text-pink-200 border-pink-400/50",
       "Web Tasarım": "bg-blue-500/30 text-blue-200 border-blue-400/50",
       "Dijital Pazarlama":
         "bg-purple-500/30 text-purple-200 border-purple-400/50",
