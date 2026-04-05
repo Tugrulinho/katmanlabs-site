@@ -968,9 +968,9 @@ function HomePage() {
             {sortedClients.map((brand, index) => (
               <div
                 key={index}
-                className="shrink-0 w-[130px] md:w-[180px] px-1 py-3 flex items-center justify-center"
+                className="shrink-0 w-[150px] md:w-[230px] px-2 py-3 flex items-center justify-center"
               >
-                <div className="w-[130px] md:w-[180px] bg-white rounded-2xl p-3 shadow-md border border-gray-100 flex flex-col items-center justify-center gap-2">
+                <div className="w-[150px] md:w-[230px] bg-white rounded-2xl p-4 shadow-md border border-gray-100 flex flex-col items-center justify-center gap-2">
                   <div className="h-16 flex items-center justify-center group">
                     {brand.website_url ? (
                       <a
