@@ -981,7 +981,7 @@ function HomePage() {
                         <img
                           src={brand.logo_url}
                           alt={brand.name}
-                          className="h-12 max-w-[120px] object-contain transition-transform duration-300 hover:scale-110 opacity-80 hover:opacity-100"
+                          className="block h-12 max-w-[120px] object-contain transition-all duration-300 hover:scale-125 opacity-80 hover:opacity-100"
                         />
                       </a>
                     ) : (
