@@ -16,6 +16,7 @@ export default function AdminClients() {
   const [websiteUrl, setWebsiteUrl] = useState("");
   const [sortOrder, setSortOrder] = useState(0);
   const [isActive, setIsActive] = useState(true);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const fetchClients = async () => {
@@ -65,7 +66,39 @@ export default function AdminClients() {
 
     fetchClients();
   };
+  const addClient = handleAddClient;
+  const updateClient = async () => {
+    if (!editingId) return;
 
+    setLoading(true);
+
+    const { error } = await supabase
+      .from("clients")
+      .update({
+        name,
+        logo_url: logoUrl,
+        website_url: websiteUrl || null,
+        sort_order: sortOrder,
+        is_active: isActive,
+      })
+      .eq("id", editingId);
+
+    if (error) {
+      console.error("Update error:", error);
+      setLoading(false);
+      return;
+    }
+
+    setEditingId(null);
+    setName("");
+    setLogoUrl("");
+    setWebsiteUrl("");
+    setSortOrder(0);
+    setIsActive(true);
+
+    await fetchClients();
+    setLoading(false);
+  };
   const handleDeleteClient = async (id: string) => {
     const { error } = await supabase.from("clients").delete().eq("id", id);
 
@@ -127,11 +160,16 @@ export default function AdminClients() {
           </label>
 
           <button
-            type="submit"
+            type="button"
+            onClick={editingId ? updateClient : addClient}
             disabled={loading}
             className="bg-black text-white rounded-lg px-4 py-2"
           >
-            {loading ? "Ekleniyor..." : "Referans Ekle"}
+            {loading
+              ? "Kaydediliyor..."
+              : editingId
+                ? "Güncelle"
+                : "Referans Ekle"}
           </button>
         </form>
       </div>
@@ -159,6 +197,18 @@ export default function AdminClients() {
                 className="bg-red-500 text-white rounded-lg px-3 py-2"
               >
                 Sil
+              </button>
+              <button
+                onClick={() => {
+                  setEditingId(client.id);
+                  setName(client.name);
+                  setLogoUrl(client.logo_url);
+                  setWebsiteUrl(client.website_url || "");
+                  setSortOrder(client.sort_order);
+                  setIsActive(client.is_active);
+                }}
+              >
+                Düzenle
               </button>
             </div>
           ))}
