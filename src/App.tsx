@@ -959,26 +959,19 @@ function HomePage() {
                 "Birçok başarılı markayla çalışma fırsatı bulduk"}
             </p>
           </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
-            {clients.map((brand, index) => (
+        </div>
+        <div className="overflow-hidden">
+          <div className="flex gap-12 animate-marquee w-max">
+            {[...clients, ...clients].map((brand, index) => (
               <div
                 key={index}
-                className="group relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-200 hover:border-pink-300"
+                className="flex items-center justify-center p-6 min-w-full md:min-w-[200px]"
               >
-                <div className="flex flex-col items-center justify-center gap-4">
-                  <div className="w-20 h-20 bg-gradient-to-br from-pink-100 to-orange-100 rounded-xl flex items-center justify-center text-4xl group-hover:scale-110 transition-transform duration-300">
-                    <img
-                      src={brand.logo_url}
-                      alt={brand.name}
-                      className="h-12 object-contain"
-                    />
-                  </div>
-                  <h3 className="text-lg font-bold text-primary-dark text-center">
-                    {brand.name}
-                  </h3>
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-br from-pink-500/5 to-orange-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                <img
+                  src={brand.logo_url}
+                  alt={brand.name}
+                  className="h-12 object-contain"
+                />
               </div>
             ))}
           </div>
