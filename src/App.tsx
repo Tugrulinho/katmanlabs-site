@@ -1,6 +1,7 @@
 import FloatingMeetingButton from "./components/FloatingMeetingButton";
 import Messages from "./pages/Messages";
 import { useState, useEffect, useRef } from "react";
+import { supabase } from "./lib/supabase";
 import { Routes, Route, useNavigate, Link } from "react-router-dom";
 import {
   ArrowRight,
@@ -77,6 +78,7 @@ function HomePage() {
   const [website, setWebsite] = useState("");
   const [cfToken, setCfToken] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [clients, setClients] = useState<any[]>([]);
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
@@ -102,6 +104,26 @@ function HomePage() {
     script.async = true;
     document.body.appendChild(script);
   }, []);
+
+  useEffect(() => {
+    const fetchClients = async () => {
+      const { data, error } = await supabase
+        .from("clients")
+        .select("*")
+        .eq("is_active", true)
+        .order("sort_order", { ascending: true });
+
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      setClients(data || []);
+    };
+
+    fetchClients();
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!cfToken) {
@@ -939,20 +961,18 @@ function HomePage() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
-            {[
-              { name: "TechStart", logo: "🚀" },
-              { name: "FashionHub", logo: "👗" },
-              { name: "FoodMaster", logo: "🍔" },
-              { name: "HealthPlus", logo: "💊" },
-              { name: "EduLearn", logo: "📚" },
-            ].map((brand, index) => (
+            {clients.map((brand, index) => (
               <div
                 key={index}
                 className="group relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-200 hover:border-pink-300"
               >
                 <div className="flex flex-col items-center justify-center gap-4">
                   <div className="w-20 h-20 bg-gradient-to-br from-pink-100 to-orange-100 rounded-xl flex items-center justify-center text-4xl group-hover:scale-110 transition-transform duration-300">
-                    {brand.logo}
+                    <img
+                      src={brand.logo_url}
+                      alt={brand.name}
+                      className="h-12 object-contain"
+                    />
                   </div>
                   <h3 className="text-lg font-bold text-primary-dark text-center">
                     {brand.name}
