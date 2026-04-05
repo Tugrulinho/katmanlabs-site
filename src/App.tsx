@@ -967,12 +967,12 @@ function HomePage() {
                 key={index}
                 className="min-w-[80%] md:min-w-[240px] px-4 py-6 flex items-center justify-center"
               >
-                <div className="w-full bg-white rounded-2xl p-6 shadow-md border border-gray-100 flex flex-col items-center justify-center gap-4">
+                <div className="w-[160px] md:w-[200px] bg-white rounded-2xl p-6 shadow-md border border-gray-100 flex flex-col items-center justify-center gap-2">
                   <div className="h-16 flex items-center justify-center">
                     <img
                       src={brand.logo_url}
                       alt={brand.name}
-                      className="h-12 object-contain"
+                      className="h-16 object-contain"
                     />
                   </div>
 
