@@ -965,7 +965,7 @@ function HomePage() {
             {[...clients, ...clients].map((brand, index) => (
               <div
                 key={index}
-                className="flex items-center justify-center p-6 min-w-full md:min-w-[200px]"
+                className="min-w-full md:min-w-[240px] px-4 py-6 flex items-center justify-center"
               >
                 <img
                   src={brand.logo_url}
