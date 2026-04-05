@@ -469,3 +469,14 @@
 .animate-marquee {
   animation: marquee 10s linear infinite;
 }
+.marquee-item {
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
+}
+
+.marquee-item:hover {
+  transform: scale(1.15);
+  opacity: 1;
+  z-index: 10;
+}
