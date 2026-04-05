@@ -964,19 +964,33 @@ function HomePage() {
           </div>
         </div>
         <div className="overflow-hidden">
-          <div className="flex gap-8 animate-marquee w-max">
+          <div className="flex gap-4 animate-marquee hover:[animation-play-state:paused] w-max">
             {[...sortedClients, ...sortedClients].map((brand, index) => (
               <div
                 key={index}
-                className="shrink-0 w-[180px] md:w-[240px] px-2 py-4 flex items-center justify-center"
+                className="shrink-0 w-[130px] md:w-[180px] px-1 py-3 flex items-center justify-center"
               >
-                <div className="w-[160px] md:w-[200px] bg-white rounded-2xl p-6 shadow-md border border-gray-100 flex flex-col items-center justify-center gap-2">
+                <div className="w-[130px] md:w-[180px] bg-white rounded-2xl p-3 shadow-md border border-gray-100 flex flex-col items-center justify-center gap-2">
                   <div className="h-16 flex items-center justify-center">
-                    <img
-                      src={brand.logo_url}
-                      alt={brand.name}
-                      className="h-16 object-contain"
-                    />
+                    {brand.website_url ? (
+                      <a
+                        href={brand.website_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <img
+                          src={brand.logo_url}
+                          alt={brand.name}
+                          className="h-12 max-w-[120px] object-contain transition-transform duration-300 hover:scale-110 opacity-80 hover:opacity-100"
+                        />
+                      </a>
+                    ) : (
+                      <img
+                        src={brand.logo_url}
+                        alt={brand.name}
+                        className="h-12 max-w-[120px] object-contain"
+                      />
+                    )}
                   </div>
 
                   <div className="text-sm font-semibold text-primary-dark text-center">

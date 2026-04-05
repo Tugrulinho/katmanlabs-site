@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { Link, useNavigate, Outlet, useLocation } from 'react-router-dom';
-import { signOut } from '../lib/auth';
+import { useState, useEffect } from "react";
+import { Link, useNavigate, Outlet, useLocation } from "react-router-dom";
+import { signOut } from "../lib/auth";
 import {
   LayoutDashboard,
   FileText,
@@ -10,8 +10,8 @@ import {
   Grid3x3,
   LogOut,
   Menu,
-  X
-} from 'lucide-react';
+  X,
+} from "lucide-react";
 
 export default function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -19,39 +19,40 @@ export default function AdminLayout() {
   const unreadCount = messages.filter((msg) => msg.is_read === false).length;
   const navigate = useNavigate();
   const location = useLocation();
- useEffect(() => {
-  const loadMessages = () => {
-    fetch('/api/messages')
-      .then((res) => res.json())
-      .then((data) => setMessages(data));
-  };
+  useEffect(() => {
+    const loadMessages = () => {
+      fetch("/api/messages")
+        .then((res) => res.json())
+        .then((data) => setMessages(data));
+    };
 
-  loadMessages();
+    loadMessages();
 
-  window.addEventListener('focus', loadMessages);
+    window.addEventListener("focus", loadMessages);
 
-  return () => {
-    window.removeEventListener('focus', loadMessages);
-  };
-}, []);
+    return () => {
+      window.removeEventListener("focus", loadMessages);
+    };
+  }, []);
 
   const handleSignOut = async () => {
     try {
       await signOut();
-      navigate('/admin/login');
+      navigate("/admin/login");
     } catch (error) {
-      console.error('Error signing out:', error);
+      console.error("Error signing out:", error);
     }
   };
 
   const menuItems = [
-    { path: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-    { path: '/admin/blogs', icon: FileText, label: 'Blog Management' },
-    { path: '/admin/blogs/new', icon: PlusCircle, label: 'New Blog' },
-    { path: '/admin/content', icon: Settings, label: 'Site Content' },
-    { path: '/admin/services', icon: Grid3x3, label: 'Service Cards' },
-    { path: '/admin/pricing', icon: Package, label: 'Pricing Cards' },
-    { path: '/admin/messages', icon: FileText, label: 'Mesajlar' },
+    { path: "/admin/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+    { path: "/admin/blogs", icon: FileText, label: "Blog Management" },
+    { path: "/admin/blogs/new", icon: PlusCircle, label: "New Blog" },
+    { path: "/admin/content", icon: Settings, label: "Site Content" },
+    { path: "/admin/services", icon: Grid3x3, label: "Service Cards" },
+    { path: "/admin/pricing", icon: Package, label: "Pricing Cards" },
+    { path: "/admin/messages", icon: FileText, label: "Mesajlar" },
+    { path: "/admin/clients", icon: FileText, label: "Referanslar" },
   ];
 
   return (
@@ -86,7 +87,7 @@ export default function AdminLayout() {
       <aside
         className={`
           fixed top-16 left-0 bottom-0 w-64 bg-white border-r border-slate-200 z-20 transition-transform duration-300 ease-in-out
-          ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+          ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
           lg:translate-x-0
         `}
       >
@@ -96,26 +97,26 @@ export default function AdminLayout() {
             const isActive = location.pathname === item.path;
 
             return (
-  <Link
-  key={item.path}
-  to={item.path}
-  onClick={() => setSidebarOpen(false)}
-  className={`
+              <Link
+                key={item.path}
+                to={item.path}
+                onClick={() => setSidebarOpen(false)}
+                className={`
     flex items-center justify-between px-4 py-3 rounded-lg transition-colors font-medium
-    ${isActive ? 'bg-blue-50 text-blue-700' : 'text-slate-700 hover:bg-slate-100'}
+    ${isActive ? "bg-blue-50 text-blue-700" : "text-slate-700 hover:bg-slate-100"}
   `}
->
-  <div className="flex items-center gap-3">
-    <Icon className="w-5 h-5" />
-    <span>{item.label}</span>
-  </div>
+              >
+                <div className="flex items-center gap-3">
+                  <Icon className="w-5 h-5" />
+                  <span>{item.label}</span>
+                </div>
 
-  {item.path === '/admin/messages' && unreadCount > 0 && (
-    <span className="bg-red-500 text-white text-xs font-semibold min-w-[20px] h-5 flex items-center justify-center rounded-full px-2">
-      {unreadCount}
-    </span>
-  )}
-</Link>
+                {item.path === "/admin/messages" && unreadCount > 0 && (
+                  <span className="bg-red-500 text-white text-xs font-semibold min-w-[20px] h-5 flex items-center justify-center rounded-full px-2">
+                    {unreadCount}
+                  </span>
+                )}
+              </Link>
             );
           })}
         </nav>
