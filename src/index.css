@@ -487,8 +487,8 @@
   left: 10%;
   width: 80%;
   height: 20px;
-  background: radial-gradient(circle, rgba(0, 0, 0, 0.15), transparent 70%);
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.25), transparent 70%);
   filter: blur(8px);
-  opacity: 0.6;
+  opacity: 0.9;
   pointer-events: none;
 }
