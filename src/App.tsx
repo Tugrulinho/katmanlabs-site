@@ -971,7 +971,7 @@ function HomePage() {
                 className="shrink-0 w-[160px] md:w-[280px] px-2 py-3 flex items-center justify-center"
               >
                 <div
-                  className="marquee-card w-[160px] md:w-[280px] bg-white rounded-2xl p-4 shadow-md border border-gray-100 flex flex-col items-center justify-center gap-2 relative overflow-hidden"
+                  className="marquee-card w-[160px] md:w-[280px] bg-white rounded-2xl p-4 shadow-md border border-gray-100 flex flex-col items-center justify-center gap-2 relative"
                   style={
                     {
                       "--glow-color": brand.glow_color || "#94a3b8",
