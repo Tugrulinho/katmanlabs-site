@@ -52,6 +52,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminBlogs from "./pages/AdminBlogs";
 import AdminBlogForm from "./pages/AdminBlogForm";
 import AdminContent from "./pages/AdminContent";
+import AdminClients from "./AdminClients";
 import AdminServices from "./pages/AdminServices";
 import AdminPricing from "./pages/AdminPricing";
 import ScrollToTop from "./components/ScrollToTop";
@@ -423,7 +424,9 @@ function HomePage() {
       iconColor: "text-cyan-500",
     },
   ];
-
+  const sortedClients = [...clients].sort(
+    (a, b) => a.sort_order - b.sort_order,
+  );
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
@@ -962,7 +965,7 @@ function HomePage() {
         </div>
         <div className="overflow-hidden">
           <div className="flex gap-8 animate-marquee w-max">
-            {[...clients, ...clients].map((brand, index) => (
+            {[...sortedClients, ...sortedClients].map((brand, index) => (
               <div
                 key={index}
                 className="shrink-0 w-[180px] md:w-[240px] px-2 py-4 flex items-center justify-center"
@@ -1352,6 +1355,7 @@ function App() {
           <Route path="services" element={<AdminServices />} />
           <Route path="pricing" element={<AdminPricing />} />
           <Route path="messages" element={<Messages />} />
+          <Route path="clients" element={<AdminClients />} />
         </Route>
         <Route
           path="/admin-v2"
