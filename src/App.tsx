@@ -961,13 +961,13 @@ function HomePage() {
           </div>
         </div>
         <div className="overflow-hidden">
-          <div className="flex gap-12 animate-marquee w-max">
+          <div className="flex gap-8 animate-marquee w-max">
             {[...clients, ...clients].map((brand, index) => (
               <div
                 key={index}
                 className="min-w-full md:min-w-[240px] px-4 py-6 flex items-center justify-center"
               >
-                <div className="w-full max-w-[220px] bg-white rounded-2xl p-6 shadow-md border border-gray-100 flex flex-col items-center justify-center gap-4">
+                <div className="w-full max-w-[200px] bg-white rounded-2xl p-6 shadow-md border border-gray-100 flex flex-col items-center justify-center gap-4">
                   <div className="h-16 flex items-center justify-center">
                     <img
                       src={brand.logo_url}
