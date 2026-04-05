@@ -965,7 +965,7 @@ function HomePage() {
         </div>
         <div className="overflow-hidden">
           <div className="flex gap-4 animate-marquee hover:[animation-play-state:paused] w-max">
-            {[...sortedClients, ...sortedClients].map((brand, index) => (
+            {sortedClients.map((brand, index) => (
               <div
                 key={index}
                 className="shrink-0 w-[130px] md:w-[180px] px-1 py-3 flex items-center justify-center"
