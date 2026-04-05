@@ -480,3 +480,15 @@
   opacity: 1;
   z-index: 10;
 }
+.marquee-card::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 10%;
+  width: 80%;
+  height: 20px;
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.15), transparent 70%);
+  filter: blur(8px);
+  opacity: 0.6;
+  pointer-events: none;
+}
