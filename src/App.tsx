@@ -43,6 +43,8 @@ import DijitalPazarlama from "./pages/DijitalPazarlama";
 import SeoAnalitik from "./pages/SeoAnalitik";
 import SosyalMedyaTasarim from "./pages/SosyalMedyaTasarim";
 import BlogDetail from "./pages/BlogDetail";
+import BlogSection from "./components/BlogSection";
+import PricingSection from "./components/PricingSection";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminLayout from "./components/AdminLayout";
 import AdminLogin from "./pages/AdminLogin";
@@ -468,141 +470,20 @@ function HomePage() {
 
       <ProcessSection process={process} />
 
-      <section
-        id="blog-gallery"
-        className="py-20 bg-gradient-to-b from-gray-50 to-white"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent-light/20 rounded-full text-primary mb-4">
-              <BookOpen className="w-4 h-4" />
-              <span className="text-sm font-medium">
-                {content.blog_badge || "Blog & İçerikler"}
-              </span>
-            </div>
+      <BlogSection
+        content={content}
+        blogs={blogs}
+        loading={loading}
+        isMobile={isMobile}
+        getBlogBadgeColor={getBlogBadgeColor}
+      />
 
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              {content.blog_title || "Son Blog Yazılarımız"}
-            </h2>
-
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              {content.blog_description ||
-                "Dijital dünyadan güncel içerikler, trendler ve ipuçları"}
-            </p>
-          </div>
-
-          {loading ? (
-            <div className="flex justify-center items-center py-20">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-            </div>
-          ) : blogs.length > 0 ? (
-            <div className="grid md:grid-cols-2 gap-8">
-              {blogs.slice(0, isMobile ? 2 : 4).map((blog) => (
-                <Link
-                  key={blog.id}
-                  to={`/blog/${blog.slug}`}
-                  className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
-                >
-                  <div className="relative h-48 overflow-hidden">
-                    <img
-                      src={blog.image_url}
-                      alt={blog.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-
-                    <span
-                      className={`absolute bottom-4 left-4 px-3 py-1 text-white text-xs font-semibold rounded-full ${getBlogBadgeColor(blog.category)}`}
-                    >
-                      {blog.category}
-                    </span>
-                  </div>
-
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold text-gray-900 mb-2 transition-colors">
-                      {blog.title}
-                    </h3>
-                    <p className="text-gray-600 mb-4 line-clamp-2">
-                      {blog.excerpt}
-                    </p>
-                    <div className="flex items-center text-primary font-semibold">
-                      Devamını Oku
-                      <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-2 transition-transform" />
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-20 text-gray-400">
-              <p>Henüz blog yazısı bulunmamaktadır.</p>
-            </div>
-          )}
-        </div>
-      </section>
-
-      <section id="pricing" className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-primary-dark mb-4">
-              {content.pricing_title || "Paketlerimiz"}
-            </h2>
-            <p className="text-xl text-gray-600">
-              {content.pricing_description || "Her bütçeye uygun çözümler"}
-            </p>
-          </div>
-
-          {packagesLoading ? (
-            <div className="flex justify-center items-center py-20">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-            </div>
-          ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {packages.map((pkg, index) => (
-                <div
-                  key={index}
-                  className={`relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 ${pkg.popular ? "border-2 border-transparent bg-gradient-to-br from-pink-50 to-orange-50 scale-105 ring-2 ring-pink-500/20" : "border border-gray-200"}`}
-                >
-                  {pkg.popular && (
-                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                      <span className="px-4 py-1 bg-gradient-to-r from-pink-500 to-orange-500 text-white rounded-full text-sm font-semibold shadow-lg">
-                        ⭐ En Popüler
-                      </span>
-                    </div>
-                  )}
-                  <h3 className="text-2xl font-bold text-primary-dark mb-2">
-                    {pkg.name}
-                  </h3>
-                  <div className="mb-6">
-                    <span
-                      className={`text-4xl font-bold ${pkg.popular ? "text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-orange-600" : "text-transparent bg-clip-text bg-gradient-cta"}`}
-                    >
-                      {pkg.price}
-                    </span>
-                    <span className="text-gray-600 ml-2">/ {pkg.period}</span>
-                  </div>
-                  <ul className="space-y-3 mb-8">
-                    {pkg.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-start gap-2">
-                        <Check
-                          className={`w-5 h-5 flex-shrink-0 mt-0.5 ${pkg.popular ? "text-pink-500" : "text-secondary"}`}
-                        />
-                        <span className="text-gray-700">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <button
-                    onClick={() => scrollToSection("contact")}
-                    className={`w-full py-3 rounded-lg font-semibold transition-all ${pkg.popular ? "bg-gradient-to-r from-pink-500 to-orange-500 text-white hover:scale-105 shadow-lg" : "border-2 border-primary text-primary hover:bg-primary hover:text-white"}`}
-                  >
-                    Hemen Başla
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
+      <PricingSection
+        content={content}
+        packages={packages}
+        packagesLoading={packagesLoading}
+        scrollToSection={scrollToSection}
+      />
 
       <section className="py-24 bg-gradient-to-br from-gray-50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
