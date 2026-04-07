@@ -1,23 +1,8 @@
-import type { CSSProperties } from "react";
 import { Star } from "lucide-react";
 
 type TestimonialsSectionProps = {
   content: any;
   clients: Array<any>;
-};
-
-const getGlowColor = (brandName: string): string => {
-  const glowMap: Record<string, string> = {
-    Actisilk: "#FFD700",
-    "Atasehir Bilişim": "#00CED1",
-    Proatak: "#0047AB",
-    "PRX Türkiye": "#8B3A3A",
-    Wiqo: "#8B0000",
-    "Ekson Farma": "#A0223E",
-    "Forlled Türkiye": "#D4AF37",
-    Alphascience: "#0066CC",
-  };
-  return glowMap[brandName] || "#94a3b8";
 };
 
 export default function TestimonialsSection({
@@ -53,16 +38,6 @@ export default function TestimonialsSection({
             >
               <div
                 className="marquee-card w-[160px] md:w-[280px] bg-white rounded-2xl p-4 shadow-md justify-center gap-2 relative group"
-                style={
-                  {
-                    "--glow-color": getGlowColor(brand.name),
-                    boxShadow: `
-                      0 0 8px ${getGlowColor(brand.name)}40,
-                      0 0 15px ${getGlowColor(brand.name)}20,
-                      0 0 30px ${getGlowColor(brand.name)}10
-                    `,
-                  } as CSSProperties
-                }
               >
                 <div className="h-16 flex items-center justify-center group">
                   {brand.website_url ? (
