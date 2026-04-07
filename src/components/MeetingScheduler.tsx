@@ -10,6 +10,7 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
   const [cfToken, setCfToken] = useState("");
   const [website, setWebsite] = useState("");
   const [bookedTimes, setBookedTimes] = useState<string[]>([]);
+  const [turnstileReady, setTurnstileReady] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -50,15 +51,19 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
     );
 
     if (win.turnstile) {
-      renderTurnstile();
+      setTurnstileReady(true);
     } else if (existingScript) {
-      existingScript.addEventListener("load", renderTurnstile, { once: true });
+      existingScript.addEventListener("load", () => {
+        setTurnstileReady(true);
+      }, { once: true });
     } else {
       const script = document.createElement("script");
       script.src = scriptSrc;
       script.async = true;
       script.defer = true;
-      script.addEventListener("load", renderTurnstile, { once: true });
+      script.addEventListener("load", () => {
+        setTurnstileReady(true);
+      }, { once: true });
       document.body.appendChild(script);
     }
 
@@ -66,6 +71,26 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
       // no-op cleanup required for render callback reference
     };
   }, []);
+
+  useEffect(() => {
+    const win = window as any;
+    const siteKey = "0x4AAAAAACt8xcbnaubosl1H";
+
+    if (!isOpen || !turnstileReady || !turnstileRef.current) {
+      return;
+    }
+
+    if (win.turnstile) {
+      if (turnstileRef.current.firstChild) {
+        turnstileRef.current.innerHTML = "";
+      }
+      win.turnstile.render(turnstileRef.current, {
+        sitekey: siteKey,
+        callback: (token: string) => setCfToken(token),
+      });
+    }
+  }, [isOpen, turnstileReady]);
+
   useEffect(() => {
     if (!formData.date) {
       setBookedTimes([]);
