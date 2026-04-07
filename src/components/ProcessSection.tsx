@@ -29,7 +29,9 @@ export default function ProcessSection({ process }: ProcessSectionProps) {
                 key={index}
                 className={`group flex items-center gap-8 ${index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"}`}
               >
-                <div className={`flex-1 ${index % 2 === 0 ? "md:text-right" : "md:text-left"}`}>
+                <div
+                  className={`flex-1 ${index % 2 === 0 ? "md:text-right" : "md:text-left"}`}
+                >
                   <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow">
                     <h3 className="text-2xl font-bold text-primary-dark mb-3">
                       {step.title}
