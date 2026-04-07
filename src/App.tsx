@@ -15,6 +15,7 @@ import {
   Zap,
   Clock,
   Award,
+  HelpCircle,
   ChevronRight,
   BookOpen,
   Instagram,
