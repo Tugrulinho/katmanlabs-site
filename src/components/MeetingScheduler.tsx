@@ -26,14 +26,11 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
   };
   useEffect(() => {
     const win = window as any;
-    const callbackName = "onTurnstileSuccessMeeting";
     const siteKey = "0x4AAAAAACt8xcbnaubosl1H";
 
     const onSuccess = (token: string) => {
       setCfToken(token);
     };
-
-    win[callbackName] = onSuccess;
 
     const renderTurnstile = () => {
       if (win.turnstile && turnstileRef.current) {
@@ -42,7 +39,7 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
         }
         win.turnstile.render(turnstileRef.current, {
           sitekey: siteKey,
-          callback: callbackName,
+          callback: onSuccess,
         });
       }
     };
@@ -66,9 +63,7 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
     }
 
     return () => {
-      if (win[callbackName] === onSuccess) {
-        delete win[callbackName];
-      }
+      // no-op cleanup required for render callback reference
     };
   }, []);
   useEffect(() => {
@@ -298,7 +293,6 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
               ref={turnstileRef}
               className="cf-turnstile"
               data-sitekey="0x4AAAAAACt8xcbnaubosl1H"
-              data-callback="onTurnstileSuccessMeeting"
             />
             <button
               type="submit"

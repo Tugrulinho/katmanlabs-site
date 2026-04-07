@@ -18,14 +18,11 @@ function ContactSection({ content }: ContactSectionProps) {
 
   useEffect(() => {
     const win = window as any;
-    const callbackName = "onTurnstileSuccessContact";
     const siteKey = "0x4AAAAAACt8xcbnaubosl1H";
 
     const onSuccess = (token: string) => {
       setCfToken(token);
     };
-
-    win[callbackName] = onSuccess;
 
     const renderTurnstile = () => {
       if (win.turnstile && turnstileRef.current) {
@@ -34,7 +31,7 @@ function ContactSection({ content }: ContactSectionProps) {
         }
         win.turnstile.render(turnstileRef.current, {
           sitekey: siteKey,
-          callback: callbackName,
+          callback: onSuccess,
         });
       }
     };
@@ -58,9 +55,7 @@ function ContactSection({ content }: ContactSectionProps) {
     }
 
     return () => {
-      if (win[callbackName] === onSuccess) {
-        delete win[callbackName];
-      }
+      // no-op cleanup required for render callback reference
     };
   }, []);
 
@@ -290,7 +285,6 @@ function ContactSection({ content }: ContactSectionProps) {
                 ref={turnstileRef}
                 className="cf-turnstile"
                 data-sitekey="0x4AAAAAACt8xcbnaubosl1H"
-                data-callback="onTurnstileSuccessContact"
               ></div>
 
               <button
