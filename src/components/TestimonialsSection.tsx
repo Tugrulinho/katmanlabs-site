@@ -11,9 +11,10 @@ const getGlowColor = (brandName: string): string => {
     Actisilk: "#FFD700",
     "Atasehir Bilişim": "#00CED1",
     Proatak: "#0047AB",
+    "PRX Türkiye": "#8B3A3A",
     Wiqo: "#8B0000",
     "Ekson Farma": "#A0223E",
-    "Forlled Türkiye": "#C0C0C0",
+    "Forlled Türkiye": "#D4AF37",
     Alphascience: "#0066CC",
   };
   return glowMap[brandName] || "#94a3b8";
@@ -55,7 +56,13 @@ export default function TestimonialsSection({
                 style={
                   {
                     "--glow-color": getGlowColor(brand.name),
-                    boxShadow: `0 0 30px ${getGlowColor(brand.name)}20, 0 0 60px ${getGlowColor(brand.name)}15`,
+                    boxShadow: `
+                      0 0 15px ${getGlowColor(brand.name)}80,
+                      0 0 30px ${getGlowColor(brand.name)}60,
+                      0 0 50px ${getGlowColor(brand.name)}40,
+                      0 0 80px ${getGlowColor(brand.name)}20,
+                      0 0 120px ${getGlowColor(brand.name)}10
+                    `,
                   } as CSSProperties
                 }
               >
