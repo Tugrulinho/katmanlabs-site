@@ -6,7 +6,10 @@ type TestimonialsSectionProps = {
   clients: Array<any>;
 };
 
-export default function TestimonialsSection({ content, clients }: TestimonialsSectionProps) {
+export default function TestimonialsSection({
+  content,
+  clients,
+}: TestimonialsSectionProps) {
   return (
     <section className="py-24 bg-gradient-to-br from-zinc-900 via-primary-dark to-zinc-950 relative overflow-hidden">
       <div className="absolute inset-0 opacity-20">
@@ -23,10 +26,12 @@ export default function TestimonialsSection({ content, clients }: TestimonialsSe
             </span>
           </div>
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            {content.testimonials_title || "Katmanlabs'ı Tercih Eden Mutlu Müşterilerimiz"}
+            {content.testimonials_title ||
+              "Katmanlabs'ı Tercih Eden Mutlu Müşterilerimiz"}
           </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            {content.testimonials_description || "Birçok başarılı markayla çalışma fırsatı bulduk"}
+            {content.testimonials_description ||
+              "Birçok başarılı markayla çalışma fırsatı bulduk"}
           </p>
         </div>
       </div>

@@ -459,7 +459,11 @@ function HomePage() {
 
       <TestimonialsSection content={content} clients={sortedClients} />
 
-      <FaqSection content={content} faqs={faqs} scrollToSection={scrollToSection} />
+      <FaqSection
+        content={content}
+        faqs={faqs}
+        scrollToSection={scrollToSection}
+      />
 
       <ContactSection content={content} />
 

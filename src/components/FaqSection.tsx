@@ -15,7 +15,11 @@ type FaqSectionProps = {
   scrollToSection: (id: string) => void;
 };
 
-export default function FaqSection({ content, faqs, scrollToSection }: FaqSectionProps) {
+export default function FaqSection({
+  content,
+  faqs,
+  scrollToSection,
+}: FaqSectionProps) {
   const [activeAccordion, setActiveAccordion] = useState<number | null>(null);
 
   return (
@@ -37,7 +41,8 @@ export default function FaqSection({ content, faqs, scrollToSection }: FaqSectio
             {content.faq_title || "Merak Ettikleriniz"}
           </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            {content.faq_description || "Size yardımcı olmak için en çok sorulan soruları yanıtladık"}
+            {content.faq_description ||
+              "Size yardımcı olmak için en çok sorulan soruları yanıtladık"}
           </p>
         </div>
 
@@ -65,14 +70,18 @@ export default function FaqSection({ content, faqs, scrollToSection }: FaqSectio
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    setActiveAccordion(activeAccordion === index ? null : index);
+                    setActiveAccordion(
+                      activeAccordion === index ? null : index,
+                    );
                   }}
                   className="w-full p-4 flex items-center gap-4 text-left transition-all duration-300"
                 >
                   <div className="flex-shrink-0">
                     <div
                       className={`relative w-10 h-10 rounded-lg bg-gradient-to-br ${faq.gradient} flex items-center justify-center border border-white/20 transition-all duration-300 ${
-                        isActive ? "scale-110 shadow-lg" : "group-hover:scale-105"
+                        isActive
+                          ? "scale-110 shadow-lg"
+                          : "group-hover:scale-105"
                       }`}
                     >
                       <Icon className={`w-5 h-5 ${faq.iconColor}`} />
@@ -93,7 +102,9 @@ export default function FaqSection({ content, faqs, scrollToSection }: FaqSectio
 
                   <div
                     className={`flex-shrink-0 w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center transition-all duration-300 ${
-                      isActive ? "bg-accent-light/20 rotate-180" : "group-hover:bg-white/20"
+                      isActive
+                        ? "bg-accent-light/20 rotate-180"
+                        : "group-hover:bg-white/20"
                     }`}
                   >
                     {isActive ? (
