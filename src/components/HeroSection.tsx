@@ -1,4 +1,14 @@
-import { ArrowRight, ChevronDown, Layers, Instagram, Facebook, Linkedin, Search, Youtube, MessageCircle } from "lucide-react";
+import {
+  ArrowRight,
+  ChevronDown,
+  Layers,
+  Instagram,
+  Facebook,
+  Linkedin,
+  Search,
+  Youtube,
+  MessageCircle,
+} from "lucide-react";
 import SplineScene from "./SplineScene";
 
 type HeroSectionProps = {
@@ -153,7 +163,8 @@ function HeroSection({ content, scrollToSection }: HeroSectionProps) {
               onClick={() => scrollToSection("contact")}
               className="px-8 py-4 bg-gradient-cta text-white rounded-full font-semibold hover:scale-105 transition-transform shadow-lg flex items-center justify-center gap-2"
             >
-              {content.hero_cta_primary || "Hemen Başla"} <ArrowRight className="w-5 h-5" />
+              {content.hero_cta_primary || "Hemen Başla"}{" "}
+              <ArrowRight className="w-5 h-5" />
             </button>
             <button
               onClick={() => scrollToSection("services")}
