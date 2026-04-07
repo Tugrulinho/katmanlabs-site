@@ -36,9 +36,7 @@ export default function TestimonialsSection({
               key={index}
               className="shrink-0 w-[160px] md:w-[280px] px-2 py-3 flex items-center justify-center"
             >
-              <div
-                className="marquee-card w-[160px] md:w-[280px] bg-white rounded-2xl p-4 shadow-md justify-center gap-2 relative group"
-              >
+              <div className="marquee-card w-[160px] md:w-[280px] bg-white rounded-2xl p-4 shadow-md justify-center gap-2 relative group">
                 <div className="h-16 flex items-center justify-center group">
                   {brand.website_url ? (
                     <a
