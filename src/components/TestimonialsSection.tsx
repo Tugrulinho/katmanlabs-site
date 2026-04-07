@@ -49,24 +49,22 @@ export default function TestimonialsSection({
           {[...clients, ...clients].map((brand, index) => (
             <div
               key={index}
-              className="shrink-0 w-[160px] md:w-[280px] px-2 py-1 flex items-center justify-center"
+              className="shrink-0 w-[160px] md:w-[280px] px-2 py-3 flex items-center justify-center"
             >
               <div
-                className="marquee-card w-[160px] md:w-[280px] bg-white rounded-2xl p-3 shadow-md justify-center gap-1 relative group"
+                className="marquee-card w-[160px] md:w-[280px] bg-white rounded-2xl p-4 shadow-md justify-center gap-2 relative group"
                 style={
                   {
                     "--glow-color": getGlowColor(brand.name),
                     boxShadow: `
-                      0 0 15px ${getGlowColor(brand.name)}80,
-                      0 0 30px ${getGlowColor(brand.name)}60,
-                      0 0 50px ${getGlowColor(brand.name)}40,
-                      0 0 80px ${getGlowColor(brand.name)}20,
-                      0 0 120px ${getGlowColor(brand.name)}10
+                      0 0 8px ${getGlowColor(brand.name)}40,
+                      0 0 15px ${getGlowColor(brand.name)}20,
+                      0 0 30px ${getGlowColor(brand.name)}10
                     `,
                   } as CSSProperties
                 }
               >
-                <div className="h-12 flex items-center justify-center group">
+                <div className="h-16 flex items-center justify-center group">
                   {brand.website_url ? (
                     <a
                       href={brand.website_url}
@@ -76,19 +74,19 @@ export default function TestimonialsSection({
                       <img
                         src={brand.logo_url}
                         alt={brand.name}
-                        className="marquee-item h-10 max-w-[100px] object-contain"
+                        className="marquee-item h-12 max-w-[120px] object-contain"
                       />
                     </a>
                   ) : (
                     <img
                       src={brand.logo_url}
                       alt={brand.name}
-                      className="marquee-item h-10 max-w-[100px] object-contain"
+                      className="marquee-item h-12 max-w-[120px] object-contain"
                     />
                   )}
                 </div>
 
-                <div className="text-xs font-semibold text-primary-dark text-center">
+                <div className="text-sm font-semibold text-primary-dark text-center">
                   {brand.name}
                 </div>
               </div>
