@@ -53,17 +53,25 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
     if (win.turnstile) {
       setTurnstileReady(true);
     } else if (existingScript) {
-      existingScript.addEventListener("load", () => {
-        setTurnstileReady(true);
-      }, { once: true });
+      existingScript.addEventListener(
+        "load",
+        () => {
+          setTurnstileReady(true);
+        },
+        { once: true },
+      );
     } else {
       const script = document.createElement("script");
       script.src = scriptSrc;
       script.async = true;
       script.defer = true;
-      script.addEventListener("load", () => {
-        setTurnstileReady(true);
-      }, { once: true });
+      script.addEventListener(
+        "load",
+        () => {
+          setTurnstileReady(true);
+        },
+        { once: true },
+      );
       document.body.appendChild(script);
     }
 
