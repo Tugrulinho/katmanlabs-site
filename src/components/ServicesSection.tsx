@@ -17,7 +17,11 @@ type ServicesSectionProps = {
   servicesLoading: boolean;
 };
 
-function ServicesSection({ content, services, servicesLoading }: ServicesSectionProps) {
+function ServicesSection({
+  content,
+  services,
+  servicesLoading,
+}: ServicesSectionProps) {
   return (
     <section id="services" className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -53,17 +57,17 @@ function ServicesSection({ content, services, servicesLoading }: ServicesSection
               const borderColor = service.featured
                 ? "#ec4899"
                 : index === 1
-                ? "#215080"
-                : index === 2
-                ? "#676fbc"
-                : "#cf99fa";
+                  ? "#215080"
+                  : index === 2
+                    ? "#676fbc"
+                    : "#cf99fa";
               const iconColor = service.featured
                 ? "#ec4899"
                 : index === 1
-                ? "#215080"
-                : index === 2
-                ? "#676fbc"
-                : "#cf99fa";
+                  ? "#215080"
+                  : index === 2
+                    ? "#676fbc"
+                    : "#cf99fa";
 
               return (
                 <Link
@@ -77,7 +81,10 @@ function ServicesSection({ content, services, servicesLoading }: ServicesSection
                       ⭐ EN POPÜLER
                     </div>
                   )}
-                  <div className="mb-6 service-icon" style={{ color: iconColor }}>
+                  <div
+                    className="mb-6 service-icon"
+                    style={{ color: iconColor }}
+                  >
                     {service.icon}
                   </div>
                   <h3 className="text-2xl font-bold text-primary-dark mb-4">
@@ -86,13 +93,20 @@ function ServicesSection({ content, services, servicesLoading }: ServicesSection
                   <p className="text-gray-600 mb-6">{service.description}</p>
                   <ul className="space-y-3 mb-6">
                     {service.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-center gap-2 text-gray-700">
-                        <Check className={`w-5 h-5 ${service.featured ? "text-pink-500" : "text-secondary"}`} />
+                      <li
+                        key={idx}
+                        className="flex items-center gap-2 text-gray-700"
+                      >
+                        <Check
+                          className={`w-5 h-5 ${service.featured ? "text-pink-500" : "text-secondary"}`}
+                        />
                         <span>{feature}</span>
                       </li>
                     ))}
                   </ul>
-                  <div className={`flex items-center gap-2 font-semibold transition-colors ${service.featured ? "text-pink-600 group-hover:text-pink-700" : "text-primary group-hover:text-secondary"}`}>
+                  <div
+                    className={`flex items-center gap-2 font-semibold transition-colors ${service.featured ? "text-pink-600 group-hover:text-pink-700" : "text-primary group-hover:text-secondary"}`}
+                  >
                     Detaylı Bilgi <ChevronRight className="w-4 h-4" />
                   </div>
                 </Link>
