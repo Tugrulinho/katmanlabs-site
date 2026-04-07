@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Calendar, X, Clock } from "lucide-react";
 
 interface MeetingSchedulerProps {
@@ -17,6 +17,7 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
     date: "",
     time: "",
   });
+  const turnstileRef = useRef<HTMLDivElement | null>(null);
   const normalizeDate = (date: string) => {
     if (!date.includes(".")) return date;
 
@@ -24,14 +25,47 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
     return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
   };
   useEffect(() => {
-    (window as any).onTurnstileSuccess = (token: string) => {
+    const win = window as any;
+    const callbackName = "onTurnstileSuccessMeeting";
+    const siteKey = "0x4AAAAAACt8xcbnaubosl1H";
+
+    const onSuccess = (token: string) => {
       setCfToken(token);
     };
 
-    const script = document.createElement("script");
-    script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
-    script.async = true;
-    document.body.appendChild(script);
+    win[callbackName] = onSuccess;
+
+    const renderTurnstile = () => {
+      if (win.turnstile && turnstileRef.current) {
+        win.turnstile.render(turnstileRef.current, {
+          sitekey: siteKey,
+          callback: callbackName,
+        });
+      }
+    };
+
+    const scriptSrc = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+    const existingScript = document.querySelector<HTMLScriptElement>(
+      `script[src="${scriptSrc}"]`,
+    );
+
+    if (win.turnstile) {
+      renderTurnstile();
+    } else if (existingScript) {
+      existingScript.addEventListener("load", renderTurnstile, { once: true });
+    } else {
+      const script = document.createElement("script");
+      script.src = scriptSrc;
+      script.async = true;
+      script.defer = true;
+      document.body.appendChild(script);
+    }
+
+    return () => {
+      if (win[callbackName] === onSuccess) {
+        delete win[callbackName];
+      }
+    };
   }, []);
   useEffect(() => {
     if (!formData.date) {
@@ -257,9 +291,10 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
               />
             </div>
             <div
+              ref={turnstileRef}
               className="cf-turnstile"
               data-sitekey="0x4AAAAAACt8xcbnaubosl1H"
-              data-callback="onTurnstileSuccess"
+              data-callback="onTurnstileSuccessMeeting"
             />
             <button
               type="submit"

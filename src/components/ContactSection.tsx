@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { ArrowRight, Mail, Phone, MessageCircle } from "lucide-react";
 
 type ContactSectionProps = {
@@ -14,23 +14,49 @@ function ContactSection({ content }: ContactSectionProps) {
   const [website, setWebsite] = useState("");
   const [cfToken, setCfToken] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const turnstileRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const win = window as any;
-    win.onTurnstileSuccess = (token: string) => {
+    const callbackName = "onTurnstileSuccessContact";
+    const siteKey = "0x4AAAAAACt8xcbnaubosl1H";
+
+    const onSuccess = (token: string) => {
       setCfToken(token);
     };
 
-    const script = document.createElement("script");
-    script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
-    script.async = true;
-    document.body.appendChild(script);
+    win[callbackName] = onSuccess;
+
+    const renderTurnstile = () => {
+      if (win.turnstile && turnstileRef.current) {
+        win.turnstile.render(turnstileRef.current, {
+          sitekey: siteKey,
+          callback: callbackName,
+        });
+      }
+    };
+
+    const scriptSrc = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+    const existingScript = document.querySelector<HTMLScriptElement>(
+      `script[src="${scriptSrc}"]`,
+    );
+
+    if (win.turnstile) {
+      renderTurnstile();
+    } else if (existingScript) {
+      existingScript.addEventListener("load", renderTurnstile, { once: true });
+    } else {
+      const script = document.createElement("script");
+      script.src = scriptSrc;
+      script.async = true;
+      script.defer = true;
+      document.body.appendChild(script);
+    }
 
     return () => {
-      if (script.parentNode) {
-        script.parentNode.removeChild(script);
+      if (win[callbackName] === onSuccess) {
+        delete win[callbackName];
       }
-      delete win.onTurnstileSuccess;
     };
   }, []);
 
@@ -257,9 +283,10 @@ function ContactSection({ content }: ContactSectionProps) {
               </div>
 
               <div
+                ref={turnstileRef}
                 className="cf-turnstile"
                 data-sitekey="0x4AAAAAACt8xcbnaubosl1H"
-                data-callback="onTurnstileSuccess"
+                data-callback="onTurnstileSuccessContact"
               ></div>
 
               <button
