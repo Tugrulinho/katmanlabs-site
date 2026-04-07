@@ -39,7 +39,7 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
       if (win.turnstile && turnstileRef.current) {
         win.turnstile.render(turnstileRef.current, {
           sitekey: siteKey,
-          callback: callbackName,
+          callback: onSuccess,
         });
       }
     };
@@ -58,6 +58,7 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
       script.src = scriptSrc;
       script.async = true;
       script.defer = true;
+      script.addEventListener("load", renderTurnstile, { once: true });
       document.body.appendChild(script);
     }
 
@@ -294,7 +295,6 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
               ref={turnstileRef}
               className="cf-turnstile"
               data-sitekey="0x4AAAAAACt8xcbnaubosl1H"
-              data-callback="onTurnstileSuccessMeeting"
             />
             <button
               type="submit"

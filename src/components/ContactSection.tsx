@@ -31,7 +31,7 @@ function ContactSection({ content }: ContactSectionProps) {
       if (win.turnstile && turnstileRef.current) {
         win.turnstile.render(turnstileRef.current, {
           sitekey: siteKey,
-          callback: callbackName,
+          callback: onSuccess,
         });
       }
     };
@@ -50,6 +50,7 @@ function ContactSection({ content }: ContactSectionProps) {
       script.src = scriptSrc;
       script.async = true;
       script.defer = true;
+      script.addEventListener("load", renderTurnstile, { once: true });
       document.body.appendChild(script);
     }
 
@@ -286,7 +287,6 @@ function ContactSection({ content }: ContactSectionProps) {
                 ref={turnstileRef}
                 className="cf-turnstile"
                 data-sitekey="0x4AAAAAACt8xcbnaubosl1H"
-                data-callback="onTurnstileSuccessContact"
               ></div>
 
               <button

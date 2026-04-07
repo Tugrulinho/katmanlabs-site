@@ -71,11 +71,18 @@ export default async function handler(req: any, res: any) {
       meeting_time,
     } = req.body;
 
-    const startDateTime = new Date(`${meeting_date}T${meeting_time}:00`);
-    const endDateTime = new Date(startDateTime.getTime() + 30 * 60000);
     if (!cfToken) {
       return res.status(400).json({ error: "Doğrulama yok" });
     }
+
+    if (website) {
+      return res.status(400).json({ error: "Spam tespit edildi" });
+    }
+
+    if (!name || !email || !message) {
+      return res.status(400).json({ error: "Eksik alan var" });
+    }
+
     const verifyRes = await fetch(
       "https://challenges.cloudflare.com/turnstile/v0/siteverify",
       {
@@ -95,64 +102,7 @@ export default async function handler(req: any, res: any) {
     if (!verifyData.success) {
       return res.status(400).json({ error: "Bot doğrulama başarısız" });
     }
-    // aynı saat dolu mu kontrol et
-    const { data: existingMeeting, error: meetingCheckError } = await supabase
-      .from("meetings")
-      .select("id")
-      .eq("meeting_date", meeting_date)
-      .eq("meeting_time", meeting_time)
-      .maybeSingle();
 
-    if (meetingCheckError) {
-      return res.status(500).json({ error: "Toplantı kontrolü başarısız" });
-    }
-
-    if (existingMeeting) {
-      return res.status(400).json({ error: "Bu saat dolu" });
-    }
-
-    const event = {
-      summary: `Yeni Toplantı - ${name}`,
-      description: `Email: ${email}`,
-      start: {
-        dateTime: startDateTime.toISOString(),
-        timeZone: "Europe/Istanbul",
-      },
-      end: {
-        dateTime: endDateTime.toISOString(),
-        timeZone: "Europe/Istanbul",
-      },
-      attendees: [{ email }],
-      conferenceData: {
-        createRequest: {
-          requestId: Date.now().toString(),
-          conferenceSolutionKey: { type: "hangoutsMeet" },
-        },
-      },
-    };
-
-    const calendarResponse = await calendar.events.insert({
-      calendarId: process.env.GOOGLE_CALENDAR_ID,
-      requestBody: event,
-      conferenceDataVersion: 1,
-    });
-
-    const meetLink = calendarResponse.data.hangoutLink;
-    const { error: meetingInsertError } = await supabase
-      .from("meetings")
-      .insert([
-        {
-          name,
-          email,
-          meeting_date,
-          meeting_time,
-          meet_link: meetLink,
-        },
-      ]);
-
-    if (meetingInsertError) {
-      return res.status(500).json({ error: "Toplantı kaydı oluşturulamadı" });
-    }
     const { error: dbError } = await supabase.from("contact_messages").insert([
       {
         name,
@@ -168,25 +118,109 @@ export default async function handler(req: any, res: any) {
     if (dbError) {
       console.error("DB ERROR:", dbError);
     }
-    if (website) {
-      return res.status(400).json({ error: "Spam tespit edildi" });
-    }
-    if (!name || !email || !message) {
-      return res.status(400).json({ error: "Eksik alan var" });
+
+    const isMeeting = Boolean(meeting_date && meeting_time);
+
+    let meetLink: string | null = null;
+
+    if (isMeeting) {
+      const startDateTime = new Date(`${meeting_date}T${meeting_time}:00`);
+      if (isNaN(startDateTime.getTime())) {
+        return res.status(400).json({ error: "Geçersiz toplantı tarihi" });
+      }
+      const endDateTime = new Date(startDateTime.getTime() + 30 * 60000);
+
+      const { data: existingMeeting, error: meetingCheckError } = await supabase
+        .from("meetings")
+        .select("id")
+        .eq("meeting_date", meeting_date)
+        .eq("meeting_time", meeting_time)
+        .maybeSingle();
+
+      if (meetingCheckError) {
+        return res.status(500).json({ error: "Toplantı kontrolü başarısız" });
+      }
+
+      if (existingMeeting) {
+        return res.status(400).json({ error: "Bu saat dolu" });
+      }
+
+      const event = {
+        summary: `Yeni Toplantı - ${name}`,
+        description: `Email: ${email}`,
+        start: {
+          dateTime: startDateTime.toISOString(),
+          timeZone: "Europe/Istanbul",
+        },
+        end: {
+          dateTime: endDateTime.toISOString(),
+          timeZone: "Europe/Istanbul",
+        },
+        attendees: [{ email }],
+        conferenceData: {
+          createRequest: {
+            requestId: Date.now().toString(),
+            conferenceSolutionKey: { type: "hangoutsMeet" },
+          },
+        },
+      };
+
+      const calendarResponse = await calendar.events.insert({
+        calendarId: process.env.GOOGLE_CALENDAR_ID,
+        requestBody: event,
+        conferenceDataVersion: 1,
+      });
+
+      meetLink = calendarResponse.data.hangoutLink;
+      const { error: meetingInsertError } = await supabase
+        .from("meetings")
+        .insert([
+          {
+            name,
+            email,
+            meeting_date,
+            meeting_time,
+            meet_link: meetLink,
+          },
+        ]);
+
+      if (meetingInsertError) {
+        return res.status(500).json({ error: "Toplantı kaydı oluşturulamadı" });
+      }
     }
 
-    const { data, error } = await resend.emails.send({
-      from: "KatmanLabs <info@katmanlabs.com>",
-      to: "info@katmanlabs.com",
-      subject: `Yeni İletişim Formu - ${name}`,
-      html: `
+    const adminSubject = isMeeting
+      ? `Yeni Toplantı Talebi - ${name}`
+      : `Yeni İletişim Formu - ${name}`;
+
+    const adminHtml = isMeeting
+      ? `
+    <div style="font-family: Arial, sans-serif; color: #111827; line-height: 1.6; padding: 24px; background: #f9fafb;">
+      <div style="max-width: 640px; margin: 0 auto; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden;">
+        <div style="background: linear-gradient(135deg, #1e3a8a, #7c3aed); padding: 20px 24px;">
+          <h2 style="margin: 0; color: #ffffff; font-size: 22px;">Yeni Toplantı Talebi</h2>
+          <p style="margin: 8px 0 0; color: #e9d5ff; font-size: 14px;">Web sitenizden yeni bir toplantı isteği gönderildi.</p>
+        </div>
+        <div style="padding: 24px;">
+          <p><strong>İsim:</strong> ${name}</p>
+          <p><strong>Email:</strong> <a href="mailto:${email}" style="color: #2563eb; text-decoration: none;">${email}</a></p>
+          <p><strong>Telefon:</strong> ${phone || "-"}</p>
+          <p><strong>Hizmet:</strong> ${service || "-"}</p>
+          <p><strong>Tarih:</strong> ${meeting_date}</p>
+          <p><strong>Saat:</strong> ${meeting_time}</p>
+          <p><strong>Google Meet Linki:</strong> <a href="${meetLink}" style="color: #2563eb; text-decoration: none;">${meetLink}</a></p>
+          <div style="margin-top: 24px; padding: 16px; background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 10px; white-space: pre-line;">${message}</div>
+        </div>
+      </div>
+    </div>
+  `
+      : `
     <div style="font-family: Arial, sans-serif; color: #111827; line-height: 1.6; padding: 24px; background: #f9fafb;">
       <div style="max-width: 640px; margin: 0 auto; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden;">
         <div style="background: linear-gradient(135deg, #1e3a8a, #7c3aed); padding: 20px 24px;">
           <h2 style="margin: 0; color: #ffffff; font-size: 22px;">Yeni İletişim Talebi</h2>
           <p style="margin: 8px 0 0; color: #e9d5ff; font-size: 14px;">Web sitenizden yeni bir form gönderimi alındı.</p>
         </div>
-
         <div style="padding: 24px;">
           <table style="width: 100%; border-collapse: collapse;">
             <tr>
@@ -195,9 +229,7 @@ export default async function handler(req: any, res: any) {
             </tr>
             <tr>
               <td style="padding: 10px 0; border-bottom: 1px solid #e5e7eb; font-weight: 700;">Email</td>
-              <td style="padding: 10px 0; border-bottom: 1px solid #e5e7eb;">
-                <a href="mailto:${email}" style="color: #2563eb; text-decoration: none;">${email}</a>
-              </td>
+              <td style="padding: 10px 0; border-bottom: 1px solid #e5e7eb;">${email}</td>
             </tr>
             <tr>
               <td style="padding: 10px 0; border-bottom: 1px solid #e5e7eb; font-weight: 700;">Telefon</td>
@@ -208,44 +240,62 @@ export default async function handler(req: any, res: any) {
               <td style="padding: 10px 0; border-bottom: 1px solid #e5e7eb;">${service || "-"}</td>
             </tr>
           </table>
-
           <div style="margin-top: 24px;">
             <div style="font-weight: 700; margin-bottom: 8px;">Mesaj</div>
-            <div style="padding: 16px; background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 10px; white-space: pre-line;">
-              ${message}
-            </div>
+            <div style="padding: 16px; background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 10px; white-space: pre-line;">${message}</div>
           </div>
         </div>
       </div>
     </div>
-  `,
+  `;
+
+    const adminSend = await resend.emails.send({
+      from: "KatmanLabs <info@katmanlabs.com>",
+      to: "info@katmanlabs.com",
+      subject: adminSubject,
+      html: adminHtml,
     });
 
-    console.log("RESEND DATA:", data);
-    console.log("RESEND ERROR:", error);
-
-    if (error) {
+    if (adminSend.error) {
       return res
         .status(500)
-        .json({ error: error.message || "Mail gönderilemedi" });
+        .json({ error: adminSend.error.message || "Mail gönderilemedi" });
     }
-    await resend.emails.send({
-      from: "KatmanLabs <info@katmanlabs.com>",
-      to: email,
-      subject: "Mesajınız bize ulaştı",
-      html: `
+
+    const userSubject = isMeeting
+      ? "Toplantı talebiniz alındı"
+      : "Mesajınız bize ulaştı";
+
+    const userHtml = isMeeting
+      ? `
+    <div style="font-family: Arial, sans-serif; color: #111827; line-height: 1.6; padding: 24px; background: #f9fafb;">
+      <div style="max-width: 640px; margin: 0 auto; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden;">
+        <div style="background: linear-gradient(135deg, #1e3a8a, #7c3aed); padding: 20px 24px;">
+          <h2 style="margin: 0; color: #ffffff; font-size: 22px;">Toplantı Talebiniz Alındı</h2>
+          <p style="margin: 8px 0 0; color: #e9d5ff; font-size: 14px;">Toplantı talebiniz kaydedildi. Size hemen geri dönüş yapacağız.</p>
+        </div>
+        <div style="padding: 24px;">
+          <p style="margin-top: 0;">Merhaba ${name},</p>
+          <p>Seçtiğiniz toplantı tarihi:</p>
+          <p><strong>${meeting_date} ${meeting_time}</strong></p>
+          <p>Google Meet linkiniz:</p>
+          <p><a href="${meetLink}" style="color: #2563eb; text-decoration: none;">${meetLink}</a></p>
+          <p>Toplantı zamanında bu link üzerinden katılabilirsiniz.</p>
+          <p style="margin-bottom: 0;">KatmanLabs</p>
+        </div>
+      </div>
+    </div>
+  `
+      : `
     <div style="font-family: Arial, sans-serif; color: #111827; line-height: 1.6; padding: 24px; background: #f9fafb;">
       <div style="max-width: 640px; margin: 0 auto; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden;">
         <div style="background: linear-gradient(135deg, #1e3a8a, #7c3aed); padding: 20px 24px;">
           <h2 style="margin: 0; color: #ffffff; font-size: 22px;">Mesajınız Alındı</h2>
           <p style="margin: 8px 0 0; color: #e9d5ff; font-size: 14px;">KatmanLabs ile iletişime geçtiğiniz için teşekkür ederiz.</p>
         </div>
-
         <div style="padding: 24px;">
           <p style="margin-top: 0;">Merhaba ${name},</p>
-
           <p>Mesajınız bize ulaştı. En kısa sürede dönüş sağlayacağız.</p>
-
           <div style="margin: 24px 0; padding: 16px; background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 10px;">
             <div style="font-weight: 700; margin-bottom: 8px;">Gönderdiğiniz bilgiler</div>
             <p style="margin: 6px 0;"><strong>İsim:</strong> ${name}</p>
@@ -254,16 +304,27 @@ export default async function handler(req: any, res: any) {
             <p style="margin: 6px 0;"><strong>Hizmet:</strong> ${service || "-"}</p>
             <p style="margin: 6px 0;"><strong>Mesaj:</strong><br/>${message}</p>
           </div>
-
           <p style="margin-bottom: 0;">KatmanLabs</p>
         </div>
       </div>
     </div>
-  `,
+  `;
+
+    const userSend = await resend.emails.send({
+      from: "KatmanLabs <info@katmanlabs.com>",
+      to: email,
+      subject: userSubject,
+      html: userHtml,
     });
+
+    if (userSend.error) {
+      return res
+        .status(500)
+        .json({ error: userSend.error.message || "Mail gönderilemedi" });
+    }
+
     return res.status(200).json({
       success: true,
-      id: data?.id,
       meetLink,
     });
   } catch (err) {
