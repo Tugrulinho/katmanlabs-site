@@ -29,9 +29,12 @@ function ContactSection({ content }: ContactSectionProps) {
 
     const renderTurnstile = () => {
       if (win.turnstile && turnstileRef.current) {
+        if (turnstileRef.current.firstChild) {
+          turnstileRef.current.innerHTML = "";
+        }
         win.turnstile.render(turnstileRef.current, {
           sitekey: siteKey,
-          callback: onSuccess,
+          callback: callbackName,
         });
       }
     };
@@ -287,6 +290,7 @@ function ContactSection({ content }: ContactSectionProps) {
                 ref={turnstileRef}
                 className="cf-turnstile"
                 data-sitekey="0x4AAAAAACt8xcbnaubosl1H"
+                data-callback="onTurnstileSuccessContact"
               ></div>
 
               <button

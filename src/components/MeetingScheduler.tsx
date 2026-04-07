@@ -37,9 +37,12 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
 
     const renderTurnstile = () => {
       if (win.turnstile && turnstileRef.current) {
+        if (turnstileRef.current.firstChild) {
+          turnstileRef.current.innerHTML = "";
+        }
         win.turnstile.render(turnstileRef.current, {
           sitekey: siteKey,
-          callback: onSuccess,
+          callback: callbackName,
         });
       }
     };
@@ -295,6 +298,7 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
               ref={turnstileRef}
               className="cf-turnstile"
               data-sitekey="0x4AAAAAACt8xcbnaubosl1H"
+              data-callback="onTurnstileSuccessMeeting"
             />
             <button
               type="submit"
