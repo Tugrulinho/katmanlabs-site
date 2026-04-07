@@ -324,8 +324,7 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
             </div>
             <div
               ref={turnstileRef}
-              className="cf-turnstile"
-              data-sitekey="0x4AAAAAACt8xcbnaubosl1H"
+              className="turnstile-container mt-4"
             />
             <button
               type="submit"
