@@ -35,6 +35,9 @@ import HeroSection from "./components/HeroSection";
 import ServicesSection from "./components/ServicesSection";
 import ContactSection from "./components/ContactSection";
 import Footer from "./components/Footer";
+import StatsSection from "./components/StatsSection";
+import AboutSection from "./components/AboutSection";
+import ProcessSection from "./components/ProcessSection";
 import WebTasarim from "./pages/WebTasarim";
 import DijitalPazarlama from "./pages/DijitalPazarlama";
 import SeoAnalitik from "./pages/SeoAnalitik";
@@ -363,20 +366,7 @@ function HomePage() {
         servicesLoading={servicesLoading}
       />
 
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <StatCard
-                key={index}
-                number={stat.number}
-                label={stat.label}
-                index={index}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
+      <StatsSection stats={stats} />
 
       <section id="services" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -474,96 +464,9 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div
-            className="grid md:grid-cols-2 gap-8 items-center"
-            style={{ minHeight: "300px" }}
-          >
-            <div className="flex flex-col justify-center h-full py-8">
-              <h2 className="text-3xl md:text-4xl font-bold text-primary-dark mb-6">
-                {content.about_title || "Biz ne yapıyoruz ?"}
-              </h2>
-              <div className="text-gray-700 leading-relaxed space-y-4 text-base">
-                <p>
-                  {content.about_text_1 ||
-                    "Bugün sosyal medya, işletmeler için sadece bir paylaşım alanı değil; çoğu zaman ilk temas noktası."}
-                </p>
-                <p>
-                  {content.about_text_2 ||
-                    "Katman Labs olarak amacımız; küçük işletmeler için bu alanı rastgele değil, düzenli, anlaşılır ve markayı doğru yansıtan bir yapıya kavuşturmak."}
-                </p>
-                <p>
-                  {content.about_text_3 ||
-                    "Ürün de satsanız, hizmet de verseniz; sosyal medya profiliniz çoğu zaman satıştan önceki son durak."}
-                </p>
-                <p className="font-semibold text-primary-dark">
-                  {content.about_text_4 ||
-                    "Biz bu bütünlüğü kuruyor, sosyal medya hesaplarının sahipsiz kalmadan, düzenli bir şekilde devam etmesini sağlıyoruz."}
-                </p>
-              </div>
-            </div>
+      <AboutSection content={content} />
 
-            <div className="flex items-center justify-center h-full">
-              <div className="relative w-full h-[300px] rounded-2xl overflow-hidden shadow-2xl">
-                <img
-                  src={
-                    content.about_image_url ||
-                    "https://images.pexels.com/photos/607812/pexels-photo-607812.jpeg?auto=compress&cs=tinysrgb&w=800"
-                  }
-                  alt="Sosyal Medya ve İşletme Yönetimi"
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-primary-dark/30 to-transparent"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="process" className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-primary-dark mb-4">
-              {content.process_title || "Çalışma Sürecimiz"}
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              {content.process_description ||
-                "Başarılı projeler için kanıtlanmış 4 adımlık metodolojimiz"}
-            </p>
-          </div>
-
-          <div className="relative">
-            <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-gradient-layer transform -translate-x-1/2 hidden md:block"></div>
-
-            <div className="space-y-12">
-              {process.map((step, index) => (
-                <div
-                  key={index}
-                  className={`group flex items-center gap-8 ${index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"}`}
-                >
-                  <div
-                    className={`flex-1 ${index % 2 === 0 ? "md:text-right" : "md:text-left"}`}
-                  >
-                    <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow">
-                      <h3 className="text-2xl font-bold text-primary-dark mb-3">
-                        {step.title}
-                      </h3>
-                      <p className="text-gray-600">{step.description}</p>
-                    </div>
-                  </div>
-                  <div className="relative flex-shrink-0">
-                    <div className="w-16 h-16 bg-gradient-cta rounded-full flex items-center justify-center text-white text-2xl font-bold shadow-lg z-10 relative transition-all duration-300 group-hover:scale-150 group-hover:shadow-2xl">
-                      {index + 1}
-                    </div>
-                  </div>
-                  <div className="flex-1 hidden md:block"></div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      <ProcessSection process={process} />
 
       <section
         id="blog-gallery"
