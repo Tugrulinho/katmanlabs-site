@@ -104,7 +104,9 @@ function ContactSection({ content }: ContactSectionProps) {
                   <Mail className="w-6 h-6 text-primary" />
                 </div>
                 <div>
-                  <div className="font-semibold text-primary-dark mb-1">Email</div>
+                  <div className="font-semibold text-primary-dark mb-1">
+                    Email
+                  </div>
                   <a
                     href={`mailto:${content.contact_email || "info@katmanlabs.com"}`}
                     className="text-primary hover:text-secondary transition-colors"
@@ -119,7 +121,9 @@ function ContactSection({ content }: ContactSectionProps) {
                   <Phone className="w-6 h-6 text-secondary" />
                 </div>
                 <div>
-                  <div className="font-semibold text-primary-dark mb-1">Telefon</div>
+                  <div className="font-semibold text-primary-dark mb-1">
+                    Telefon
+                  </div>
                   <a
                     href={`tel:${content.contact_phone || "+905428445570"}`}
                     className="text-primary hover:text-secondary transition-colors"
@@ -134,7 +138,9 @@ function ContactSection({ content }: ContactSectionProps) {
                   <MessageCircle className="w-6 h-6 text-accent" />
                 </div>
                 <div>
-                  <div className="font-semibold text-primary-dark mb-1">WhatsApp</div>
+                  <div className="font-semibold text-primary-dark mb-1">
+                    WhatsApp
+                  </div>
                   <a
                     href={`https://wa.me/${content.contact_whatsapp || "905428445570"}`}
                     target="_blank"
@@ -162,7 +168,8 @@ function ContactSection({ content }: ContactSectionProps) {
                 className="inline-flex items-center gap-2 px-6 py-3 bg-white text-primary rounded-lg font-semibold hover:scale-105 transition-transform"
               >
                 <MessageCircle className="w-5 h-5" />
-                {content.contact_consultation_button || "WhatsApp ile İletişime Geç"}
+                {content.contact_consultation_button ||
+                  "WhatsApp ile İletişime Geç"}
               </a>
             </div>
           </div>
@@ -170,7 +177,9 @@ function ContactSection({ content }: ContactSectionProps) {
           <div className="bg-gray-50 p-8 rounded-2xl">
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
-                <label className="block text-sm font-semibold text-primary mb-2">İsim Soyisim</label>
+                <label className="block text-sm font-semibold text-primary mb-2">
+                  İsim Soyisim
+                </label>
                 <input
                   type="text"
                   value={name}
@@ -181,7 +190,9 @@ function ContactSection({ content }: ContactSectionProps) {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-primary mb-2">Email</label>
+                <label className="block text-sm font-semibold text-primary mb-2">
+                  Email
+                </label>
                 <input
                   type="email"
                   value={email}
@@ -192,7 +203,9 @@ function ContactSection({ content }: ContactSectionProps) {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-primary mb-2">Telefon</label>
+                <label className="block text-sm font-semibold text-primary mb-2">
+                  Telefon
+                </label>
                 <input
                   type="tel"
                   value={phone}
@@ -203,7 +216,9 @@ function ContactSection({ content }: ContactSectionProps) {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-primary mb-2">Hangi hizmetlerle ilgileniyorsunuz?</label>
+                <label className="block text-sm font-semibold text-primary mb-2">
+                  Hangi hizmetlerle ilgileniyorsunuz?
+                </label>
                 <select
                   value={service}
                   onChange={(e) => setService(e.target.value)}
@@ -218,7 +233,9 @@ function ContactSection({ content }: ContactSectionProps) {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-primary mb-2">Mesajınız</label>
+                <label className="block text-sm font-semibold text-primary mb-2">
+                  Mesajınız
+                </label>
                 <textarea
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
