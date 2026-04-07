@@ -34,6 +34,7 @@ import StatCard from "./components/StatCard";
 import RotatingText from "./components/RotatingText";
 import Navbar from "./components/Navbar";
 import HeroSection from "./components/HeroSection";
+import ServicesSection from "./components/ServicesSection";
 import Footer from "./components/Footer";
 import WebTasarim from "./pages/WebTasarim";
 import DijitalPazarlama from "./pages/DijitalPazarlama";
@@ -427,6 +428,12 @@ function HomePage() {
       <Navbar />
 
       <HeroSection content={content} scrollToSection={scrollToSection} />
+
+      <ServicesSection
+        content={content}
+        services={services}
+        servicesLoading={servicesLoading}
+      />
 
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
