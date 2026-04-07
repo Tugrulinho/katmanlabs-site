@@ -322,10 +322,7 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
                 tabIndex={-1}
               />
             </div>
-            <div
-              ref={turnstileRef}
-              className="turnstile-container mt-4"
-            />
+            <div ref={turnstileRef} className="turnstile-container mt-4" />
             <button
               type="submit"
               className="w-full py-3 bg-gradient-to-r from-pink-600 to-orange-600 text-white rounded-lg font-semibold hover:scale-105 transition-transform shadow-lg"
