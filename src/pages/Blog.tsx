@@ -144,6 +144,7 @@ export default function Blog() {
                     →
                   </button>
                 </div>
+                <BlogCTA gradient="from-[#17385f] to-[#9062ae]" />
               </div>
 
               <aside className="lg:col-span-4 self-start">
@@ -162,7 +163,6 @@ export default function Blog() {
             </div>
           </div>
         </div>
-        <BlogCTA gradient="from-[#17385f] to-[#9062ae]" />
       </section>
       <Footer />
     </>
