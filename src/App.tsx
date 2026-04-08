@@ -335,14 +335,12 @@ function HomePage() {
       <Navbar />
 
       <HeroSection content={content} scrollToSection={scrollToSection} />
-
+      <StatsSection stats={stats} />
       <ServicesSection
         content={content}
         services={services}
         servicesLoading={servicesLoading}
       />
-
-      <StatsSection stats={stats} />
 
       <AboutSection content={content} />
 
