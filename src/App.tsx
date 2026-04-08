@@ -1,6 +1,11 @@
 import FloatingMeetingButton from "./components/FloatingMeetingButton";
 import Messages from "./pages/Messages";
 import { useState, useEffect, useRef } from "react";
+declare global {
+  interface Window {
+    dataLayer: any[];
+  }
+}
 import { supabase } from "./lib/supabase";
 import { Routes, Route, useNavigate, Link } from "react-router-dom";
 import {
@@ -375,10 +380,22 @@ function HomePage() {
     </div>
   );
 }
-
 function App() {
   const navigate = useNavigate();
+  useEffect(() => {
+    window.dataLayer = window.dataLayer || [];
 
+    window.dataLayer.push({
+      "gtm.start": new Date().getTime(),
+      event: "gtm.js",
+    });
+
+    const script = document.createElement("script");
+    script.async = true;
+    script.src = "https://www.googletagmanager.com/gtm.js?id=GTM-KGLVZXQG";
+
+    document.head.appendChild(script);
+  }, []);
   return (
     <>
       <ScrollToTop />
