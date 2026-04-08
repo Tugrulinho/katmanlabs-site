@@ -306,7 +306,7 @@ function Navbar() {
             </div>
 
             <button
-              onClick={() => scrollToSection("pricing")}
+              onClick={() => scrollToSection("fiyatlar")}
               className="nav-link-hover px-3 py-2 text-gray-300 text-sm font-medium"
             >
               Fiyatlar
