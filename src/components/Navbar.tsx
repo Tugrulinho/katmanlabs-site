@@ -237,7 +237,7 @@ function Navbar() {
                     setIsBlogMenuOpen(false);
                   }, 150);
                 }}
-                onClick={() => scrollToSection("blog-gallery")}
+                onClick={() => navigate("/blog")}
                 className="nav-link-hover flex items-center gap-1 px-3 py-2 text-gray-300 text-sm font-medium"
               >
                 Blog
