@@ -102,7 +102,7 @@ function Footer() {
               </li>
               <li>
                 <a
-                  href="/#pricing"
+                  href="/#fiyatlar"
                   className="text-gray-300 hover:text-accent transition-colors"
                 >
                   Fiyatlar
