@@ -419,6 +419,7 @@ function App() {
           element={<SeoAnalitik onBack={() => navigate("/")} />}
         />
         <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/kategori/:categorySlug" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogDetail />} />
 
         <Route path="/admin/login" element={<AdminLogin />} />

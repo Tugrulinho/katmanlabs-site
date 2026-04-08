@@ -2,20 +2,37 @@ import Navbar from "../components/Navbar";
 import BlogSection from "../components/BlogSection";
 import { useBlogs } from "../hooks/useBlogs";
 import BlogSidebar from "../components/BlogSidebar";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Footer from "../components/Footer";
 import { useEffect, useState } from "react";
 export default function Blog() {
+  const { categorySlug } = useParams();
   const { blogs, loading } = useBlogs();
-  const [searchParams] = useSearchParams();
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(
-    searchParams.get("category"),
-  );
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const postsPerPage = 4;
-
-  const filteredBlogs = selectedCategory
-    ? blogs.filter((blog: any) => blog.category === selectedCategory)
+  const navigate = useNavigate();
+  const slugifyCategory = (value: string) =>
+    value
+      .toLowerCase()
+      .replace(/ğ/g, "g")
+      .replace(/ü/g, "u")
+      .replace(/ş/g, "s")
+      .replace(/ı/g, "i")
+      .replace(/ö/g, "o")
+      .replace(/ç/g, "c")
+      .replace(/\s+/g, "-");
+  const activeCategory = categorySlug
+    ? blogs.find(
+        (blog: any) =>
+          slugifyCategory(blog.category) === decodeURIComponent(categorySlug),
+      )?.category || null
+    : null;
+  const filteredBlogs = categorySlug
+    ? blogs.filter(
+        (blog: any) =>
+          slugifyCategory(blog.category) === decodeURIComponent(categorySlug),
+      )
     : blogs;
   const startIndex = (currentPage - 1) * postsPerPage;
   const paginatedBlogs = filteredBlogs.slice(
@@ -23,7 +40,14 @@ export default function Blog() {
     startIndex + postsPerPage,
   );
   const totalPages = Math.ceil(filteredBlogs.length / postsPerPage);
-
+  useEffect(() => {
+    if (categorySlug) {
+      const decoded = decodeURIComponent(categorySlug);
+      setSelectedCategory(decoded);
+    } else {
+      setSelectedCategory(null);
+    }
+  }, [categorySlug]);
   useEffect(() => {
     setCurrentPage(1);
   }, [selectedCategory]);
@@ -124,8 +148,14 @@ export default function Blog() {
               <aside className="lg:col-span-4 self-start">
                 <BlogSidebar
                   blogs={blogs}
-                  currentCategory={selectedCategory}
-                  onCategorySelect={setSelectedCategory}
+                  currentCategory={activeCategory}
+                  onCategorySelect={(category: string | null) => {
+                    if (category) {
+                      navigate(`/blog/kategori/${slugifyCategory(category)}`);
+                    } else {
+                      navigate("/blog");
+                    }
+                  }}
                 />
               </aside>
             </div>
