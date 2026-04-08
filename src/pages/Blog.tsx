@@ -1,5 +1,6 @@
 import BlogSection from "../components/BlogSection";
 import { useBlogs } from "../hooks/useBlogs";
+import Footer from "../components/Footer";
 export default function Blog() {
   const { blogs, loading } = useBlogs();
   return (
@@ -11,4 +12,5 @@ export default function Blog() {
       getBlogBadgeColor={() => "bg-primary"}
     />
   );
+  <Footer />;
 }
