@@ -5,6 +5,7 @@ import BlogSidebar from "../components/BlogSidebar";
 import { useNavigate, useParams } from "react-router-dom";
 import Footer from "../components/Footer";
 import { useEffect, useState } from "react";
+import BlogCTA from "../components/blog/BlogCTA";
 export default function Blog() {
   const { categorySlug } = useParams();
   const { blogs, loading } = useBlogs();
@@ -162,7 +163,7 @@ export default function Blog() {
           </div>
         </div>
       </section>
-
+      <BlogCTA />
       <Footer />
     </>
   );

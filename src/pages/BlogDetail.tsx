@@ -5,6 +5,7 @@ import Footer from "../components/Footer";
 import { useBlogBySlug } from "../hooks/useBlogBySlug";
 import { useBlogs } from "../hooks/useBlogs";
 import BlogSidebar from "../components/BlogSidebar";
+import BlogCTA from "../components/BlogCTA";
 
 function BlogDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -177,56 +178,7 @@ function BlogDetail() {
               ) : null}
             </article>
 
-            <div
-              className={`mt-12 p-8 bg-gradient-to-br ${colors.gradient} rounded-2xl text-white`}
-            >
-              <h3 className="text-2xl font-bold mb-4">
-                Bu içerik size yardımcı oldu mu?
-              </h3>
-              <p className="text-gray-200 mb-6">
-                Dijital dünyada başarılı olmak için profesyonel destek alın.
-              </p>
-              <button
-                onClick={() => {
-                  if (location.pathname !== "/") {
-                    navigate("/");
-
-                    setTimeout(() => {
-                      const el = document.getElementById("contact-anchor");
-                      if (el) {
-                        const navbar = document.querySelector("nav");
-                        const navbarHeight = navbar ? navbar.offsetHeight : 120;
-                        const yOffset = -navbarHeight + 60;
-
-                        const y =
-                          el.getBoundingClientRect().top +
-                          window.pageYOffset +
-                          yOffset;
-
-                        window.scrollTo({ top: y, behavior: "smooth" });
-                      }
-                    }, 200);
-                  } else {
-                    const el = document.getElementById("contact-anchor");
-                    if (el) {
-                      const navbar = document.querySelector("nav");
-                      const navbarHeight = navbar ? navbar.offsetHeight : 120;
-                      const yOffset = -navbarHeight + 60;
-
-                      const y =
-                        el.getBoundingClientRect().top +
-                        window.pageYOffset +
-                        yOffset;
-
-                      window.scrollTo({ top: y, behavior: "smooth" });
-                    }
-                  }
-                }}
-                className="px-8 py-4 bg-white text-primary rounded-full font-semibold hover:scale-105 transition-transform"
-              >
-                Bizimle İletişime Geçin
-              </button>
-            </div>
+            <BlogCTA gradient={colors.gradient} />
           </div>
 
           <div className="lg:col-span-1">
