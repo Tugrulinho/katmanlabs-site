@@ -364,7 +364,7 @@ function Navbar() {
                   Blog
                 </button>
                 <button
-                  onClick={() => scrollToSection("pricing")}
+                  onClick={() => scrollToSection("fiyatlar")}
                   className="block w-full text-left px-4 py-2 text-white hover:bg-gradient-to-r hover:from-accent-light/20 hover:to-accent/20 rounded-lg transition-all duration-300"
                 >
                   Fiyatlar
