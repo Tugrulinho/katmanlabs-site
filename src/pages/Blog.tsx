@@ -21,7 +21,7 @@ export default function Blog() {
             </div>
 
             {/* Sağ alan - sidebar */}
-            <aside className="lg:col-span-4">
+            <aside className="lg:col-span-4 self-start">
               <BlogSidebar blogs={blogs} />
             </aside>
           </div>
