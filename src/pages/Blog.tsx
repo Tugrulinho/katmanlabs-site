@@ -26,7 +26,7 @@ export default function Blog() {
         {/* Hero spacing */}
         <div className="relative z-10 pt-32">
           <div className="container mx-auto px-4">
-            <div className="h-[140px]" />
+            <div className="h-[300px]" />
           </div>
         </div>
 
