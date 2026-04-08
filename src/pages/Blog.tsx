@@ -1,5 +1,6 @@
 import BlogSection from "../components/BlogSection";
 import { useBlogs } from "../hooks/useBlogs";
+import BlogSidebar from "../components/BlogSidebar";
 import Footer from "../components/Footer";
 export default function Blog() {
   const { blogs, loading } = useBlogs();
@@ -21,9 +22,7 @@ export default function Blog() {
 
             {/* Sağ alan - sidebar */}
             <aside className="lg:col-span-4">
-              <div className="rounded-2xl border border-white/10 p-6 sticky top-24">
-                Sidebar gelecek
-              </div>
+              <BlogSidebar blogs={blogs} />
             </aside>
           </div>
         </div>

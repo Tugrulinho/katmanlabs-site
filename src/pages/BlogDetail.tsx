@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useBlogBySlug } from "../hooks/useBlogBySlug";
 import { useBlogs } from "../hooks/useBlogs";
+import BlogSidebar from "../components/BlogSidebar";
 
 function BlogDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -267,23 +268,7 @@ function BlogDetail() {
                 <h3 className="text-lg font-bold text-primary-dark mb-4">
                   Kategoriler
                 </h3>
-                <div className="space-y-2">
-                  {["Web Tasarım", "Dijital Pazarlama", "SEO", "Genel"].map(
-                    (cat) => (
-                      <Link
-                        key={cat}
-                        to="/#blog-gallery"
-                        className={`block px-4 py-2 rounded-lg transition-colors ${
-                          cat === blog.category
-                            ? `${colors.tag}`
-                            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                        }`}
-                      >
-                        {cat}
-                      </Link>
-                    ),
-                  )}
-                </div>
+                <BlogSidebar blogs={blogs} currentCategory={blog.category} />
               </div>
             </div>
           </div>
