@@ -22,6 +22,7 @@ export default function Blog() {
                 loading={loading}
                 isMobile={false}
                 getBlogBadgeColor={() => "bg-primary"}
+                hideHeader={true}
               />
             </div>
 

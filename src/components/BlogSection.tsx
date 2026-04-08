@@ -7,6 +7,7 @@ type BlogSectionProps = {
   loading: boolean;
   isMobile: boolean;
   getBlogBadgeColor: (category: string) => string;
+  hideHeader?: boolean;
 };
 
 export default function BlogSection({
@@ -15,6 +16,7 @@ export default function BlogSection({
   loading,
   isMobile,
   getBlogBadgeColor,
+  hideHeader,
 }: BlogSectionProps) {
   return (
     <section
@@ -22,24 +24,25 @@ export default function BlogSection({
       className="py-20 bg-gradient-to-b from-gray-50 to-white"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent-light/20 rounded-full text-primary mb-4">
-            <BookOpen className="w-4 h-4" />
-            <span className="text-sm font-medium">
-              {content.blog_badge || "Blog & İçerikler"}
-            </span>
+        {!hideHeader && (
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent-light/20 rounded-full text-primary mb-4">
+              <BookOpen className="w-4 h-4" />
+              <span className="text-sm font-medium">
+                {content.blog_badge || "Blog & İçerikler"}
+              </span>
+            </div>
+
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              {content.blog_title || "Son Blog Yazılarımız"}
+            </h2>
+
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              {content.blog_description ||
+                "Dijital dünyadan güncel içerikler, trendler ve ipuçları"}
+            </p>
           </div>
-
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            {content.blog_title || "Son Blog Yazılarımız"}
-          </h2>
-
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            {content.blog_description ||
-              "Dijital dünyadan güncel içerikler, trendler ve ipuçları"}
-          </p>
-        </div>
-
+        )}
         {loading ? (
           <div className="flex justify-center items-center py-20">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
