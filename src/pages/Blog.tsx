@@ -8,7 +8,15 @@ export default function Blog() {
       {loading ? (
         <p>yükleniyor...</p>
       ) : (
-        blogs.map((b) => <p key={b.id}>{b.title}</p>)
+        blogs.map((b) => (
+          <a
+            key={b.id}
+            href={`/blog/${b.slug}`}
+            className="block mb-3 text-lg text-gray-900 hover:text-primary"
+          >
+            {b.title}
+          </a>
+        ))
       )}
     </div>
   );
