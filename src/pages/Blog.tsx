@@ -2,11 +2,15 @@ import Navbar from "../components/Navbar";
 import BlogSection from "../components/BlogSection";
 import { useBlogs } from "../hooks/useBlogs";
 import BlogSidebar from "../components/BlogSidebar";
+import { useSearchParams } from "react-router-dom";
 import Footer from "../components/Footer";
 import { useEffect, useState } from "react";
 export default function Blog() {
   const { blogs, loading } = useBlogs();
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [searchParams] = useSearchParams();
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(
+    searchParams.get("category"),
+  );
   const [currentPage, setCurrentPage] = useState<number>(1);
   const postsPerPage = 4;
 
@@ -19,6 +23,7 @@ export default function Blog() {
     startIndex + postsPerPage,
   );
   const totalPages = Math.ceil(filteredBlogs.length / postsPerPage);
+
   useEffect(() => {
     setCurrentPage(1);
   }, [selectedCategory]);

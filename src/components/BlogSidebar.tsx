@@ -11,23 +11,6 @@ export default function BlogSidebar({
 
   return (
     <div className="sticky top-24 space-y-6">
-      {/* İlgili Yazılar */}
-      <div className="rounded-2xl border border-white/10 bg-white p-6 shadow-sm">
-        <h3 className="text-lg font-bold text-primary-dark mb-4">
-          İlgili Yazılar
-        </h3>
-
-        <div className="space-y-4">
-          {(blogs || []).slice(0, 3).map((blog: any) => (
-            <Link key={blog.id} to={`/blog/${blog.slug}`} className="block">
-              <p className="text-sm font-medium text-gray-900 hover:text-primary transition">
-                {blog.title}
-              </p>
-            </Link>
-          ))}
-        </div>
-      </div>
-
       {/* Kategoriler */}
       <div className="rounded-2xl border border-white/10 bg-white p-6 shadow-sm">
         <h3 className="text-lg font-bold text-primary-dark mb-4">

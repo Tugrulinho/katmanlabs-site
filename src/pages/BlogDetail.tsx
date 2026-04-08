@@ -268,7 +268,19 @@ function BlogDetail() {
                 <h3 className="text-lg font-bold text-primary-dark mb-4">
                   Kategoriler
                 </h3>
-                <BlogSidebar blogs={blogs} currentCategory={blog.category} />
+                <BlogSidebar
+                  blogs={blogs}
+                  currentCategory={blog.category}
+                  onCategorySelect={(category: string | null) => {
+                    if (category) {
+                      navigate(
+                        `/blog?category=${encodeURIComponent(category)}`,
+                      );
+                    } else {
+                      navigate("/blog");
+                    }
+                  }}
+                />
               </div>
             </div>
           </div>
