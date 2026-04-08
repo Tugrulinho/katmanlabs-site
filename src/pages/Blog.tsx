@@ -1,18 +1,33 @@
 import Navbar from "../components/Navbar";
 import BlogSection from "../components/BlogSection";
 import { useBlogs } from "../hooks/useBlogs";
-import { useState } from "react";
 import BlogSidebar from "../components/BlogSidebar";
 import Footer from "../components/Footer";
-
+import { useEffect, useState } from "react";
 export default function Blog() {
   const { blogs, loading } = useBlogs();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const postsPerPage = 4;
 
   const filteredBlogs = selectedCategory
     ? blogs.filter((blog: any) => blog.category === selectedCategory)
     : blogs;
-
+  const startIndex = (currentPage - 1) * postsPerPage;
+  const paginatedBlogs = filteredBlogs.slice(
+    startIndex,
+    startIndex + postsPerPage,
+  );
+  const totalPages = Math.ceil(filteredBlogs.length / postsPerPage);
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedCategory]);
+  useEffect(() => {
+    window.scrollTo({
+      top: 300,
+      behavior: "smooth",
+    });
+  }, [currentPage]);
   return (
     <>
       <Navbar />
@@ -47,12 +62,58 @@ export default function Blog() {
               <div className="lg:col-span-8">
                 <BlogSection
                   content={{}}
-                  blogs={filteredBlogs}
+                  blogs={paginatedBlogs}
                   loading={loading}
                   isMobile={false}
                   getBlogBadgeColor={() => "bg-primary"}
                   hideHeader={true}
                 />
+                <div className="flex justify-center mt-10 gap-2 items-center">
+                  {/* Önceki */}
+                  <button
+                    disabled={currentPage === 1}
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.max(prev - 1, 1))
+                    }
+                    className={`px-3 py-2 rounded-lg text-sm ${
+                      currentPage === 1
+                        ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                        : "bg-gray-100 hover:bg-gray-200"
+                    }`}
+                  >
+                    ←
+                  </button>
+
+                  {/* Sayılar */}
+                  {Array.from({ length: totalPages }).map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentPage(index + 1)}
+                      className={`px-4 py-2 rounded-lg text-sm ${
+                        currentPage === index + 1
+                          ? "bg-primary text-white"
+                          : "bg-gray-100 hover:bg-gray-200"
+                      }`}
+                    >
+                      {index + 1}
+                    </button>
+                  ))}
+
+                  {/* Sonraki */}
+                  <button
+                    disabled={currentPage === totalPages}
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                    }
+                    className={`px-3 py-2 rounded-lg text-sm ${
+                      currentPage === totalPages
+                        ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                        : "bg-gray-100 hover:bg-gray-200"
+                    }`}
+                  >
+                    →
+                  </button>
+                </div>
               </div>
 
               <aside className="lg:col-span-4 self-start">
