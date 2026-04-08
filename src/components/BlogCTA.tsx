@@ -23,7 +23,7 @@ export default function BlogCTA({ gradient }: Props) {
 
   return (
     <section className="mt-12 px-4">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-7xl mx-auto lg:px-8">
         <div
           className={`p-8 bg-gradient-to-br ${gradient} rounded-2xl text-white`}
         >
