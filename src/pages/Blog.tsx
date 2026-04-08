@@ -1,8 +1,15 @@
+import { useBlogs } from "../hooks/useBlogs";
 export default function Blog() {
+  const { blogs, loading } = useBlogs();
   return (
-    <div style={{ padding: "40px" }}>
+    <div className="max-w-7xl mx-auto px-4 py-20">
       <h1>Blog</h1>
-      <p>Blog sayfası hazır</p>
+
+      {loading ? (
+        <p>yükleniyor...</p>
+      ) : (
+        blogs.map((b) => <p key={b.id}>{b.title}</p>)
+      )}
     </div>
   );
 }
