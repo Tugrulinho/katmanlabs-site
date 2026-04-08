@@ -17,7 +17,7 @@ export default function Blog() {
             <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3">
               SEO, Web ve Dijital Pazarlama Hakkında Blog İçerikleri
             </h1>
-            <p className="text-lg text-slate-600 max-w-2xl">
+            <p className="text-lg text-slate-600 max-w-2xl text-center mx-auto">
               SEO, dijital pazarlama, web tasarım ve içerik stratejileri üzerine
               güncel yazılarımızla dijital dünyada öne çıkın.
             </p>
