@@ -44,6 +44,7 @@ import WebTasarim from "./pages/WebTasarim";
 import DijitalPazarlama from "./pages/DijitalPazarlama";
 import SeoAnalitik from "./pages/SeoAnalitik";
 import SosyalMedyaTasarim from "./pages/SosyalMedyaTasarim";
+import Blog from "./pages/Blog";
 import BlogDetail from "./pages/BlogDetail";
 import BlogSection from "./components/BlogSection";
 import PricingSection from "./components/PricingSection";
@@ -417,6 +418,7 @@ function App() {
           path="/hizmet/seo-analitik"
           element={<SeoAnalitik onBack={() => navigate("/")} />}
         />
+        <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogDetail />} />
 
         <Route path="/admin/login" element={<AdminLogin />} />
