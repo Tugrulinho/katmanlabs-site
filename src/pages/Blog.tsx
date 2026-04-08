@@ -163,7 +163,7 @@ export default function Blog() {
           </div>
         </div>
       </section>
-      <BlogCTA />
+      <BlogCTA gradient="from-[#17385f] to-[#9062ae]" />
       <Footer />
     </>
   );
