@@ -265,9 +265,6 @@ function BlogDetail() {
               )}
 
               <div className={`p-6 rounded-2xl border-2 ${colors.border}`}>
-                <h3 className="text-lg font-bold text-primary-dark mb-4">
-                  Kategoriler
-                </h3>
                 <BlogSidebar
                   blogs={blogs}
                   currentCategory={blog.category}
