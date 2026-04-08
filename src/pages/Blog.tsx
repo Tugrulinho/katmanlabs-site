@@ -1,3 +1,4 @@
+import Navbar from "../components/Navbar";
 import BlogSection from "../components/BlogSection";
 import { useBlogs } from "../hooks/useBlogs";
 import { useState } from "react";
@@ -11,6 +12,7 @@ export default function Blog() {
     : blogs;
   return (
     <>
+      <Navbar />
       <section className="pt-24 pb-16">
         <div className="container mx-auto px-4">
           <div className="mb-10 text-center">
