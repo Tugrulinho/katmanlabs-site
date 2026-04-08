@@ -36,8 +36,8 @@ export default function TestimonialsSection({
               key={index}
               className="shrink-0 w-[160px] md:w-[280px] px-2 py-3 flex items-center justify-center"
             >
-              <div className="marquee-card w-[160px] md:w-[280px] bg-white rounded-2xl p-4 shadow-md justify-center gap-2 relative group">
-                <div className="h-16 flex items-center justify-center group">
+              <div className="flex items-center justify-center">
+                <div className="h-20 md:h-24 flex items-center justify-center group">
                   {brand.website_url ? (
                     <a
                       href={brand.website_url}
@@ -47,20 +47,16 @@ export default function TestimonialsSection({
                       <img
                         src={brand.logo_url}
                         alt={brand.name}
-                        className="marquee-item h-12 max-w-[120px] object-contain"
+                        className="marquee-item h-16 md:h-20 max-w-[220px] md:max-w-[260px] object-contain"
                       />
                     </a>
                   ) : (
                     <img
                       src={brand.logo_url}
                       alt={brand.name}
-                      className="marquee-item h-12 max-w-[120px] object-contain"
+                      className="marquee-item h-16 md:h-20 max-w-[220px] md:max-w-[260px] object-contain"
                     />
                   )}
-                </div>
-
-                <div className="text-sm font-semibold text-primary-dark text-center">
-                  {brand.name}
                 </div>
               </div>
             </div>

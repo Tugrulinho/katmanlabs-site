@@ -12,7 +12,7 @@ interface Client {
 export default function AdminClients() {
   const [clients, setClients] = useState<Client[]>([]);
   const [name, setName] = useState("");
-  const [logoUrl, setLogoUrl] = useState("");
+  const [logoFile, setLogoFile] = useState<File | null>(null);
   const [websiteUrl, setWebsiteUrl] = useState("");
   const [sortOrder, setSortOrder] = useState(0);
   const [isActive, setIsActive] = useState(true);
@@ -40,6 +40,32 @@ export default function AdminClients() {
   const handleAddClient = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    if (!logoFile) {
+      setLoading(false);
+      return;
+    }
+
+    const fileExt = logoFile!.name.split(".").pop();
+    const fileName = `${Date.now()}-${logoFile!.name}`;
+    const filePath = `clients/${fileName}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from("assets")
+      .upload(filePath, logoFile, {
+        upsert: true,
+      });
+
+    if (uploadError) {
+      console.error("Logo upload error:", uploadError);
+      setLoading(false);
+      return;
+    }
+
+    const { data: publicUrlData } = supabase.storage
+      .from("assets")
+      .getPublicUrl(filePath);
+
+    const logoUrl = publicUrlData.publicUrl;
 
     const { error } = await supabase.from("clients").insert([
       {
@@ -126,10 +152,9 @@ export default function AdminClients() {
           />
 
           <input
-            type="text"
-            placeholder="Logo URL"
-            value={logoUrl}
-            onChange={(e) => setLogoUrl(e.target.value)}
+            type="file"
+            accept="image/png, image/svg+xml"
+            onChange={(e) => setLogoFile(e.target.files?.[0] || null)}
             className="border rounded-lg px-4 py-2"
             required
           />
