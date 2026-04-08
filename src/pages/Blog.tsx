@@ -1,9 +1,14 @@
 import BlogSection from "../components/BlogSection";
 import { useBlogs } from "../hooks/useBlogs";
+import { useState } from "react";
 import BlogSidebar from "../components/BlogSidebar";
 import Footer from "../components/Footer";
 export default function Blog() {
   const { blogs, loading } = useBlogs();
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const filteredBlogs = selectedCategory
+    ? blogs.filter((blog: any) => blog.category === selectedCategory)
+    : blogs;
   return (
     <>
       <section className="pt-24 pb-16">
@@ -13,7 +18,7 @@ export default function Blog() {
             <div className="lg:col-span-8">
               <BlogSection
                 content={{}}
-                blogs={blogs}
+                blogs={filteredBlogs}
                 loading={loading}
                 isMobile={false}
                 getBlogBadgeColor={() => "bg-primary"}
@@ -22,7 +27,11 @@ export default function Blog() {
 
             {/* Sağ alan - sidebar */}
             <aside className="lg:col-span-4 self-start">
-              <BlogSidebar blogs={blogs} />
+              <BlogSidebar
+                blogs={blogs}
+                currentCategory={selectedCategory}
+                onCategorySelect={setSelectedCategory}
+              />
             </aside>
           </div>
         </div>

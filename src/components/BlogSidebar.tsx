@@ -1,6 +1,14 @@
 import { Link } from "react-router-dom";
 
-export default function BlogSidebar({ blogs, currentCategory }: any) {
+export default function BlogSidebar({
+  blogs,
+  currentCategory,
+  onCategorySelect,
+}: any) {
+  const categories = Array.from(
+    new Set((blogs || []).map((blog: any) => blog.category).filter(Boolean)),
+  ) as string[];
+
   return (
     <div className="sticky top-24 space-y-6">
       {/* İlgili Yazılar */}
@@ -10,7 +18,7 @@ export default function BlogSidebar({ blogs, currentCategory }: any) {
         </h3>
 
         <div className="space-y-4">
-          {blogs?.slice(0, 3).map((blog: any) => (
+          {(blogs || []).slice(0, 3).map((blog: any) => (
             <Link key={blog.id} to={`/blog/${blog.slug}`} className="block">
               <p className="text-sm font-medium text-gray-900 hover:text-primary transition">
                 {blog.title}
@@ -27,18 +35,31 @@ export default function BlogSidebar({ blogs, currentCategory }: any) {
         </h3>
 
         <div className="space-y-2">
-          {["Web Tasarım", "Dijital Pazarlama", "SEO", "Genel"].map((cat) => (
-            <Link
+          <button
+            type="button"
+            onClick={() => onCategorySelect?.(null)}
+            className={`block w-full text-left px-4 py-2 rounded-lg transition-colors ${
+              currentCategory === null
+                ? "bg-primary text-white"
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+            }`}
+          >
+            Tüm Yazılar
+          </button>
+
+          {categories.map((cat) => (
+            <button
               key={cat}
-              to="/blog"
-              className={`block px-4 py-2 rounded-lg transition-colors ${
+              type="button"
+              onClick={() => onCategorySelect?.(cat)}
+              className={`block w-full text-left px-4 py-2 rounded-lg transition-colors ${
                 cat === currentCategory
                   ? "bg-primary text-white"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               }`}
             >
               {cat}
-            </Link>
+            </button>
           ))}
         </div>
       </div>
