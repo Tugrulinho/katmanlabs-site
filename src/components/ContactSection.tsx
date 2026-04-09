@@ -111,14 +111,11 @@ function ContactSection({ content }: ContactSectionProps) {
   };
 
   return (
-    <section id="contact" className="py-24 bg-white">
+    <section className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid md:grid-cols-2 gap-12">
           <div>
-            <h2
-              id="contact-title"
-              className="text-4xl md:text-5xl font-bold text-primary-dark mb-6"
-            >
+            <h2 className="text-4xl md:text-5xl font-bold text-primary-dark mb-6">
               {content.contact_title || "Projenizi Konuşalım"}
             </h2>
             <p className="text-lg text-gray-600 mb-8">
@@ -243,7 +240,7 @@ function ContactSection({ content }: ContactSectionProps) {
                 />
               </div>
 
-              <div>
+              <div id="contact">
                 <label className="block text-sm font-semibold text-primary mb-2">
                   Hangi hizmetlerle ilgileniyorsunuz?
                 </label>
