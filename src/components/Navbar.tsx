@@ -336,7 +336,7 @@ function Navbar() {
               Fiyatlar
             </button>
             <button
-              onClick={() => scrollToSection("contact-form")}
+              onClick={() => navigate("/iletisim")}
               className="px-6 py-2 bg-gradient-to-r from-accent-light to-accent text-white rounded-lg hover:shadow-lg hover:shadow-accent/50 hover:scale-105 transition-all duration-300 text-sm font-semibold"
             >
               İletişim

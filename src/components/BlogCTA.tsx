@@ -37,12 +37,7 @@ export default function BlogCTA({ gradient }: Props) {
           </p>
           <button
             onClick={() => {
-              if (location.pathname !== "/") {
-                sessionStorage.setItem("scrollToContact", "true");
-                window.location.href = "/";
-              } else {
-                scrollToSection("contact");
-              }
+              navigate("/iletisim");
             }}
             className="px-8 py-4 bg-white text-primary rounded-full font-semibold hover:scale-105 transition-transform"
           >

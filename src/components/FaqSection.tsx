@@ -1,6 +1,6 @@
 import { HelpCircle, Minus, Plus, MessageCircle } from "lucide-react";
 import { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 type FaqItem = {
   question: string;
   answer: string;
@@ -21,6 +21,7 @@ export default function FaqSection({
   scrollToSection,
 }: FaqSectionProps) {
   const [activeAccordion, setActiveAccordion] = useState<number | null>(null);
+  const navigate = useNavigate();
 
   return (
     <section className="py-24 bg-gradient-to-br from-zinc-900 via-primary-dark to-zinc-950 relative overflow-hidden">
@@ -144,7 +145,7 @@ export default function FaqSection({
             {content.faq_cta_text || "Başka sorularınız mı var?"}
           </p>
           <button
-            onClick={() => scrollToSection("contact")}
+            onClick={() => navigate("/iletisim")}
             className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-accent-light to-accent text-white rounded-full font-semibold hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-accent-light/50"
           >
             <MessageCircle className="w-5 h-5" />
