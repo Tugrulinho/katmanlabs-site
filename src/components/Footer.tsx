@@ -1,9 +1,7 @@
-import { useNavigate } from "react-router-dom";
 import { Layers } from "lucide-react";
 import { Link } from "react-router-dom";
 
 function Footer() {
-  const navigate = useNavigate();
   return (
     <footer className="bg-primary-dark text-white py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
