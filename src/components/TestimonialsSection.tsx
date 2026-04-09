@@ -30,7 +30,7 @@ export default function TestimonialsSection({
         </div>
       </div>
       <div className="overflow-hidden">
-        <div className="flex flex-wrap justify-center gap-6">
+        <div className="flex gap-4 animate-marquee hover:[animation-play-state:paused] w-max md:flex-nowrap">
           {[...clients, ...clients].map((brand, index) => (
             <div
               key={index}
