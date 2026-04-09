@@ -1,39 +1,9 @@
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Layers } from "lucide-react";
 import { Link } from "react-router-dom";
 
 function Footer() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const handleContactClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-
-    if (location.pathname !== "/") {
-      navigate("/");
-
-      setTimeout(() => {
-        const el = document.getElementById("contact-anchor");
-        if (el) {
-          const navbar = document.querySelector("nav");
-          const navbarHeight = navbar ? navbar.offsetHeight : 120;
-          const yOffset = -navbarHeight + 60;
-          const y =
-            el.getBoundingClientRect().top + window.pageYOffset + yOffset;
-
-          window.scrollTo({ top: y, behavior: "smooth" });
-        }
-      }, 200);
-    } else {
-      const el = document.getElementById("contact-anchor");
-      if (el) {
-        const yOffset = -120;
-        const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
-
-        window.scrollTo({ top: y, behavior: "smooth" });
-      }
-    }
-  };
-
   return (
     <footer className="bg-primary-dark text-white py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -109,13 +79,12 @@ function Footer() {
                 </a>
               </li>
               <li>
-                <a
-                  href="/#contact-anchor"
-                  onClick={handleContactClick}
+                <Link
+                  to="/iletisim"
                   className="text-gray-300 hover:text-accent transition-colors"
                 >
                   İletişim
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
