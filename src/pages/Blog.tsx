@@ -26,7 +26,7 @@ export default function Blog() {
 
   const categoryColors: Record<string, string> = {
     seo: "from-[#17385f] via-[#494880] to-[#9062ae]",
-    "dijital-pazarlama": "from-[#0f766e] via-[#14b8a6] to-[#5eead4]",
+    "dijital-pazarlama": "from-[#f97316] via-[#fb7185] to-[#f43f5e]",
     "web-tasarim": "from-[#1e3a8a] via-[#3b82f6] to-[#93c5fd]",
     "sosyal-medya-yonetimi": "from-[#7e22ce] via-[#a855f7] to-[#e9d5ff]",
   };
