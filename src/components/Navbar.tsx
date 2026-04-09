@@ -40,8 +40,8 @@ function Navbar() {
           const y =
             element.getBoundingClientRect().top +
             window.pageYOffset -
-            navbarHeight;
-
+            navbarHeight +
+            40;
           window.scrollTo({
             top: y,
             behavior: "smooth",
