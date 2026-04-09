@@ -34,7 +34,7 @@ export default function TestimonialsSection({
           {[...clients, ...clients].map((brand, index) => (
             <div
               key={index}
-              className="shrink-0 w-[160px] md:w-[280px] px-2 py-3 flex items-center justify-center"
+              className="shrink-0 w-[120px] md:w-[280px] px-1 py-3 flex items-center justify-center"
             >
               <div className="flex items-center justify-center">
                 <div className="h-20 md:h-24 flex items-center justify-center group">
