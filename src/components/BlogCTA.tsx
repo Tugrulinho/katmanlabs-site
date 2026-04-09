@@ -38,7 +38,10 @@ export default function BlogCTA({ gradient }: Props) {
               if (location.pathname !== "/") {
                 window.location.href = "/#contact-title";
               } else {
-                scrollToContact();
+                document.getElementById("contact-title")?.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                });
               }
             }}
             className="px-8 py-4 bg-white text-primary rounded-full font-semibold hover:scale-105 transition-transform"
