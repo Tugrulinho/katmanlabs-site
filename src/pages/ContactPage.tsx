@@ -11,15 +11,17 @@ export default function ContactPage() {
       <Navbar />
 
       {/* HERO */}
-      <section className="pt-32 pb-20 bg-gradient-to-b from-[#0f172a] via-[#233e68] to-[#6f5aa6]" />
-
+      <section className="relative pt-32 pb-20 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#17385f] via-[#2f4f8f] to-[#5c6fc4]" />
+        <div className="relative h-[300px]" />
+      </section>
       {/* BAŞLIK */}
-      <section className="py-16 bg-[#0f172a]">
+      <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-primary-dark mb-4">
             İletişim
           </h1>
-          <p className="text-lg text-gray-300 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Projeniz hakkında konuşalım. Size en uygun çözümü birlikte
             planlayalım.
           </p>
