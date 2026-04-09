@@ -32,7 +32,7 @@ function Navbar() {
       sessionStorage.removeItem("scrollToContact");
 
       setTimeout(() => {
-        const element = document.getElementById("contact");
+        const element = document.getElementById("contact-form");
         if (element) {
           const navbar = document.querySelector("nav");
           const navbarHeight = navbar ? navbar.offsetHeight : 100;
