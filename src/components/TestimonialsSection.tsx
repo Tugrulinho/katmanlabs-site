@@ -37,7 +37,7 @@ export default function TestimonialsSection({
               className="shrink-0 w-[90px] md:w-[280px] px-1 py-3 flex items-center justify-center"
             >
               <div className="flex items-center justify-center">
-                <div className="h-20 md:h-24 flex items-center justify-center group">
+                <div className="h-14 md:h-20 flex items-center justify-center group">
                   {brand.website_url ? (
                     <a
                       href={brand.website_url}
