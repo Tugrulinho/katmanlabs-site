@@ -199,7 +199,7 @@ function ContactSection({ content }: ContactSectionProps) {
             </div>
           </div>
 
-          <div id="contact" className="bg-gray-50 p-8 rounded-2xl">
+          <div id="contact-form" className="bg-gray-50 p-8 rounded-2xl">
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
                 <label className="block text-sm font-semibold text-primary mb-2">

@@ -336,7 +336,7 @@ function Navbar() {
               Fiyatlar
             </button>
             <button
-              onClick={() => scrollToSection("contact")}
+              onClick={() => scrollToSection("contact-form")}
               className="px-6 py-2 bg-gradient-to-r from-accent-light to-accent text-white rounded-lg hover:shadow-lg hover:shadow-accent/50 hover:scale-105 transition-all duration-300 text-sm font-semibold"
             >
               İletişim
@@ -394,7 +394,7 @@ function Navbar() {
                   Fiyatlar
                 </button>
                 <button
-                  onClick={() => scrollToSection("contact")}
+                  onClick={() => scrollToSection("contact-form")}
                   className="block w-full px-4 py-2 bg-gradient-to-r from-accent-light to-accent text-white rounded-lg font-semibold hover:shadow-lg hover:shadow-accent/50 transition-all duration-300"
                 >
                   İletişim
