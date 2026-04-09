@@ -9,7 +9,7 @@ export default function BlogCTA({ gradient }: Props) {
   const location = useLocation();
 
   const scrollToContact = () => {
-    const el = document.getElementById("contact");
+    const el = document.getElementById("contact-title");
     if (el) {
       const navbar = document.querySelector("nav");
       const navbarHeight = navbar ? navbar.offsetHeight : 120;

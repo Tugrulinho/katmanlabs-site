@@ -115,7 +115,10 @@ function ContactSection({ content }: ContactSectionProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid md:grid-cols-2 gap-12">
           <div>
-            <h2 className="text-4xl md:text-5xl font-bold text-primary-dark mb-6">
+            <h2
+              id="contact-title"
+              className="text-4xl md:text-5xl font-bold text-primary-dark mb-6"
+            >
               {content.contact_title || "Projenizi Konuşalım"}
             </h2>
             <p className="text-lg text-gray-600 mb-8">
