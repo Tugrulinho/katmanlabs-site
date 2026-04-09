@@ -23,6 +23,18 @@ export default function Blog() {
       .replace(/ö/g, "o")
       .replace(/ç/g, "c")
       .replace(/\s+/g, "-");
+
+  const categoryColors: Record<string, string> = {
+    seo: "from-[#17385f] via-[#494880] to-[#9062ae]",
+    "dijital-pazarlama": "from-[#0f766e] via-[#14b8a6] to-[#5eead4]",
+    "web-tasarim": "from-[#1e3a8a] via-[#3b82f6] to-[#93c5fd]",
+    "sosyal-medya-yonetimi": "from-[#7e22ce] via-[#a855f7] to-[#e9d5ff]",
+  };
+  const currentGradient =
+    categorySlug && categoryColors[categorySlug]
+      ? categoryColors[categorySlug]
+      : "from-[#17385f] via-[#494880] to-[#9062ae]";
+
   const activeCategory = categorySlug
     ? blogs.find(
         (blog: any) =>
@@ -64,7 +76,9 @@ export default function Blog() {
 
       <section className="relative pb-16 overflow-hidden">
         {/* Hero background */}
-        <div className="absolute inset-x-0 top-0 h-[340px] bg-gradient-to-br from-[#17385f] via-[#494880] to-[#9062ae]">
+        <div
+          className={`absolute inset-0 top-0 h-[340px] bg-gradient-to-br ${currentGradient}`}
+        >
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.16),transparent_28%),radial-gradient(circle_at_top_right,rgba(242,131,228,0.18),transparent_24%),radial-gradient(circle_at_bottom_center,rgba(255,255,255,0.08),transparent_30%)]" />
         </div>
 
