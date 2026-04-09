@@ -88,8 +88,32 @@ export default function Blog() {
         </div>
 
         <div
-          style={floatStyle}
-          className="absolute left-[8%] top-[90px] h-32 w-32 rounded-full bg-white/10 blur-3xl"
+          style={{ animation: "float-medium 7s ease-in-out infinite" }}
+          className="absolute right-[24%] top-[118px] text-white/35 z-20"
+        >
+          <img
+            src="/icons/lucide--target.svg"
+            className="absolute right-[10%] top-[80px] w-[120px] opacity-20"
+          />
+        </div>
+        <img
+          src="/icons/lucide--monitor-play.svg"
+          className="absolute left-[15%] top-[140px] w-[110px] opacity-15"
+        />
+
+        <img
+          src="/icons/lucide--layout-grid.svg"
+          className="absolute right-[25%] top-[160px] w-[90px] opacity-15"
+        />
+
+        <img
+          src="/icons/lucide--mouse-pointer-click.svg"
+          className="absolute right-[5%] top-[120px] w-[100px] opacity-15"
+        />
+
+        <img
+          src="/icons/lucide--line-chart.svg"
+          className="absolute left-[5%] top-[200px] w-[100px] opacity-15"
         />
         <div className="absolute right-[12%] top-[70px] h-40 w-40 rounded-full bg-white/10 blur-3xl animate-pulse" />
         <div className="absolute left-[45%] top-[180px] h-24 w-24 rounded-full bg-white/8 blur-2xl animate-pulse" />
