@@ -47,7 +47,7 @@ function Navbar() {
             behavior: "smooth",
           });
         }
-      }, 300);
+      }, 500);
     }
   }, [location.pathname]);
   useEffect(() => {
