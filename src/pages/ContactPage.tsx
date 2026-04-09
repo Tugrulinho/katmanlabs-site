@@ -10,12 +10,12 @@ export default function ContactPage() {
     <div className="min-h-screen bg-white">
       <Navbar />
 
-      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+      <section className="pt-32 pb-16 text-center bg-gradient-to-b from-[#0f172a] to-transparent">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-primary-dark mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
             İletişim
           </h1>
-          <p className="text-lg text-gray-600">
+          <p className="text-gray-300">
             Projeniz hakkında konuşalım. Size en uygun çözümü birlikte
             planlayalım.
           </p>
