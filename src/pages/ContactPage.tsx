@@ -13,7 +13,7 @@ export default function ContactPage() {
       {/* HERO */}
       <section className="relative pt-32 pb-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-[#17385f] via-[#2f4f8f] to-[#5c6fc4]" />
-        <div className="relative h-[300px]" />
+        <div className="relative h-[200px]" />
       </section>
       {/* BAŞLIK */}
       <section className="py-16 bg-white">

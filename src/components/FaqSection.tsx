@@ -12,14 +12,9 @@ type FaqItem = {
 type FaqSectionProps = {
   content: any;
   faqs: FaqItem[];
-  scrollToSection: (id: string) => void;
 };
 
-export default function FaqSection({
-  content,
-  faqs,
-  scrollToSection,
-}: FaqSectionProps) {
+export default function FaqSection({ content, faqs }: FaqSectionProps) {
   const [activeAccordion, setActiveAccordion] = useState<number | null>(null);
   const navigate = useNavigate();
 

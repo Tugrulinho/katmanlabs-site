@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   gradient: string;
@@ -6,22 +6,6 @@ type Props = {
 
 export default function BlogCTA({ gradient }: Props) {
   const navigate = useNavigate();
-  const location = useLocation();
-  const scrollToSection = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      const navbar = document.querySelector("nav");
-      const navbarHeight = navbar ? navbar.offsetHeight : 120;
-
-      const y =
-        el.getBoundingClientRect().top + window.pageYOffset - navbarHeight;
-
-      window.scrollTo({
-        top: y,
-        behavior: "smooth",
-      });
-    }
-  };
 
   return (
     <section className="mt-12 px-4">

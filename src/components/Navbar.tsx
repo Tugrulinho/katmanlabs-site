@@ -26,31 +26,6 @@ function Navbar() {
   const blogTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const { blogs, loading } = useBlogs();
   useEffect(() => {
-    const shouldScrollToContact = sessionStorage.getItem("scrollToContact");
-
-    if (shouldScrollToContact === "true" && location.pathname === "/") {
-      sessionStorage.removeItem("scrollToContact");
-
-      setTimeout(() => {
-        const element = document.getElementById("contact-form");
-        if (element) {
-          const navbar = document.querySelector("nav");
-          const navbarHeight = navbar ? navbar.offsetHeight : 100;
-
-          const y =
-            element.getBoundingClientRect().top +
-            window.pageYOffset -
-            navbarHeight +
-            40;
-          window.scrollTo({
-            top: y,
-            behavior: "smooth",
-          });
-        }
-      }, 500);
-    }
-  }, [location.pathname]);
-  useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
