@@ -38,6 +38,7 @@ export default function BlogCTA({ gradient }: Props) {
           <button
             onClick={() => {
               if (location.pathname !== "/") {
+                sessionStorage.setItem("scrollToContact", "true");
                 window.location.href = "/";
               } else {
                 scrollToSection("contact");
