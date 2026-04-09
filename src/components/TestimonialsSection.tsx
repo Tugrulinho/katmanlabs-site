@@ -47,14 +47,14 @@ export default function TestimonialsSection({
                       <img
                         src={brand.logo_url}
                         alt={brand.name}
-                        className="marquee-item h-16 md:h-20 max-w-[220px] md:max-w-[260px] object-contain"
+                        className="marquee-item h-16 md:h-20 max-w-full object-contain"
                       />
                     </a>
                   ) : (
                     <img
                       src={brand.logo_url}
                       alt={brand.name}
-                      className="marquee-item h-16 md:h-20 max-w-[220px] md:max-w-[260px] object-contain"
+                      className="marquee-item h-16 md:h-20 max-w-full object-contain"
                     />
                   )}
                 </div>
