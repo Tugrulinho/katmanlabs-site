@@ -70,6 +70,11 @@ export default function Blog() {
       behavior: "smooth",
     });
   }, [currentPage]);
+
+  const floatStyle = {
+    animation: "float 8s ease-in-out infinite",
+  };
+
   return (
     <>
       <Navbar />
@@ -81,6 +86,13 @@ export default function Blog() {
         >
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.16),transparent_28%),radial-gradient(circle_at_top_right,rgba(242,131,228,0.18),transparent_24%),radial-gradient(circle_at_bottom_center,rgba(255,255,255,0.08),transparent_30%)]" />
         </div>
+
+        <div
+          style={floatStyle}
+          className="absolute left-[8%] top-[90px] h-32 w-32 rounded-full bg-white/10 blur-3xl"
+        />
+        <div className="absolute right-[12%] top-[70px] h-40 w-40 rounded-full bg-white/10 blur-3xl animate-pulse" />
+        <div className="absolute left-[45%] top-[180px] h-24 w-24 rounded-full bg-white/8 blur-2xl animate-pulse" />
 
         {/* Hero spacing */}
         <div className="relative z-10 pt-32">
