@@ -11,7 +11,7 @@ export default function BlogCTA({ gradient }: Props) {
     const el = document.getElementById(id);
     if (el) {
       const navbar = document.querySelector("nav");
-      const navbarHeight = navbar ? navbar.offsetHeight : 0;
+      const navbarHeight = navbar ? navbar.offsetHeight : 120;
 
       const y =
         el.getBoundingClientRect().top + window.pageYOffset - navbarHeight;
