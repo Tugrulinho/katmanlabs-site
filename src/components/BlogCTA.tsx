@@ -7,17 +7,19 @@ type Props = {
 export default function BlogCTA({ gradient }: Props) {
   const navigate = useNavigate();
   const location = useLocation();
-
-  const scrollToContact = () => {
-    const el = document.getElementById("contact-title");
+  const scrollToSection = (id: string) => {
+    const el = document.getElementById(id);
     if (el) {
       const navbar = document.querySelector("nav");
       const navbarHeight = navbar ? navbar.offsetHeight : 120;
-      const yOffset = -navbarHeight + 120;
 
-      const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      const y =
+        el.getBoundingClientRect().top + window.pageYOffset - navbarHeight;
 
-      window.scrollTo({ top: y, behavior: "smooth" });
+      window.scrollTo({
+        top: y,
+        behavior: "smooth",
+      });
     }
   };
 
@@ -36,12 +38,9 @@ export default function BlogCTA({ gradient }: Props) {
           <button
             onClick={() => {
               if (location.pathname !== "/") {
-                window.location.href = "/#contact-title";
+                window.location.href = "/#contact";
               } else {
-                document.getElementById("contact-title")?.scrollIntoView({
-                  behavior: "smooth",
-                  block: "start",
-                });
+                scrollToSection("contact");
               }
             }}
             className="px-8 py-4 bg-white text-primary rounded-full font-semibold hover:scale-105 transition-transform"
