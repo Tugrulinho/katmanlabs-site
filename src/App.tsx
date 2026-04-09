@@ -35,6 +35,7 @@ import RotatingText from "./components/RotatingText";
 import Navbar from "./components/Navbar";
 import HeroSection from "./components/HeroSection";
 import ServicesSection from "./components/ServicesSection";
+import ContactPage from "./pages/ContactPage";
 import ContactSection from "./components/ContactSection";
 import Footer from "./components/Footer";
 import StatsSection from "./components/StatsSection";
@@ -421,7 +422,7 @@ function App() {
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/kategori/:categorySlug" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogDetail />} />
-
+        <Route path="/iletisim" element={<ContactPage />} />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route
           path="/admin"
