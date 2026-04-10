@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Footer from "../components/Footer";
 import { useEffect, useState } from "react";
 import BlogCTA from "../components/BlogCTA";
+import { Helmet } from "react-helmet-async";
 export default function Blog() {
   const { categorySlug } = useParams();
   const { blogs, loading } = useBlogs();
@@ -190,6 +191,29 @@ export default function Blog() {
           slugifyCategory(blog.category) === decodeURIComponent(categorySlug),
       )?.category || null
     : null;
+  const categorySeoDescriptionMap: Record<string, string> = {
+    seo: "SEO stratejileri, teknik iyilestirmeler ve organik buyumeyi destekleyen pratik blog yazilarini inceleyin.",
+    "dijital-pazarlama":
+      "Dijital pazarlama stratejileri, reklam yonetimi ve donusum odakli blog yazilarina goz atin.",
+    "web-tasarim":
+      "Web tasarim, kullanici deneyimi ve performans odakli blog yazilarini bu kategoride kesfedin.",
+    "sosyal-medya-yonetimi":
+      "Sosyal medya yonetimi, icerik plani ve gorsel iletisim uzerine kisa ve faydali yazilar burada.",
+  };
+  const fallbackCategoryName = categorySlug
+    ? decodeURIComponent(categorySlug)
+        .split("-")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ")
+    : null;
+  const seoCategoryName = activeCategory || fallbackCategoryName;
+  const seoTitle = seoCategoryName
+    ? `${seoCategoryName} Blog Yazilari | Katman Labs`
+    : null;
+  const seoDescription = categorySlug
+    ? categorySeoDescriptionMap[decodeURIComponent(categorySlug)] ||
+      `${seoCategoryName || "Bu kategori"} icin hazirlanan blog yazilarini kesfedin.`
+    : null;
   const filteredBlogs = categorySlug
     ? blogs.filter(
         (blog: any) =>
@@ -226,6 +250,14 @@ export default function Blog() {
 
   return (
     <>
+      {categorySlug && seoTitle && seoDescription ? (
+        <Helmet>
+          <title>{seoTitle}</title>
+          <meta name="description" content={seoDescription} />
+          <meta property="og:title" content={seoTitle} />
+          <meta property="og:description" content={seoDescription} />
+        </Helmet>
+      ) : null}
       <Navbar />
 
       <section className="relative pb-16 overflow-hidden">
