@@ -127,12 +127,12 @@ function HomePage() {
 
   const getBlogBadgeColor = (category: string) => {
     const colors: Record<string, string> = {
-      "Sosyal Medya YÃ¶netimi": "bg-pink-500",
-      "Web TasarÄ±m": "bg-blue-500",
+      "Sosyal Medya Yönetimi": "bg-pink-500",
+      "Web Tasarım": "bg-blue-500",
       "Dijital Pazarlama": "bg-purple-500",
       SEO: "bg-green-500",
       Analitik: "bg-cyan-500",
-      "Ä°Ã§erik Ãœretimi": "bg-orange-500",
+      "İçerik Üretimi": "bg-orange-500",
       Genel: "bg-gray-500",
     };
 
@@ -162,11 +162,11 @@ function HomePage() {
   const stats = [
     {
       number: content.stat_1_number || "150+",
-      label: content.stat_1_label || "Mutlu MÃ¼ÅŸteri",
+      label: content.stat_1_label || "Mutlu Müşteri",
     },
     {
       number: content.stat_2_number || "%300",
-      label: content.stat_2_label || "Ortalama ROI ArtÄ±ÅŸÄ±",
+      label: content.stat_2_label || "Ortalama ROI Artışı",
     },
     {
       number: content.stat_3_number || "50+",
@@ -174,62 +174,62 @@ function HomePage() {
     },
     {
       number: content.stat_4_number || "5+",
-      label: content.stat_4_label || "YÄ±llÄ±k Deneyim",
+      label: content.stat_4_label || "Yıllık Deneyim",
     },
   ];
 
   const process = [
     {
-      title: "KeÅŸif & Analiz",
+      title: "Keşif & Analiz",
       description:
-        "Ä°ÅŸ hedeflerinizi ve hedef kitlenizi derinlemesine analiz ediyoruz.",
+        "İş hedeflerinizi ve hedef kitlenizi derinlemesine analiz ediyoruz.",
     },
     {
-      title: "Strateji GeliÅŸtirme",
+      title: "Strateji Geliştirme",
       description:
-        "Size Ã¶zel, veri odaklÄ± dijital pazarlama stratejisi oluÅŸturuyoruz.",
+        "Size özel, veri odaklı dijital pazarlama stratejisi oluşturuyoruz.",
     },
     {
       title: "Uygulama",
       description:
-        "PlanÄ± hayata geÃ§iriyoruz. Her katmanÄ± Ã¶zenle inÅŸa ediyoruz.",
+        "Planı hayata geçiriyoruz. Her katmanı özenle inşa ediyoruz.",
     },
     {
       title: "Optimizasyon",
       description:
-        "SÃ¼rekli izleme ve iyileÅŸtirme ile en iyi sonuÃ§larÄ± garanti ediyoruz.",
+        "Sürekli izleme ve iyileştirme ile en iyi sonuçları garanti ediyoruz.",
     },
   ];
 
   const faqs = [
     {
-      question: "KatmanlÄ± yaklaÅŸÄ±m nedir?",
+      question: "Katmanlı yaklaşım nedir?",
       answer:
-        "Web tasarÄ±m, dijital pazarlama ve SEO'yu birbirinden baÄŸÄ±msÄ±z deÄŸil, birbiriyle entegre katmanlar olarak gÃ¶rÃ¼yoruz. Her katman bir Ã¶ncekini gÃ¼Ã§lendirir ve birlikte saÄŸlam bir dijital varlÄ±k oluÅŸturur.",
+        "Web tasarım, dijital pazarlama ve SEO'yu birbirinden bağımsız değil, birbiriyle entegre katmanlar olarak görüyoruz. Her katman bir öncekini güçlendirir ve birlikte sağlam bir dijital varlık oluşturur.",
       icon: Layers,
       gradient: "from-blue-500/20 to-cyan-500/20",
       iconColor: "text-blue-500",
     },
     {
-      question: "Proje teslim sÃ¼resi ne kadar?",
+      question: "Proje teslim süresi ne kadar?",
       answer:
-        "BaÅŸlangÄ±Ã§ paketi iÃ§in 2-3 hafta, Profesyonel paket iÃ§in 4-6 hafta sÃ¼rer. Kurumsal projeler iÃ§in Ã¶zel timeline oluÅŸturulur.",
+        "Başlangıç paketi için 2-3 hafta, Profesyonel paket için 4-6 hafta sürer. Kurumsal projeler için özel timeline oluşturulur.",
       icon: Clock,
       gradient: "from-orange-500/20 to-red-500/20",
       iconColor: "text-orange-500",
     },
     {
-      question: "Hangi sektÃ¶rlerde Ã§alÄ±ÅŸÄ±yorsunuz?",
+      question: "Hangi sektörlerde çalışıyorsunuz?",
       answer:
-        "E-ticaret, SaaS, eÄŸitim, saÄŸlÄ±k, finans ve daha birÃ§ok sektÃ¶rde deneyimimiz var. Her sektÃ¶re Ã¶zel stratejiler geliÅŸtiriyoruz.",
+        "E-ticaret, SaaS, eğitim, sağlık, finans ve daha birçok sektörde deneyimimiz var. Her sektöre özel stratejiler geliştiriyoruz.",
       icon: Target,
       gradient: "from-green-500/20 to-emerald-500/20",
       iconColor: "text-green-500",
     },
     {
-      question: "SonuÃ§larÄ± ne zaman gÃ¶rmeye baÅŸlarÄ±m?",
+      question: "Sonuçları ne zaman görmeye başlarım?",
       answer:
-        "Web sitesi tesliminden hemen sonra gÃ¶rsel sonuÃ§larÄ± gÃ¶rÃ¼rsÃ¼nÃ¼z. SEO ve pazarlama sonuÃ§larÄ± genellikle 2-3 ay iÃ§inde belirgin hale gelir.",
+        "Web sitesi tesliminden hemen sonra görsel sonuçları görürsünüz. SEO ve pazarlama sonuçları genellikle 2-3 ay içinde belirgin hale gelir.",
       icon: Zap,
       gradient: "from-yellow-500/20 to-amber-500/20",
       iconColor: "text-yellow-500",
@@ -237,31 +237,31 @@ function HomePage() {
     {
       question: "Destek hizmeti sunuyor musunuz?",
       answer:
-        "Evet, tÃ¼m paketlerimizde destek hizmeti bulunur. SÃ¼re pakete gÃ¶re deÄŸiÅŸir. AyrÄ±ca aylÄ±k bakÄ±m paketleri de sunuyoruz.",
+        "Evet, tüm paketlerimizde destek hizmeti bulunur. Süre pakete göre değişir. Ayrıca aylık bakım paketleri de sunuyoruz.",
       icon: Award,
       gradient: "from-purple-500/20 to-pink-500/20",
       iconColor: "text-purple-500",
     },
     {
-      question: "FiyatlandÄ±rma nasÄ±l Ã§alÄ±ÅŸÄ±yor?",
+      question: "Fiyatlandırma nasıl çalışıyor?",
       answer:
-        "Her projenin ihtiyaÃ§larÄ± farklÄ±dÄ±r. BaÅŸlangÄ±Ã§ paketi 5.000â‚º'den baÅŸlar. DetaylÄ± fiyatlandÄ±rma iÃ§in paketlerimizi inceleyebilir veya Ã¶zel teklif alabilirsiniz.",
+        "Her projenin ihtiyaçları farklıdır. Başlangıç paketi 5.000€'den başlar. Detaylı fiyatlandırma için paketlerimizi inceleyebilir veya özel teklif alabilirsiniz.",
       icon: HelpCircle,
       gradient: "from-teal-500/20 to-cyan-500/20",
       iconColor: "text-teal-500",
     },
     {
-      question: "Ã–deme yÃ¶ntemleri nelerdir?",
+      question: "Ödeme yöntemleri nelerdir?",
       answer:
-        "Banka havalesi, kredi kartÄ± ve PayPal ile Ã¶deme kabul ediyoruz. Kurumsal mÃ¼ÅŸteriler iÃ§in Ã¶zel Ã¶deme planlarÄ± sunuyoruz.",
+        "Banka havalesi, kredi kartı ve PayPal ile ödeme kabul ediyoruz. Kurumsal müşteriler için özel ödeme planları sunuyoruz.",
       icon: Users,
       gradient: "from-pink-500/20 to-rose-500/20",
       iconColor: "text-pink-500",
     },
     {
-      question: "Revizyon hakkÄ± var mÄ±?",
+      question: "Revizyon hakkı var mı?",
       answer:
-        "TÃ¼m paketlerimizde revizyon hakkÄ± bulunur. BaÅŸlangÄ±Ã§ paketinde 2, Profesyonel paketinde 4, Kurumsal pakette sÄ±nÄ±rsÄ±z revizyon hakkÄ±nÄ±z vardÄ±r.",
+        "Tüm paketlerimizde revizyon hakkı bulunur. Başlangıç paketinde 2, Profesyonel paketinde 4, Kurumsal pakette sınırsız revizyon hakkınız vardır.",
       icon: Star,
       gradient: "from-cyan-500/20 to-blue-500/20",
       iconColor: "text-cyan-500",
