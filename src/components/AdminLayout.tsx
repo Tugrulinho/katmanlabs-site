@@ -4,7 +4,6 @@ import { signOut } from "../lib/auth";
 import {
   LayoutDashboard,
   FileText,
-  PlusCircle,
   Settings,
   Package,
   Grid3x3,
@@ -44,13 +43,20 @@ export default function AdminLayout() {
     }
   };
 
+  const isMenuItemActive = (path: string) => {
+    if (path === "/admin/blogs") {
+      return location.pathname.startsWith("/admin/blogs");
+    }
+
+    return location.pathname === path;
+  };
+
   const menuItems = [
-    { path: "/admin/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-    { path: "/admin/blogs", icon: FileText, label: "Blog Management" },
-    { path: "/admin/blogs/new", icon: PlusCircle, label: "New Blog" },
-    { path: "/admin/content", icon: Settings, label: "Site Content" },
-    { path: "/admin/services", icon: Grid3x3, label: "Service Cards" },
-    { path: "/admin/pricing", icon: Package, label: "Pricing Cards" },
+    { path: "/admin/dashboard", icon: LayoutDashboard, label: "Genel Bakis" },
+    { path: "/admin/blogs", icon: FileText, label: "Bloglar" },
+    { path: "/admin/content", icon: Settings, label: "Site Icerigi" },
+    { path: "/admin/services", icon: Grid3x3, label: "Hizmet Kartlari" },
+    { path: "/admin/pricing", icon: Package, label: "Fiyat Kartlari" },
     { path: "/admin/messages", icon: FileText, label: "Mesajlar" },
     { path: "/admin/clients", icon: FileText, label: "Referanslar" },
   ];
@@ -71,14 +77,14 @@ export default function AdminLayout() {
                   <Menu className="w-6 h-6 text-slate-700" />
                 )}
               </button>
-              <h1 className="text-xl font-bold text-slate-800">Admin Panel</h1>
+              <h1 className="text-xl font-bold text-slate-800">Yonetim Paneli</h1>
             </div>
             <button
               onClick={handleSignOut}
               className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
             >
               <LogOut className="w-4 h-4" />
-              <span className="hidden sm:inline">Sign Out</span>
+              <span className="hidden sm:inline">Cikis Yap</span>
             </button>
           </div>
         </div>
@@ -94,7 +100,7 @@ export default function AdminLayout() {
         <nav className="p-4 space-y-1">
           {menuItems.map((item) => {
             const Icon = item.icon;
-            const isActive = location.pathname === item.path;
+            const isActive = isMenuItemActive(item.path);
 
             return (
               <Link

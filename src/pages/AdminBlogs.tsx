@@ -124,7 +124,7 @@ export default function AdminBlogs() {
       <div className="flex items-center justify-center h-96">
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-blue-500/30 border-t-blue-500 rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-slate-600">Loading blogs...</p>
+          <p className="text-slate-600">Yazilar yukleniyor...</p>
         </div>
       </div>
     );
@@ -134,17 +134,15 @@ export default function AdminBlogs() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">
-            Blog Management
-          </h1>
-          <p className="text-slate-600">Manage all your blog posts</p>
+          <h1 className="text-3xl font-bold text-slate-900 mb-2">Bloglar</h1>
+          <p className="text-slate-600">Tum blog yazilarini buradan yonetebilirsin.</p>
         </div>
         <Link
           to="/admin/blogs/new"
           className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
         >
           <PlusCircle className="w-5 h-5" />
-          New Blog
+          Yeni Yazi
         </Link>
       </div>
 
@@ -154,7 +152,7 @@ export default function AdminBlogs() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
             <input
               type="text"
-              placeholder="Search blogs..."
+              placeholder="Yazilarda ara..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -169,7 +167,7 @@ export default function AdminBlogs() {
             >
               {categories.map((cat) => (
                 <option key={cat} value={cat}>
-                  {cat === "all" ? "All Categories" : cat}
+                  {cat === "all" ? "Tum kategoriler" : cat}
                 </option>
               ))}
             </select>
@@ -180,7 +178,7 @@ export default function AdminBlogs() {
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
         {filteredBlogs.length === 0 ? (
           <div className="p-8 text-center text-slate-500">
-            <p>No blogs found matching your criteria.</p>
+            <p>Aramana uyan blog yazisi bulunamadi.</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -188,19 +186,19 @@ export default function AdminBlogs() {
               <thead className="bg-slate-50 border-b border-slate-200">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
-                    Title
+                    Baslik
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
-                    Category
+                    Kategori
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
-                    Status
+                    Durum
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
-                    Date
+                    Tarih
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase tracking-wider">
-                    Actions
+                    Islemler
                   </th>
                 </tr>
               </thead>
@@ -238,12 +236,12 @@ export default function AdminBlogs() {
                       {isPublished(blog) ? (
                         <span className="inline-flex items-center gap-1 text-green-600 text-sm font-medium">
                           <Eye className="w-4 h-4" />
-                          Published
+                          Yayinda
                         </span>
                       ) : (
                         <span className="inline-flex items-center gap-1 text-yellow-600 text-sm font-medium">
                           <EyeOff className="w-4 h-4" />
-                          Draft
+                          Taslak
                         </span>
                       )}
                     </td>
@@ -258,7 +256,7 @@ export default function AdminBlogs() {
                         <button
                           onClick={() => togglePublish(blog)}
                           className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
-                          title={isPublished(blog) ? "Unpublish" : "Publish"}
+                          title={isPublished(blog) ? "Taslak yap" : "Yayinla"}
                         >
                           {isPublished(blog) ? (
                             <EyeOff className="w-4 h-4 text-slate-600" />
@@ -269,7 +267,7 @@ export default function AdminBlogs() {
                         <Link
                           to={`/admin/blogs/edit/${blog.id}`}
                           className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
-                          title="Edit"
+                          title="Duzenle"
                         >
                           <Edit className="w-4 h-4 text-slate-600" />
                         </Link>
@@ -279,20 +277,20 @@ export default function AdminBlogs() {
                               onClick={() => handleDelete(blog.id)}
                               className="px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700"
                             >
-                              Confirm
+                              Onayla
                             </button>
                             <button
                               onClick={() => setDeleteConfirm(null)}
                               className="px-3 py-1 bg-slate-200 text-slate-700 text-sm rounded hover:bg-slate-300"
                             >
-                              Cancel
+                              Vazgec
                             </button>
                           </div>
                         ) : (
                           <button
                             onClick={() => setDeleteConfirm(blog.id)}
                             className="p-2 hover:bg-red-50 rounded-lg transition-colors"
-                            title="Delete"
+                            title="Sil"
                           >
                             <Trash2 className="w-4 h-4 text-red-600" />
                           </button>

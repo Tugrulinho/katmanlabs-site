@@ -101,7 +101,7 @@ export default function AdminPricing() {
       <div className="bg-red-50 border border-red-200 rounded-lg p-4">
         <div className="flex items-center gap-2 text-red-800">
           <XCircle className="w-5 h-5" />
-          <span>Error loading pricing: {error}</span>
+          <span>Fiyat kartlari yuklenirken hata olustu: {error}</span>
         </div>
       </div>
     );
@@ -111,15 +111,17 @@ export default function AdminPricing() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Pricing Cards Management</h1>
-          <p className="text-gray-600 mt-1">Edit pricing package text content</p>
+          <h1 className="text-3xl font-bold text-gray-900">Fiyat Kartlari</h1>
+          <p className="text-gray-600 mt-1">
+            Paket iceriklerini ve siralamalarini buradan guncelleyebilirsin.
+          </p>
         </div>
         <button
           onClick={refetch}
           className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-2"
         >
           <RefreshCw className="w-4 h-4" />
-          Refresh
+          Yenile
         </button>
       </div>
 
@@ -138,13 +140,13 @@ export default function AdminPricing() {
                   {pkg.popular && (
                     <span className="px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded-full flex items-center gap-1">
                       <Star className="w-3 h-3" />
-                      Popular
+                      Populer
                     </span>
                   )}
                   {isSaved && (
                     <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full flex items-center gap-1">
                       <CheckCircle className="w-3 h-3" />
-                      Saved
+                      Kaydedildi
                     </span>
                   )}
                 </div>
@@ -160,12 +162,12 @@ export default function AdminPricing() {
                   {isSaving ? (
                     <>
                       <RefreshCw className="w-4 h-4 animate-spin" />
-                      Saving...
+                      Kaydediliyor...
                     </>
                   ) : (
                     <>
                       <Save className="w-4 h-4" />
-                      Save
+                      Kaydet
                     </>
                   )}
                 </button>
@@ -173,7 +175,7 @@ export default function AdminPricing() {
 
               <div className="p-6 space-y-4">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-900 mb-2">Package Name</label>
+                  <label className="block text-sm font-semibold text-gray-900 mb-2">Paket Adi</label>
                   <input
                     type="text"
                     value={getValue(pkg, 'name') as string}
@@ -184,37 +186,37 @@ export default function AdminPricing() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-900 mb-2">Price</label>
+                    <label className="block text-sm font-semibold text-gray-900 mb-2">Fiyat</label>
                     <input
                       type="text"
                       value={getValue(pkg, 'price') as string}
                       onChange={(e) => handleFieldChange(pkg.id, 'price', e.target.value)}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="e.g., 5.000₺"
+                      placeholder="Ornek: 5.000 TL"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-gray-900 mb-2">Period</label>
+                    <label className="block text-sm font-semibold text-gray-900 mb-2">Donem</label>
                     <input
                       type="text"
                       value={getValue(pkg, 'period') as string}
                       onChange={(e) => handleFieldChange(pkg.id, 'period', e.target.value)}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="e.g., aylık"
+                      placeholder="Ornek: aylik"
                     />
                   </div>
                 </div>
 
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <label className="block text-sm font-semibold text-gray-900">Features</label>
+                    <label className="block text-sm font-semibold text-gray-900">Ozellikler</label>
                     <button
                       onClick={() => addFeature(pkg.id)}
                       className="text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1"
                     >
                       <Plus className="w-4 h-4" />
-                      Add Feature
+                      Ozellik Ekle
                     </button>
                   </div>
                   <div className="space-y-2">
@@ -225,7 +227,7 @@ export default function AdminPricing() {
                           value={feature}
                           onChange={(e) => handleFeatureChange(pkg.id, index, e.target.value)}
                           className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                          placeholder={`Feature ${index + 1}`}
+                          placeholder={`Ozellik ${index + 1}`}
                         />
                         <button
                           onClick={() => removeFeature(pkg.id, index)}
@@ -239,7 +241,7 @@ export default function AdminPricing() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-900 mb-2">Display Order</label>
+                  <label className="block text-sm font-semibold text-gray-900 mb-2">Gosterim Sirasi</label>
                   <input
                     type="number"
                     value={getValue(pkg, 'display_order') as number}
@@ -256,7 +258,7 @@ export default function AdminPricing() {
                       onChange={(e) => handleFieldChange(pkg.id, 'popular', e.target.checked)}
                       className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
                     />
-                    <span className="text-sm font-medium text-gray-700">Popular Package</span>
+                    <span className="text-sm font-medium text-gray-700">One Cikan Paket</span>
                   </label>
                 </div>
               </div>

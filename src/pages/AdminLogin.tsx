@@ -21,14 +21,14 @@ export default function AdminLogin() {
     } catch (err) {
       if (err instanceof Error) {
         if (err.message.includes('Invalid login credentials')) {
-          setError('Invalid email or password');
+          setError('E-posta veya sifre hatali');
         } else if (err.message.includes('Unauthorized')) {
-          setError('You do not have admin access');
+          setError('Bu panele erisim yetkin bulunmuyor');
         } else {
           setError(err.message);
         }
       } else {
-        setError('An error occurred during login');
+        setError('Giris sirasinda bir hata olustu');
       }
     } finally {
       setLoading(false);
@@ -43,8 +43,8 @@ export default function AdminLogin() {
             <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-500/20 rounded-full mb-4">
               <Lock className="w-8 h-8 text-blue-400" />
             </div>
-            <h2 className="text-3xl font-bold text-white mb-2">Admin Panel</h2>
-            <p className="text-slate-300">Sign in to manage your content</p>
+            <h2 className="text-3xl font-bold text-white mb-2">Yonetim Paneli</h2>
+            <p className="text-slate-300">Icerikleri yonetmek icin giris yap</p>
           </div>
 
           {error && (
@@ -57,7 +57,7 @@ export default function AdminLogin() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-slate-200 mb-2">
-                Email Address
+                E-posta Adresi
               </label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
@@ -76,7 +76,7 @@ export default function AdminLogin() {
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-slate-200 mb-2">
-                Password
+                Sifre
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
@@ -87,7 +87,7 @@ export default function AdminLogin() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   className="w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                  placeholder="Enter your password"
+                  placeholder="Sifreni gir"
                   autoComplete="current-password"
                 />
               </div>
@@ -101,17 +101,17 @@ export default function AdminLogin() {
               {loading ? (
                 <>
                   <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                  <span>Signing in...</span>
+                  <span>Giris yapiliyor...</span>
                 </>
               ) : (
-                'Sign In'
+                'Giris Yap'
               )}
             </button>
           </form>
         </div>
 
         <p className="text-center text-slate-400 text-sm mt-6">
-          Protected area. Unauthorized access is prohibited.
+          Bu alan korumali yonetim bolumudur.
         </p>
       </div>
     </div>

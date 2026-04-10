@@ -1,7 +1,6 @@
 import RichTextEditor from "../RichTextEditor";
 import { useEffect, useState, FormEvent } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import type { Blog } from "../lib/supabase";
 import { generateSlug } from "../lib/blogUtils";
 import { Save, X, Eye, FileText } from "lucide-react";
 
@@ -14,18 +13,13 @@ export default function AdminBlogForm() {
     title: "",
     slug: "",
     excerpt: "",
-
-    // eski sistem
     content: "",
     image_url: "",
-
-    // yeni sistem
     featured_image_url: "",
     meta_title: "",
     meta_description: "",
     og_image_url: "",
     status: "draft" as "draft" | "published",
-
     category: "",
     published_at: null as string | null,
   });
@@ -64,34 +58,27 @@ export default function AdminBlogForm() {
       const data = result.blog;
 
       if (!data) {
-        throw new Error("Blog not found");
+        throw new Error("Blog bulunamadi");
       }
 
       setFormData({
         title: data.title || "",
         slug: data.slug || "",
         excerpt: data.excerpt || "",
-
-        // eski sistem
         content: data.content || "",
         image_url: data.image_url || "",
-
-        // yeni sistem
         featured_image_url: data.featured_image_url || "",
         meta_title: data.meta_title || "",
         meta_description: data.meta_description || "",
         og_image_url: data.og_image_url || "",
-        status:
-          data.status || (data.published_at ? "published" : "draft"),
-
+        status: data.status || (data.published_at ? "published" : "draft"),
         category: data.category || "",
         published_at: data.published_at || null,
       });
-      // JSON varsa blocks'a aktar
 
       setAutoGenerateSlug(false);
     } catch (err: any) {
-      setError(err.message || "Blog yüklenirken hata oluştu");
+      setError(err.message || "Blog yuklenirken bir hata olustu");
     } finally {
       setLoading(false);
     }
@@ -113,15 +100,10 @@ export default function AdminBlogForm() {
 
       const blogData = {
         ...formData,
-
         status: nextStatus,
         published_at: publishedAt,
-
-        // eski sistem şimdilik kalsın
         content: formData.content,
         image_url: formData.image_url,
-
-        // yeni sistem
         featured_image_url: formData.featured_image_url,
         meta_title: formData.meta_title,
         meta_description: formData.meta_description,
@@ -150,17 +132,18 @@ export default function AdminBlogForm() {
       navigate("/admin/blogs");
     } catch (err) {
       console.error("Error saving blog:", err);
-      setError(err instanceof Error ? err.message : "Failed to save blog");
+      setError(err instanceof Error ? err.message : "Blog kaydedilemedi");
     } finally {
       setLoading(false);
     }
   };
+
   const categories = [
-    "Sosyal Medya Yönetimi",
+    "Sosyal Medya Yonetimi",
     "Web Tasarim",
     "SEO",
     "Dijital Pazarlama",
-    "İçerik Üretimi",
+    "Icerik Uretimi",
     "Analitik",
   ];
 
@@ -169,10 +152,12 @@ export default function AdminBlogForm() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 mb-2">
-            {isEdit ? "Edit Blog" : "New Blog"}
+            {isEdit ? "Blogu Duzenle" : "Yeni Blog Yazisi"}
           </h1>
           <p className="text-slate-600">
-            {isEdit ? "Update your blog post" : "Create a new blog post"}
+            {isEdit
+              ? "Blog yazisini guncelle."
+              : "Yeni bir blog yazisi olustur."}
           </p>
         </div>
         <button
@@ -180,7 +165,7 @@ export default function AdminBlogForm() {
           className="flex items-center gap-2 px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
         >
           <X className="w-5 h-5" />
-          Cancel
+          Geri Don
         </button>
       </div>
 
@@ -197,7 +182,7 @@ export default function AdminBlogForm() {
               htmlFor="title"
               className="block text-sm font-medium text-slate-700 mb-2"
             >
-              Title *
+              Baslik *
             </label>
             <input
               id="title"
@@ -208,7 +193,7 @@ export default function AdminBlogForm() {
                 setFormData({ ...formData, title: e.target.value })
               }
               className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="Enter blog title"
+              placeholder="Blog basligini gir"
             />
           </div>
 
@@ -227,7 +212,7 @@ export default function AdminBlogForm() {
                   onChange={(e) => setAutoGenerateSlug(e.target.checked)}
                   className="rounded"
                 />
-                Auto-generate
+                Otomatik olustur
               </label>
             </div>
             <input
@@ -249,7 +234,7 @@ export default function AdminBlogForm() {
               htmlFor="category"
               className="block text-sm font-medium text-slate-700 mb-2"
             >
-              Category *
+              Kategori *
             </label>
             <select
               id="category"
@@ -260,7 +245,7 @@ export default function AdminBlogForm() {
               }
               className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
-              <option value="">Select a category</option>
+              <option value="">Kategori sec</option>
               {categories.map((cat) => (
                 <option key={cat} value={cat}>
                   {cat}
@@ -274,7 +259,7 @@ export default function AdminBlogForm() {
               htmlFor="image_url"
               className="block text-sm font-medium text-slate-700 mb-2"
             >
-              Image URL *
+              Gorsel URL *
             </label>
             <input
               id="image_url"
@@ -304,7 +289,7 @@ export default function AdminBlogForm() {
               htmlFor="excerpt"
               className="block text-sm font-medium text-slate-700 mb-2"
             >
-              Excerpt
+              Ozet
             </label>
             <textarea
               id="excerpt"
@@ -314,7 +299,7 @@ export default function AdminBlogForm() {
               }
               rows={3}
               className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-              placeholder="Short description of the blog post"
+              placeholder="Blog yazisi icin kisa bir aciklama"
             />
           </div>
 
@@ -323,7 +308,7 @@ export default function AdminBlogForm() {
               htmlFor="content"
               className="block text-sm font-medium text-slate-700 mb-2"
             >
-              Content
+              Icerik
             </label>
             <RichTextEditor
               content={formData.content}
@@ -338,7 +323,8 @@ export default function AdminBlogForm() {
           <div>
             <h2 className="text-xl font-semibold text-slate-900">SEO Ayarlari</h2>
             <p className="text-sm text-slate-500 mt-1">
-              Bu alanlar bos kalirsa sistem blog basligi ve excerpt bilgisini kullanir.
+              Bu alanlar bos kalirsa sistem blog basligi ve excerpt bilgisini
+              kullanir.
             </p>
           </div>
 
@@ -405,7 +391,7 @@ export default function AdminBlogForm() {
                   })
                 }
                 className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Opsiyonel kapak/seo gorseli"
+                placeholder="Opsiyonel kapak veya SEO gorseli"
               />
             </div>
 
@@ -451,12 +437,12 @@ export default function AdminBlogForm() {
             {isPublished ? (
               <span className="flex items-center gap-2 text-green-600 font-medium">
                 <Eye className="w-5 h-5" />
-                Published
+                Yayinda
               </span>
             ) : (
               <span className="flex items-center gap-2 text-yellow-600 font-medium">
                 <FileText className="w-5 h-5" />
-                Draft
+                Taslak
               </span>
             )}
           </div>
@@ -468,7 +454,7 @@ export default function AdminBlogForm() {
               className="flex items-center gap-2 px-6 py-2 bg-slate-600 hover:bg-slate-700 disabled:bg-slate-400 text-white font-medium rounded-lg transition-colors"
             >
               <Save className="w-5 h-5" />
-              {loading ? "Saving..." : "Save as Draft"}
+              {loading ? "Kaydediliyor..." : "Taslak Kaydet"}
             </button>
 
             <button
@@ -479,10 +465,10 @@ export default function AdminBlogForm() {
             >
               <Eye className="w-5 h-5" />
               {loading
-                ? "Publishing..."
+                ? "Yayina aliniyor..."
                 : isEdit
-                  ? "Update & Publish"
-                  : "Publish"}
+                  ? "Guncelle ve Yayinla"
+                  : "Yayinla"}
             </button>
           </div>
         </div>

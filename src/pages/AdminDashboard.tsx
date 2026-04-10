@@ -56,25 +56,25 @@ export default function AdminDashboard() {
 
   const statCards = [
     {
-      label: 'Total Blogs',
+      label: 'Toplam Yazi',
       value: stats.total,
       icon: FileText,
       color: 'bg-blue-500',
     },
     {
-      label: 'Published',
+      label: 'Yayinda',
       value: stats.published,
       icon: Eye,
       color: 'bg-green-500',
     },
     {
-      label: 'Drafts',
+      label: 'Taslak',
       value: stats.drafts,
       icon: Calendar,
       color: 'bg-yellow-500',
     },
     {
-      label: 'This Month',
+      label: 'Bu Ay',
       value: stats.thisMonth,
       icon: TrendingUp,
       color: 'bg-purple-500',
@@ -86,7 +86,7 @@ export default function AdminDashboard() {
       <div className="flex items-center justify-center h-96">
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-blue-500/30 border-t-blue-500 rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-slate-600">Loading dashboard...</p>
+          <p className="text-slate-600">Panel yukleniyor...</p>
         </div>
       </div>
     );
@@ -95,8 +95,8 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-slate-900 mb-2">Dashboard</h1>
-        <p className="text-slate-600">Welcome back! Here's an overview of your content.</p>
+        <h1 className="text-3xl font-bold text-slate-900 mb-2">Genel Bakis</h1>
+        <p className="text-slate-600">Icerik yonetiminin guncel ozetini buradan takip edebilirsin.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -124,12 +124,12 @@ export default function AdminDashboard() {
       <div className="bg-white rounded-xl shadow-sm border border-slate-200">
         <div className="p-6 border-b border-slate-200">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold text-slate-900">Recent Blogs</h2>
+            <h2 className="text-xl font-bold text-slate-900">Son Yazilar</h2>
             <Link
               to="/admin/blogs"
               className="text-sm font-medium text-blue-600 hover:text-blue-700"
             >
-              View All
+              Tumunu Gor
             </Link>
           </div>
         </div>
@@ -137,7 +137,7 @@ export default function AdminDashboard() {
           {recentBlogs.length === 0 ? (
             <div className="p-8 text-center text-slate-500">
               <FileText className="w-12 h-12 mx-auto mb-3 opacity-50" />
-              <p>No blogs yet. Create your first blog to get started!</p>
+              <p>Henuz blog yazisi yok. Ilk yazini olusturarak baslayabilirsin.</p>
             </div>
           ) : (
             recentBlogs.map((blog) => (
@@ -157,9 +157,9 @@ export default function AdminDashboard() {
                         {blog.category}
                       </span>
                       {blog.status === 'published' || blog.published_at !== null ? (
-                        <span className="text-green-600 font-medium">Published</span>
+                        <span className="text-green-600 font-medium">Yayinda</span>
                       ) : (
-                        <span className="text-yellow-600 font-medium">Draft</span>
+                        <span className="text-yellow-600 font-medium">Taslak</span>
                       )}
                     </div>
                   </div>
@@ -167,7 +167,7 @@ export default function AdminDashboard() {
                     to={`/admin/blogs/edit/${blog.id}`}
                     className="ml-4 px-4 py-2 text-sm font-medium text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                   >
-                    Edit
+                    Duzenle
                   </Link>
                 </div>
               </div>
