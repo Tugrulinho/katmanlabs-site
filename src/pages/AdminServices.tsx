@@ -8,7 +8,11 @@ export default function AdminServices() {
   const [savingIds, setSavingIds] = useState<Set<string>>(new Set());
   const [savedIds, setSavedIds] = useState<Set<string>>(new Set());
 
-  const handleFieldChange = (id: string, field: keyof ServiceCard, value: any) => {
+  const handleFieldChange = <K extends keyof ServiceCard>(
+    id: string,
+    field: K,
+    value: ServiceCard[K],
+  ) => {
     setEditedServices((prev) => ({
       ...prev,
       [id]: {

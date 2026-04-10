@@ -107,6 +107,36 @@ function BlogDetail() {
   const relatedBlogs = blogs
     .filter((item) => item.id !== blog.id && item.category === blog.category)
     .slice(0, 3);
+  const relatedServiceMap: Record<
+    string,
+    { href: string; label: string; description: string }
+  > = {
+    SEO: {
+      href: "/hizmet/seo-analitik",
+      label: "SEO ve Analitik Hizmeti",
+      description:
+        "Bu yazidaki konu basliklarini hizmete donusturen sureci detayli inceleyin.",
+    },
+    "Web TasarÄ±m": {
+      href: "/hizmet/web-tasarim",
+      label: "Web Tasarim ve Gelistirme",
+      description:
+        "Performans, deneyim ve donusum odakli web yapisini hizmet sayfasinda gorun.",
+    },
+    "Dijital Pazarlama": {
+      href: "/hizmet/dijital-pazarlama",
+      label: "Dijital Pazarlama ve Reklam Yonetimi",
+      description:
+        "Reklam ve donusum tarafinda nasil bir sistem kurdugumuzu detayli okuyun.",
+    },
+    "Sosyal Medya YÃ¶netimi": {
+      href: "/hizmet/sosyal-medya-tasarim",
+      label: "Sosyal Medya Yonetimi ve Tasarim",
+      description:
+        "Icerik duzeni, tasarim dili ve surec yonetimini hizmet sayfasinda inceleyin.",
+    },
+  };
+  const relatedService = relatedServiceMap[blog.category] || null;
   const schema = [
     {
       "@context": "https://schema.org",
@@ -236,6 +266,26 @@ function BlogDetail() {
             </article>
 
             <BlogCTA gradient={colors.gradient} />
+
+            {relatedService ? (
+              <div className="mt-8 rounded-2xl border border-slate-200 bg-slate-50 p-6">
+                <div className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+                  Ilgili Hizmet
+                </div>
+                <h3 className="mt-2 text-2xl font-bold text-slate-900">
+                  {relatedService.label}
+                </h3>
+                <p className="mt-3 max-w-2xl text-slate-600">
+                  {relatedService.description}
+                </p>
+                <Link
+                  to={relatedService.href}
+                  className="mt-5 inline-flex items-center gap-2 rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-slate-800"
+                >
+                  Hizmet Sayfasina Git
+                </Link>
+              </div>
+            ) : null}
           </div>
 
           <div className="lg:col-span-1">

@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
+import type { ContentMap } from '../types/site';
 
 export interface SiteContent {
   id: string;
@@ -14,16 +15,12 @@ export interface SiteContent {
 }
 
 export function useContent(page?: string) {
-  const [content, setContent] = useState<Record<string, string>>({});
+  const [content, setContent] = useState<ContentMap>({});
   const [allContent, setAllContent] = useState<SiteContent[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchContent();
-  }, [page]);
-
-  const fetchContent = async () => {
+  const fetchContent = useCallback(async () => {
     try {
       setLoading(true);
       let query = supabase.from('site_content').select('*');
@@ -50,7 +47,11 @@ export function useContent(page?: string) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [page]);
+
+  useEffect(() => {
+    fetchContent();
+  }, [fetchContent]);
 
   const updateContent = async (key: string, value: string) => {
     try {

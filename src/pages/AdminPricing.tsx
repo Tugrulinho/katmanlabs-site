@@ -8,7 +8,11 @@ export default function AdminPricing() {
   const [savingIds, setSavingIds] = useState<Set<string>>(new Set());
   const [savedIds, setSavedIds] = useState<Set<string>>(new Set());
 
-  const handleFieldChange = (id: string, field: keyof PricingCard, value: any) => {
+  const handleFieldChange = <K extends keyof PricingCard>(
+    id: string,
+    field: K,
+    value: PricingCard[K],
+  ) => {
     setEditedPackages((prev) => ({
       ...prev,
       [id]: {

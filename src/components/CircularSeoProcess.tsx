@@ -352,17 +352,4 @@ function CircularSeoProcess() {
   );
 }
 
-function getColorFromGradient(gradient: string, position: number): string {
-  const colorMap: { [key: string]: string[] } = {
-    'from-blue-500 to-cyan-500': ['#3b82f6', '#06b6d4'],
-    'from-green-500 to-emerald-500': ['#22c55e', '#10b981'],
-    'from-orange-500 to-amber-500': ['#f97316', '#f59e0b'],
-    'from-red-500 to-rose-500': ['#ef4444', '#f43f5e'],
-    'from-purple-500 to-violet-500': ['#a855f7', '#8b5cf6']
-  };
-
-  const colors = colorMap[gradient] || ['#666', '#999'];
-  return position === 0 ? colors[0] : colors[1];
-}
-
 export default CircularSeoProcess;

@@ -5,7 +5,6 @@ import {
   X,
   ChevronDown,
   Layers,
-  BookOpen,
   Globe,
   TrendingUp,
   BarChart3,

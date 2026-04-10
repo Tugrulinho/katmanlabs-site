@@ -1,7 +1,9 @@
 import { google } from "googleapis";
 import { createClient } from "@supabase/supabase-js";
 import { Resend } from "resend";
-const rateLimitMap = new Map();
+import type { ApiRequest, ApiResponse } from "./_types";
+
+const rateLimitMap = new Map<string, { count: number; last: number }>();
 
 const RATE_LIMIT = 3;
 const WINDOW_MS = 30 * 1000;
@@ -20,8 +22,26 @@ oAuth2Client.setCredentials({
 });
 
 const calendar = google.calendar({ version: "v3", auth: oAuth2Client });
-export default async function handler(req: any, res: any) {
-  const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+type ContactRequestBody = {
+  name?: string;
+  email?: string;
+  phone?: string;
+  service?: string;
+  message?: string;
+  website?: string;
+  cfToken?: string;
+  meeting_date?: string;
+  meeting_time?: string;
+};
+
+export default async function handler(
+  req: ApiRequest<ContactRequestBody>,
+  res: ApiResponse,
+) {
+  const forwardedFor = req.headers["x-forwarded-for"];
+  const ip = Array.isArray(forwardedFor)
+    ? forwardedFor[0]
+    : forwardedFor || req.socket.remoteAddress || "unknown";
 
   const now = Date.now();
   const userData = rateLimitMap.get(ip) || { count: 0, last: now };
@@ -69,7 +89,7 @@ export default async function handler(req: any, res: any) {
       cfToken,
       meeting_date,
       meeting_time,
-    } = req.body;
+    } = req.body || {};
 
     if (!cfToken) {
       return res.status(400).json({ error: "Doğrulama yok" });

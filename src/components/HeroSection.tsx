@@ -1,3 +1,4 @@
+import { Suspense, lazy, useEffect, useState } from "react";
 import {
   ArrowRight,
   ChevronDown,
@@ -9,14 +10,30 @@ import {
   Youtube,
   MessageCircle,
 } from "lucide-react";
-import SplineScene from "./SplineScene";
+import type { ContentMap } from "../types/site";
+
+const LazySplineScene = lazy(() => import("./SplineScene"));
 
 type HeroSectionProps = {
-  content: any;
+  content: ContentMap;
   scrollToSection: (id: string) => void;
 };
 
 function HeroSection({ content, scrollToSection }: HeroSectionProps) {
+  const [showSpline, setShowSpline] = useState(false);
+
+  useEffect(() => {
+    if (window.innerWidth < 768) {
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      setShowSpline(true);
+    }, 250);
+
+    return () => window.clearTimeout(timer);
+  }, []);
+
   return (
     <section className="relative min-h-screen flex items-center justify-center bg-gradient-hero overflow-hidden">
       <div className="absolute inset-0 opacity-10 pointer-events-none">
@@ -134,7 +151,11 @@ function HeroSection({ content, scrollToSection }: HeroSectionProps) {
         </div>
       </div>
 
-      <SplineScene className="hidden md:block" />
+      {showSpline ? (
+        <Suspense fallback={null}>
+          <LazySplineScene className="hidden md:block" />
+        </Suspense>
+      ) : null}
 
       <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32 w-full pointer-events-none">
         <div className="max-w-xl lg:max-w-2xl text-center lg:text-left pointer-events-auto">

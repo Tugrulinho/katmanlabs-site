@@ -9,6 +9,7 @@ import BlogCTA from "../components/BlogCTA";
 import Seo from "../components/Seo";
 import { getAbsoluteUrl, SITE_NAME } from "../lib/seo";
 import { generateSlug } from "../lib/blogUtils";
+import type { ContentBlog } from "../lib/blogContent";
 export default function Blog() {
   const { categorySlug } = useParams();
   const { blogs, loading } = useBlogs();
@@ -180,7 +181,7 @@ export default function Blog() {
 
   const activeCategory = categorySlug
     ? blogs.find(
-        (blog: any) =>
+        (blog: ContentBlog) =>
           slugifyCategory(blog.category) === decodeURIComponent(categorySlug),
       )?.category || null
     : null;
@@ -219,7 +220,7 @@ export default function Blog() {
   };
   const filteredBlogs = categorySlug
     ? blogs.filter(
-        (blog: any) =>
+        (blog: ContentBlog) =>
           slugifyCategory(blog.category) === decodeURIComponent(categorySlug),
       )
     : blogs;
@@ -246,11 +247,6 @@ export default function Blog() {
       behavior: "smooth",
     });
   }, [currentPage]);
-
-  const floatStyle = {
-    animation: "float 8s ease-in-out infinite",
-  };
-
   return (
     <>
       <Seo

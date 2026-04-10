@@ -10,23 +10,37 @@ import {
   LogOut,
   Menu,
   X,
+  Mail,
+  FolderKanban,
+  Briefcase,
 } from "lucide-react";
+import type { ContactMessage } from "../types/site";
+
+type MenuGroup = {
+  title: string;
+  items: Array<{
+    path: string;
+    icon: typeof LayoutDashboard;
+    label: string;
+  }>;
+};
 
 export default function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [messages, setMessages] = useState<any[]>([]);
-  const unreadCount = messages.filter((msg) => msg.is_read === false).length;
+  const [messages, setMessages] = useState<ContactMessage[]>([]);
+  const unreadCount = messages.filter((message) => message.is_read === false).length;
   const navigate = useNavigate();
   const location = useLocation();
+
   useEffect(() => {
     const loadMessages = () => {
       fetch("/api/messages")
-        .then((res) => res.json())
-        .then((data) => setMessages(data));
+        .then((response) => response.json())
+        .then((data) => setMessages(Array.isArray(data) ? data : []))
+        .catch(() => setMessages([]));
     };
 
     loadMessages();
-
     window.addEventListener("focus", loadMessages);
 
     return () => {
@@ -51,39 +65,66 @@ export default function AdminLayout() {
     return location.pathname === path;
   };
 
-  const menuItems = [
-    { path: "/admin/dashboard", icon: LayoutDashboard, label: "Genel Bakis" },
-    { path: "/admin/blogs", icon: FileText, label: "Bloglar" },
-    { path: "/admin/content", icon: Settings, label: "Site Icerigi" },
-    { path: "/admin/services", icon: Grid3x3, label: "Hizmet Kartlari" },
-    { path: "/admin/pricing", icon: Package, label: "Fiyat Kartlari" },
-    { path: "/admin/messages", icon: FileText, label: "Mesajlar" },
-    { path: "/admin/clients", icon: FileText, label: "Referanslar" },
+  const menuGroups: MenuGroup[] = [
+    {
+      title: "Genel",
+      items: [
+        {
+          path: "/admin/dashboard",
+          icon: LayoutDashboard,
+          label: "Genel Bakis",
+        },
+        { path: "/admin/content", icon: Settings, label: "Site Icerigi" },
+      ],
+    },
+    {
+      title: "Icerik",
+      items: [
+        { path: "/admin/blogs", icon: FileText, label: "Bloglar" },
+        { path: "/admin/messages", icon: Mail, label: "Mesajlar" },
+        { path: "/admin/clients", icon: FolderKanban, label: "Referanslar" },
+      ],
+    },
+    {
+      title: "Kartlar",
+      items: [
+        { path: "/admin/services", icon: Grid3x3, label: "Hizmet Kartlari" },
+        { path: "/admin/pricing", icon: Package, label: "Fiyat Kartlari" },
+      ],
+    },
   ];
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <nav className="bg-white shadow-sm border-b border-slate-200 fixed top-0 left-0 right-0 z-30">
+      <nav className="fixed left-0 right-0 top-0 z-30 border-b border-slate-200 bg-white shadow-sm">
         <div className="px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex h-16 items-center justify-between">
             <div className="flex items-center gap-4">
               <button
                 onClick={() => setSidebarOpen(!sidebarOpen)}
-                className="lg:hidden p-2 rounded-lg hover:bg-slate-100 transition-colors"
+                className="rounded-lg p-2 transition-colors hover:bg-slate-100 lg:hidden"
               >
                 {sidebarOpen ? (
-                  <X className="w-6 h-6 text-slate-700" />
+                  <X className="h-6 w-6 text-slate-700" />
                 ) : (
-                  <Menu className="w-6 h-6 text-slate-700" />
+                  <Menu className="h-6 w-6 text-slate-700" />
                 )}
               </button>
-              <h1 className="text-xl font-bold text-slate-800">Yonetim Paneli</h1>
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-white">
+                  <Briefcase className="h-5 w-5" />
+                </div>
+                <div>
+                  <h1 className="text-lg font-bold text-slate-800">Yonetim Paneli</h1>
+                  <p className="text-xs text-slate-500">Operasyon ve icerik merkezi</p>
+                </div>
+              </div>
             </div>
             <button
               onClick={handleSignOut}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
+              className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100"
             >
-              <LogOut className="w-4 h-4" />
+              <LogOut className="h-4 w-4" />
               <span className="hidden sm:inline">Cikis Yap</span>
             </button>
           </div>
@@ -92,50 +133,60 @@ export default function AdminLayout() {
 
       <aside
         className={`
-          fixed top-16 left-0 bottom-0 w-64 bg-white border-r border-slate-200 z-20 transition-transform duration-300 ease-in-out
+          fixed bottom-0 left-0 top-16 z-20 w-72 border-r border-slate-200 bg-white transition-transform duration-300 ease-in-out
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
           lg:translate-x-0
         `}
       >
-        <nav className="p-4 space-y-1">
-          {menuItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = isMenuItemActive(item.path);
+        <nav className="space-y-6 p-4">
+          {menuGroups.map((group) => (
+            <div key={group.title}>
+              <div className="mb-2 px-3 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+                {group.title}
+              </div>
+              <div className="space-y-1">
+                {group.items.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = isMenuItemActive(item.path);
 
-            return (
-              <Link
-                key={item.path}
-                to={item.path}
-                onClick={() => setSidebarOpen(false)}
-                className={`
-    flex items-center justify-between px-4 py-3 rounded-lg transition-colors font-medium
-    ${isActive ? "bg-blue-50 text-blue-700" : "text-slate-700 hover:bg-slate-100"}
-  `}
-              >
-                <div className="flex items-center gap-3">
-                  <Icon className="w-5 h-5" />
-                  <span>{item.label}</span>
-                </div>
+                  return (
+                    <Link
+                      key={item.path}
+                      to={item.path}
+                      onClick={() => setSidebarOpen(false)}
+                      className={`flex items-center justify-between rounded-xl px-4 py-3 font-medium transition-colors ${
+                        isActive
+                          ? "bg-blue-50 text-blue-700"
+                          : "text-slate-700 hover:bg-slate-100"
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <Icon className="h-5 w-5" />
+                        <span>{item.label}</span>
+                      </div>
 
-                {item.path === "/admin/messages" && unreadCount > 0 && (
-                  <span className="bg-red-500 text-white text-xs font-semibold min-w-[20px] h-5 flex items-center justify-center rounded-full px-2">
-                    {unreadCount}
-                  </span>
-                )}
-              </Link>
-            );
-          })}
+                      {item.path === "/admin/messages" && unreadCount > 0 ? (
+                        <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-500 px-2 text-xs font-semibold text-white">
+                          {unreadCount}
+                        </span>
+                      ) : null}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </nav>
       </aside>
 
-      {sidebarOpen && (
+      {sidebarOpen ? (
         <div
-          className="fixed inset-0 bg-black/50 z-10 lg:hidden"
+          className="fixed inset-0 z-10 bg-black/50 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
-      )}
+      ) : null}
 
-      <main className="pt-16 lg:pl-64">
+      <main className="pt-16 lg:pl-72">
         <div className="p-4 sm:p-6 lg:p-8">
           <Outlet />
         </div>

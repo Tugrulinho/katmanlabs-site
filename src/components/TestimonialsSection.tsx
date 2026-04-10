@@ -1,8 +1,9 @@
 import { Star } from "lucide-react";
+import type { ClientRecord, ContentMap } from "../types/site";
 
 type TestimonialsSectionProps = {
-  content: any;
-  clients: Array<any>;
+  content: ContentMap;
+  clients: ClientRecord[];
 };
 
 export default function TestimonialsSection({

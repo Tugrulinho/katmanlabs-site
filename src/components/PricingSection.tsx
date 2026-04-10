@@ -1,8 +1,10 @@
 import { Check } from "lucide-react";
+import type { PricingCard } from "../hooks/usePricingCards";
+import type { ContentMap } from "../types/site";
 
 type PricingSectionProps = {
-  content: any;
-  packages: Array<any>;
+  content: ContentMap;
+  packages: PricingCard[];
   packagesLoading: boolean;
   scrollToSection: (id: string) => void;
 };

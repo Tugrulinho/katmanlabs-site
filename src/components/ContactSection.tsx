@@ -1,8 +1,9 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { ArrowRight, Mail, Phone, MessageCircle } from "lucide-react";
+import type { ContentMap } from "../types/site";
 
 type ContactSectionProps = {
-  content: any;
+  content: ContentMap;
 };
 
 function ContactSection({ content }: ContactSectionProps) {
@@ -17,7 +18,14 @@ function ContactSection({ content }: ContactSectionProps) {
   const turnstileRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const win = window as any;
+    const win = window as Window & {
+      turnstile?: {
+        render: (
+          target: HTMLDivElement,
+          options: { sitekey: string; callback: (token: string) => void },
+        ) => void;
+      };
+    };
     const siteKey = "0x4AAAAAACt8xcbnaubosl1H";
 
     const onSuccess = (token: string) => {

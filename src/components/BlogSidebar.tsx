@@ -1,12 +1,18 @@
-import { Link } from "react-router-dom";
+import type { ContentBlog } from "../lib/blogContent";
+
+type BlogSidebarProps = {
+  blogs: ContentBlog[];
+  currentCategory: string | null;
+  onCategorySelect?: (category: string | null) => void;
+};
 
 export default function BlogSidebar({
   blogs,
   currentCategory,
   onCategorySelect,
-}: any) {
+}: BlogSidebarProps) {
   const categories = Array.from(
-    new Set((blogs || []).map((blog: any) => blog.category).filter(Boolean)),
+    new Set((blogs || []).map((blog) => blog.category).filter(Boolean)),
   ) as string[];
 
   return (

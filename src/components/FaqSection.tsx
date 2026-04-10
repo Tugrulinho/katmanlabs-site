@@ -1,16 +1,19 @@
 import { HelpCircle, Minus, Plus, MessageCircle } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import type { ContentMap } from "../types/site";
+import type { LucideIcon } from "lucide-react";
+
 type FaqItem = {
   question: string;
   answer: string;
-  icon: any;
+  icon: LucideIcon;
   gradient: string;
   iconColor: string;
 };
 
 type FaqSectionProps = {
-  content: any;
+  content: ContentMap;
   faqs: FaqItem[];
 };
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ArrowLeft, BarChart3, Calendar, Search, Settings, FileText, TrendingDown, Zap, Smartphone, Link, Globe, Target, ListChecks, Type, LineChart, Database, Activity, ClipboardCheck, TrendingUp, Users, Clock, Shield, ArrowRight } from 'lucide-react';
+import { ArrowLeft, BarChart3, Calendar, Search, Settings, FileText, TrendingDown, Zap, Smartphone, Link, Globe, Target, ListChecks, Type, LineChart, Database, Activity, ClipboardCheck, ArrowRight } from 'lucide-react';
 import { Link as RouterLink } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';

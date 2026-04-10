@@ -3,13 +3,10 @@ import { useState, useEffect } from "react";
 import {
   ArrowLeft,
   Instagram,
-  Check,
   Calendar,
   Linkedin,
   Facebook,
   Search,
-  MessageCircle,
-  Repeat,
   Sparkles,
   TrendingUp,
   Package,

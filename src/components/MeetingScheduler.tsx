@@ -1,6 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 import { Calendar, X, Clock } from "lucide-react";
 
+type TurnstileWindow = Window & {
+  turnstile?: {
+    render: (
+      target: HTMLDivElement,
+      options: { sitekey: string; callback: (token: string) => void },
+    ) => void;
+    reset: () => void;
+  };
+};
+
+type MeetingSlotResponse = {
+  meeting_time: string;
+};
+
 interface MeetingSchedulerProps {
   isOpen: boolean;
   onClose: () => void;
@@ -26,24 +40,7 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
     return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
   };
   useEffect(() => {
-    const win = window as any;
-    const siteKey = "0x4AAAAAACt8xcbnaubosl1H";
-
-    const onSuccess = (token: string) => {
-      setCfToken(token);
-    };
-
-    const renderTurnstile = () => {
-      if (win.turnstile && turnstileRef.current) {
-        if (turnstileRef.current.firstChild) {
-          turnstileRef.current.innerHTML = "";
-        }
-        win.turnstile.render(turnstileRef.current, {
-          sitekey: siteKey,
-          callback: onSuccess,
-        });
-      }
-    };
+    const win = window as TurnstileWindow;
 
     const scriptSrc = "https://challenges.cloudflare.com/turnstile/v0/api.js";
     const existingScript = document.querySelector<HTMLScriptElement>(
@@ -81,7 +78,7 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
   }, []);
 
   useEffect(() => {
-    const win = window as any;
+    const win = window as TurnstileWindow;
     const siteKey = "0x4AAAAAACt8xcbnaubosl1H";
 
     if (!isOpen || !turnstileReady || !turnstileRef.current) {
@@ -109,7 +106,7 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
       .then((res) => res.json())
       .then((data) => {
         const times = Array.isArray(data)
-          ? data.map((item: any) => item.meeting_time)
+          ? (data as MeetingSlotResponse[]).map((item) => item.meeting_time)
           : [];
         setBookedTimes(times);
       })
@@ -148,8 +145,9 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
       }
       setCfToken("");
 
-      if ((window as any).turnstile) {
-        (window as any).turnstile.reset();
+      const turnstile = (window as TurnstileWindow).turnstile;
+      if (turnstile) {
+        turnstile.reset();
       }
       alert(
         "Toplantı talebiniz alındı. En kısa sürede sizinle iletişime geçeceğiz.",
@@ -168,8 +166,9 @@ function MeetingScheduler({ isOpen, onClose }: MeetingSchedulerProps) {
       console.error(err);
       setCfToken("");
 
-      if ((window as any).turnstile) {
-        (window as any).turnstile.reset();
+      const turnstile = (window as TurnstileWindow).turnstile;
+      if (turnstile) {
+        turnstile.reset();
       }
       alert("Seçtiğiniz saat dolu olabilir. Lütfen başka bir saat deneyin.");
     }

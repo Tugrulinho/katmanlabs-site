@@ -1,9 +1,18 @@
-console.log("SUPABASE_URL:", process.env.SUPABASE_URL);
 import dotenv from "dotenv";
 dotenv.config({ path: ".env.local" });
 import { createClient } from "@supabase/supabase-js";
+import type { ApiRequest, ApiResponse } from "./_types";
 
-export default async function handler(req: any, res: any) {
+type BlogRequestBody = {
+  id?: string;
+  blogData?: Record<string, unknown>;
+  isEdit?: boolean;
+};
+
+export default async function handler(
+  req: ApiRequest<BlogRequestBody>,
+  res: ApiResponse,
+) {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:5175");
   res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -27,7 +36,7 @@ export default async function handler(req: any, res: any) {
 
     // GET → blog getir
     if (req.method === "GET") {
-      const { id } = req.query;
+      const id = req.query.id;
 
       if (!id) {
         return res.status(400).json({ error: "Blog id gerekli" });
@@ -47,7 +56,7 @@ export default async function handler(req: any, res: any) {
       return res.status(200).json({ blog: data });
     }
     if (req.method === "DELETE") {
-      const { id } = req.body;
+      const { id } = req.body || {};
 
       if (!id) {
         return res.status(400).json({ error: "Blog id gerekli" });
@@ -61,8 +70,7 @@ export default async function handler(req: any, res: any) {
     }
     // POST → create / update
     if (req.method === "POST") {
-      console.log("BODY:", req.body);
-      const { id, blogData, isEdit } = req.body;
+      const { id, blogData, isEdit } = req.body || {};
 
       if (!blogData) {
         return res.status(400).json({ error: "blogData gerekli" });
@@ -85,10 +93,12 @@ export default async function handler(req: any, res: any) {
     }
 
     return res.status(405).json({ error: "Method not allowed" });
-  } catch (err: any) {
+  } catch (err) {
+    const message =
+      err instanceof Error ? err.message : "Internal server error";
     console.error("API /api/blog crash:", err);
     return res.status(500).json({
-      error: err?.message || "Internal server error",
+      error: message,
     });
   }
 }

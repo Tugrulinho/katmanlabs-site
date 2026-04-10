@@ -1,11 +1,12 @@
 import { createClient } from '@supabase/supabase-js';
+import type { ApiRequest, ApiResponse } from './_types';
 
 const supabase = createClient(
   process.env.SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-export default async function handler(req: any, res: any) {
+export default async function handler(req: ApiRequest, res: ApiResponse) {
   if (req.method === 'POST') {
   const { error } = await supabase
     .from('contact_messages')
@@ -33,7 +34,7 @@ export default async function handler(req: any, res: any) {
     }
 
     return res.status(200).json(data);
-  } catch (err) {
+  } catch {
     return res.status(500).json({ error: 'Server error' });
   }
 }

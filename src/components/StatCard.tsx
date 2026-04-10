@@ -3,10 +3,9 @@ import { useState, useEffect, useRef } from 'react';
 interface StatCardProps {
   number: string;
   label: string;
-  index: number;
 }
 
-export default function StatCard({ number, label, index }: StatCardProps) {
+export default function StatCard({ number, label }: StatCardProps) {
   const parseNumber = (str: string): { value: number; prefix: string; suffix: string } => {
     const prefixMatch = str.match(/^[^0-9]*/);
     const suffixMatch = str.match(/[^0-9]*$/);

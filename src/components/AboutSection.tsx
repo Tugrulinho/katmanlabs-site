@@ -1,5 +1,7 @@
+import type { ContentMap } from "../types/site";
+
 type AboutSectionProps = {
-  content: any;
+  content: ContentMap;
 };
 
 export default function AboutSection({ content }: AboutSectionProps) {

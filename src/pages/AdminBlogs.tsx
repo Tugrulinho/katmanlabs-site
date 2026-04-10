@@ -1,5 +1,12 @@
 import { useMemo, useState } from "react";
-import { Search, Filter, ExternalLink, FolderOpen, FileText } from "lucide-react";
+import {
+  CalendarDays,
+  ExternalLink,
+  FileText,
+  Filter,
+  FolderOpen,
+  Search,
+} from "lucide-react";
 import { getAllBlogs } from "../lib/blogContent";
 
 export default function AdminBlogs() {
@@ -33,51 +40,51 @@ export default function AdminBlogs() {
         <div>
           <h1 className="text-3xl font-bold text-slate-900 mb-2">Bloglar</h1>
           <p className="text-slate-600">
-            Blog yazilari artik panelden degil, repo icindeki MDX dosyalarindan
-            yonetiliyor.
+            Blog yazilari panelden degil, repo icindeki MDX dosyalarindan
+            yonetiliyor. Bu ekran operasyon takibi ve hizli kontrol amacli.
           </p>
         </div>
         <a
           href="/admin/blogs/new"
-          className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+          className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700"
         >
           <FolderOpen className="w-5 h-5" />
-          Yeni Yazi Rehberi
+          Yeni Yazi Akisi
         </a>
       </div>
 
       <div className="rounded-2xl border border-blue-200 bg-blue-50 p-5 text-blue-950">
         <div className="flex items-start gap-3">
-          <FolderOpen className="w-5 h-5 mt-0.5 text-blue-700" />
+          <FolderOpen className="mt-0.5 h-5 w-5 text-blue-700" />
           <div className="text-sm leading-6">
-            <p className="font-semibold mb-1">Read-only moda gecildi</p>
+            <p className="font-semibold mb-1">Repo-first MDX duzeni aktif</p>
             <p>
-              Aktif dosya kaynagi <code>src/content/blog/*.mdx</code>. Bu
-              ekranda listeyi kontrol edebilir, public onizlemeyi acabilir ve
-              kategori/slug durumlarini takip edebilirsin.
+              Kaynak klasor <code>src/content/blog/*.mdx</code>. Burada slug,
+              kategori, status, guncelleme tarihi ve public onizleme durumunu
+              takip edebilirsin.
             </p>
           </div>
         </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
-        <div className="flex flex-col sm:flex-row gap-4">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+      <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <div className="flex flex-col gap-4 sm:flex-row">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
-              placeholder="Yazilarda ara..."
+              placeholder="Baslik, slug veya excerpt icinde ara..."
               value={searchTerm}
               onChange={(event) => setSearchTerm(event.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full rounded-lg border border-slate-300 py-2 pl-10 pr-4 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
             />
           </div>
           <div className="relative">
-            <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+            <Filter className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
             <select
               value={categoryFilter}
               onChange={(event) => setCategoryFilter(event.target.value)}
-              className="pl-10 pr-8 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
+              className="appearance-none rounded-lg border border-slate-300 bg-white py-2 pl-10 pr-8 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
             >
               {categories.map((category) => (
                 <option key={category} value={category}>
@@ -89,56 +96,57 @@ export default function AdminBlogs() {
         </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
         {filteredBlogs.length === 0 ? (
           <div className="p-8 text-center text-slate-500">
-            <FileText className="w-12 h-12 mx-auto mb-3 opacity-50" />
+            <FileText className="mx-auto mb-3 h-12 w-12 opacity-50" />
             <p>Aramana uyan blog yazisi bulunamadi.</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-slate-50 border-b border-slate-200">
+              <thead className="border-b border-slate-200 bg-slate-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-500">
                     Baslik
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-500">
                     Kategori
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-500">
                     Durum
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-500">
+                    Son Guncelleme
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-500">
                     Dosya
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-slate-500">
                     Onizleme
                   </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200">
                 {filteredBlogs.map((blog) => (
-                  <tr key={blog.id} className="hover:bg-slate-50 transition-colors">
+                  <tr key={blog.id} className="transition-colors hover:bg-slate-50">
                     <td className="px-6 py-4">
                       <div className="flex items-start gap-3">
                         <img
                           src={blog.image_url}
                           alt={blog.title}
-                          className="w-12 h-12 rounded object-cover"
+                          className="h-12 w-12 rounded object-cover"
                         />
                         <div>
                           <div className="font-semibold text-slate-900">
                             {blog.title}
                           </div>
-                          <div className="text-sm text-slate-500 line-clamp-1">
-                            {blog.slug}
-                          </div>
+                          <div className="text-sm text-slate-500">{blog.slug}</div>
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="px-2 py-1 bg-slate-100 text-slate-700 text-xs font-medium rounded">
+                      <span className="rounded bg-slate-100 px-2 py-1 text-xs font-medium text-slate-700">
                         {blog.category}
                       </span>
                     </td>
@@ -154,6 +162,12 @@ export default function AdminBlogs() {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-sm text-slate-500">
+                      <div className="flex items-center gap-2">
+                        <CalendarDays className="h-4 w-4" />
+                        {new Date(blog.updated_at).toLocaleDateString("tr-TR")}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-slate-500">
                       {blog.filePath.replace("../content/blog/", "src/content/blog/")}
                     </td>
                     <td className="px-6 py-4">
@@ -163,9 +177,9 @@ export default function AdminBlogs() {
                             href={`/blog/${blog.slug}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                            className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-blue-600 transition-colors hover:bg-blue-50"
                           >
-                            <ExternalLink className="w-4 h-4" />
+                            <ExternalLink className="h-4 w-4" />
                             Ac
                           </a>
                         ) : (

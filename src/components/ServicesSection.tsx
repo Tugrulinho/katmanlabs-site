@@ -1,6 +1,7 @@
 import { ChevronRight, Check, Layers } from "lucide-react";
 import { Link } from "react-router-dom";
 import RotatingText from "./RotatingText";
+import type { ContentMap } from "../types/site";
 
 type Service = {
   icon: JSX.Element;
@@ -12,7 +13,7 @@ type Service = {
 };
 
 type ServicesSectionProps = {
-  content: any;
+  content: ContentMap;
   services: Service[];
   servicesLoading: boolean;
 };

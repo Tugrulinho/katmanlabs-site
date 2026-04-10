@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
 import { generateSlug } from "../src/lib/blogUtils";
+import type { ApiRequest, ApiResponse } from "./_types";
 
 type BlogFrontmatter = {
   slug: string;
@@ -29,7 +30,7 @@ function getPublishedBlogs() {
     .filter((blog) => blog.status === "published");
 }
 
-export default async function handler(req: any, res: any) {
+export default async function handler(_req: ApiRequest, res: ApiResponse) {
   const blogs = getPublishedBlogs();
   const baseUrl = "https://www.katmanlabs.com";
 

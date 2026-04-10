@@ -61,7 +61,7 @@ export default function RichTextEditor({
     const incomingHtml = content || "";
 
     if (currentHtml !== incomingHtml) {
-      editor.commands.setContent(incomingHtml, false);
+      editor.commands.setContent(incomingHtml, { emitUpdate: false });
     }
   }, [content, editor]);
 

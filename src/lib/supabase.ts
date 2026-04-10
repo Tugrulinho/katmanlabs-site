@@ -20,7 +20,7 @@ export interface Blog {
   image_url: string;
 
   // YENİ SİSTEM
-  content_json: any | null;
+  content_json: unknown | null;
   featured_image_url: string | null;
   meta_title: string | null;
   meta_description: string | null;
