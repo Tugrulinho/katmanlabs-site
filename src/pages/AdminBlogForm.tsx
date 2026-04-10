@@ -46,6 +46,9 @@ export default function AdminBlogForm() {
     }
   }, [formData.title, autoGenerateSlug]);
 
+  const isPublished =
+    formData.status === "published" || formData.published_at !== null;
+
   const fetchBlog = async () => {
     try {
       setLoading(true);
@@ -78,7 +81,8 @@ export default function AdminBlogForm() {
         meta_title: data.meta_title || "",
         meta_description: data.meta_description || "",
         og_image_url: data.og_image_url || "",
-        status: data.status || "draft",
+        status:
+          data.status || (data.published_at ? "published" : "draft"),
 
         category: data.category || "",
         published_at: data.published_at || null,
@@ -93,19 +97,25 @@ export default function AdminBlogForm() {
     }
   };
 
-  const handleSubmit = async (e: FormEvent, publish = false) => {
+  const handleSubmit = async (
+    e: FormEvent,
+    nextStatus: "draft" | "published" = "draft",
+  ) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
     try {
+      const publishedAt =
+        nextStatus === "published"
+          ? formData.published_at || new Date().toISOString()
+          : null;
+
       const blogData = {
         ...formData,
 
-        status: publish ? "published" : formData.status,
-        published_at: publish
-          ? new Date().toISOString()
-          : formData.published_at,
+        status: nextStatus,
+        published_at: publishedAt,
 
         // eski sistem şimdilik kalsın
         content: formData.content,
@@ -180,7 +190,7 @@ export default function AdminBlogForm() {
         </div>
       )}
 
-      <form onSubmit={(e) => handleSubmit(e, false)} className="space-y-6">
+      <form onSubmit={(e) => handleSubmit(e, "draft")} className="space-y-6">
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 space-y-6">
           <div>
             <label
@@ -324,9 +334,121 @@ export default function AdminBlogForm() {
           </div>
         </div>
 
+        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 space-y-6">
+          <div>
+            <h2 className="text-xl font-semibold text-slate-900">SEO Ayarlari</h2>
+            <p className="text-sm text-slate-500 mt-1">
+              Bu alanlar bos kalirsa sistem blog basligi ve excerpt bilgisini kullanir.
+            </p>
+          </div>
+
+          <div>
+            <label
+              htmlFor="meta_title"
+              className="block text-sm font-medium text-slate-700 mb-2"
+            >
+              Meta Title
+            </label>
+            <input
+              id="meta_title"
+              type="text"
+              value={formData.meta_title}
+              onChange={(e) =>
+                setFormData({ ...formData, meta_title: e.target.value })
+              }
+              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="Google sonucunda gorunecek baslik"
+            />
+            <p className="mt-2 text-xs text-slate-500">
+              {formData.meta_title.length}/60 karakter
+            </p>
+          </div>
+
+          <div>
+            <label
+              htmlFor="meta_description"
+              className="block text-sm font-medium text-slate-700 mb-2"
+            >
+              Meta Description
+            </label>
+            <textarea
+              id="meta_description"
+              value={formData.meta_description}
+              onChange={(e) =>
+                setFormData({ ...formData, meta_description: e.target.value })
+              }
+              rows={3}
+              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+              placeholder="Google sonucunda gorunecek aciklama"
+            />
+            <p className="mt-2 text-xs text-slate-500">
+              {formData.meta_description.length}/160 karakter
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label
+                htmlFor="featured_image_url"
+                className="block text-sm font-medium text-slate-700 mb-2"
+              >
+                Featured Image URL
+              </label>
+              <input
+                id="featured_image_url"
+                type="url"
+                value={formData.featured_image_url}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    featured_image_url: e.target.value,
+                  })
+                }
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="Opsiyonel kapak/seo gorseli"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="og_image_url"
+                className="block text-sm font-medium text-slate-700 mb-2"
+              >
+                OG Image URL
+              </label>
+              <input
+                id="og_image_url"
+                type="url"
+                value={formData.og_image_url}
+                onChange={(e) =>
+                  setFormData({ ...formData, og_image_url: e.target.value })
+                }
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="Sosyal paylasim gorseli"
+              />
+            </div>
+          </div>
+
+          {(formData.og_image_url || formData.featured_image_url) && (
+            <div>
+              <p className="text-sm font-medium text-slate-700 mb-2">
+                SEO Gorsel Onizlemesi
+              </p>
+              <img
+                src={formData.og_image_url || formData.featured_image_url}
+                alt="SEO preview"
+                className="rounded-lg max-h-48 object-cover border border-slate-200"
+                onError={(e) => {
+                  e.currentTarget.style.display = "none";
+                }}
+              />
+            </div>
+          )}
+        </div>
+
         <div className="flex items-center justify-between bg-white rounded-xl shadow-sm border border-slate-200 p-6">
           <div className="flex items-center gap-3">
-            {formData.published_at ? (
+            {isPublished ? (
               <span className="flex items-center gap-2 text-green-600 font-medium">
                 <Eye className="w-5 h-5" />
                 Published
@@ -351,7 +473,7 @@ export default function AdminBlogForm() {
 
             <button
               type="button"
-              onClick={(e) => handleSubmit(e, true)}
+              onClick={(e) => handleSubmit(e, "published")}
               disabled={loading}
               className="flex items-center gap-2 px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-medium rounded-lg transition-colors"
             >

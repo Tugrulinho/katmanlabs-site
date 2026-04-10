@@ -86,22 +86,29 @@ export default function AdminBlogs() {
     }
   };
 
+  const isPublished = (blog: Blog) =>
+    blog.status === "published" || blog.published_at !== null;
+
   const togglePublish = async (blog: Blog) => {
     try {
-      const newPublishedAt = blog.published_at
-        ? null
-        : new Date().toISOString();
+      const nextPublishedState = !isPublished(blog);
+      const newPublishedAt = nextPublishedState
+        ? blog.published_at || new Date().toISOString()
+        : null;
+      const newStatus: Blog["status"] = nextPublishedState ? "published" : "draft";
 
       const { error } = await supabase
         .from("blogs")
-        .update({ published_at: newPublishedAt })
+        .update({ published_at: newPublishedAt, status: newStatus })
         .eq("id", blog.id);
 
       if (error) throw error;
 
       setBlogs(
         blogs.map((b) =>
-          b.id === blog.id ? { ...b, published_at: newPublishedAt } : b,
+          b.id === blog.id
+            ? { ...b, published_at: newPublishedAt, status: newStatus }
+            : b,
         ),
       );
     } catch (error) {
@@ -228,7 +235,7 @@ export default function AdminBlogs() {
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      {blog.published_at ? (
+                      {isPublished(blog) ? (
                         <span className="inline-flex items-center gap-1 text-green-600 text-sm font-medium">
                           <Eye className="w-4 h-4" />
                           Published
@@ -251,9 +258,9 @@ export default function AdminBlogs() {
                         <button
                           onClick={() => togglePublish(blog)}
                           className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
-                          title={blog.published_at ? "Unpublish" : "Publish"}
+                          title={isPublished(blog) ? "Unpublish" : "Publish"}
                         >
-                          {blog.published_at ? (
+                          {isPublished(blog) ? (
                             <EyeOff className="w-4 h-4 text-slate-600" />
                           ) : (
                             <Eye className="w-4 h-4 text-slate-600" />

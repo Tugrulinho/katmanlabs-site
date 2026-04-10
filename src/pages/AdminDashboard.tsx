@@ -33,8 +33,11 @@ export default function AdminDashboard() {
         const now = new Date();
         const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
+        const isPublished = (blog: Blog) =>
+          blog.status === 'published' || blog.published_at !== null;
+
         const total = blogs?.length || 0;
-        const published = blogs?.filter((b) => b.published_at !== null).length || 0;
+        const published = blogs?.filter((b) => isPublished(b)).length || 0;
         const drafts = total - published;
         const thisMonth =
           blogs?.filter((b) => new Date(b.created_at) >= startOfMonth).length || 0;
@@ -153,7 +156,7 @@ export default function AdminDashboard() {
                       <span className="px-2 py-1 bg-slate-100 rounded text-xs font-medium">
                         {blog.category}
                       </span>
-                      {blog.published_at ? (
+                      {blog.status === 'published' || blog.published_at !== null ? (
                         <span className="text-green-600 font-medium">Published</span>
                       ) : (
                         <span className="text-yellow-600 font-medium">Draft</span>
