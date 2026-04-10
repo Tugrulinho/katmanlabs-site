@@ -13,6 +13,7 @@ export function useBlogsByCategory(category: string) {
         const { data, error } = await supabase
           .from("blogs")
           .select("*")
+          .eq("status", "published")
           .ilike("category", `%${category.trim()}%`)
           .order("updated_at", { ascending: false })
           .order("created_at", { ascending: false });

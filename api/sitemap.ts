@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import { generateSlug } from "../src/lib/blogUtils";
 
 export default async function handler(req: any, res: any) {
   const supabase = createClient(
@@ -9,7 +10,7 @@ export default async function handler(req: any, res: any) {
   // blogları çek
   const { data: blogs, error } = await supabase
     .from("blogs")
-    .select("slug, updated_at")
+    .select("slug, updated_at, category")
     .eq("status", "published");
 
   if (error) {
@@ -21,15 +22,20 @@ export default async function handler(req: any, res: any) {
   const staticPages = [
     "",
     "/blog",
+    "/iletisim",
     "/hizmet/web-tasarim",
     "/hizmet/dijital-pazarlama",
     "/hizmet/seo-analitik",
     "/hizmet/sosyal-medya-tasarim",
-    "/blog/kategori/web-tasarim",
-    "/blog/kategori/dijital-pazarlama",
-    "/blog/kategori/seo",
-    "/blog/kategori/sosyal-medya-yonetimi",
   ];
+  const categoryPages = Array.from(
+    new Set(
+      (blogs || [])
+        .map((blog) => blog.category)
+        .filter(Boolean)
+        .map((category) => `/blog/kategori/${generateSlug(category)}`),
+    ),
+  );
 
   const urls = [
     ...staticPages.map(
@@ -38,6 +44,15 @@ export default async function handler(req: any, res: any) {
         <loc>${baseUrl}${path}</loc>
         <changefreq>weekly</changefreq>
         <priority>${path === "" ? "1.0" : "0.8"}</priority>
+      </url>
+    `,
+    ),
+    ...categoryPages.map(
+      (path) => `
+      <url>
+        <loc>${baseUrl}${path}</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.7</priority>
       </url>
     `,
     ),

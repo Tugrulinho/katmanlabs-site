@@ -19,6 +19,8 @@ import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import MeetingScheduler from "../components/MeetingScheduler";
 import Footer from "../components/Footer";
+import Seo from "../components/Seo";
+import { getAbsoluteUrl, SITE_NAME } from "../lib/seo";
 
 interface SosyalMedyaTasarimProps {
   onBack: () => void;
@@ -28,6 +30,44 @@ function SosyalMedyaTasarim({ onBack }: SosyalMedyaTasarimProps) {
   const [isSchedulerOpen, setIsSchedulerOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
   const { blogs, loading } = useBlogsByCategory("Sosyal Medya Yönetimi");
+
+  const title = `Sosyal Medya Yonetimi ve Tasarim | ${SITE_NAME}`;
+  const description =
+    "Sosyal medya yonetimi, icerik plani, tasarim ve duzenli paylasim surecini markaya uygun sekilde yonetin.";
+  const schema = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      name: "Sosyal Medya Yonetimi ve Tasarim",
+      serviceType: "Sosyal Medya Yonetimi ve Tasarim",
+      description,
+      provider: {
+        "@type": "Organization",
+        name: SITE_NAME,
+        url: getAbsoluteUrl("/"),
+      },
+      areaServed: "TR",
+      url: getAbsoluteUrl("/hizmet/sosyal-medya-tasarim"),
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Ana Sayfa",
+          item: getAbsoluteUrl("/"),
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Sosyal Medya Yonetimi ve Tasarim",
+          item: getAbsoluteUrl("/hizmet/sosyal-medya-tasarim"),
+        },
+      ],
+    },
+  ];
 
   const sections = [
     { id: "kimler-icin", label: "Kimler İçin?" },
@@ -76,6 +116,12 @@ function SosyalMedyaTasarim({ onBack }: SosyalMedyaTasarimProps) {
 
   return (
     <div className="min-h-screen bg-white">
+      <Seo
+        title={title}
+        description={description}
+        path="/hizmet/sosyal-medya-tasarim"
+        schema={schema}
+      />
       <Navbar />
 
       <div

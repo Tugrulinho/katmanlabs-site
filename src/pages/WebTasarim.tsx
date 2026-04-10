@@ -15,6 +15,8 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import MeetingScheduler from "../components/MeetingScheduler";
 import { useBlogsByCategory } from "../hooks/useBlogsByCategory";
+import Seo from "../components/Seo";
+import { getAbsoluteUrl, SITE_NAME } from "../lib/seo";
 
 interface WebTasarimProps {
   onBack: () => void;
@@ -24,6 +26,44 @@ function WebTasarim({ onBack }: WebTasarimProps) {
   const [isSchedulerOpen, setIsSchedulerOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
   const { blogs, loading } = useBlogsByCategory("Web Tasarım");
+
+  const title = `Web Tasarim ve Gelistirme | ${SITE_NAME}`;
+  const description =
+    "Web tasarim, gelistirme, performans ve teknik temel uzerine kurulu anlasilir web sitesi cozumleri.";
+  const schema = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      name: "Web Tasarim ve Gelistirme",
+      serviceType: "Web Tasarim ve Gelistirme",
+      description,
+      provider: {
+        "@type": "Organization",
+        name: SITE_NAME,
+        url: getAbsoluteUrl("/"),
+      },
+      areaServed: "TR",
+      url: getAbsoluteUrl("/hizmet/web-tasarim"),
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Ana Sayfa",
+          item: getAbsoluteUrl("/"),
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Web Tasarim ve Gelistirme",
+          item: getAbsoluteUrl("/hizmet/web-tasarim"),
+        },
+      ],
+    },
+  ];
 
   const sections = [
     { id: "web-tasarim-neden", label: "Web Tasarım Neden Önemli" },
@@ -71,6 +111,12 @@ function WebTasarim({ onBack }: WebTasarimProps) {
 
   return (
     <div className="min-h-screen bg-white">
+      <Seo
+        title={title}
+        description={description}
+        path="/hizmet/web-tasarim"
+        schema={schema}
+      />
       <Navbar />
       <div className="bg-[url('/images/web-tasarim-hero-mobile.png')] md:bg-[url('/images/web-tasarim-hero-desktop.png')] bg-cover bg-center text-white py-20 pt-32 min-h-[500px] flex items-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">

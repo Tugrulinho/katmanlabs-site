@@ -7,7 +7,8 @@ import { useBlogs } from "../hooks/useBlogs";
 import BlogSidebar from "../components/BlogSidebar";
 import BlogCTA from "../components/BlogCTA";
 import { generateSlug } from "../lib/blogUtils";
-import { Helmet } from "react-helmet-async";
+import Seo from "../components/Seo";
+import { getAbsoluteUrl, SITE_NAME } from "../lib/seo";
 function BlogDetail() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
@@ -78,6 +79,12 @@ function BlogDetail() {
   if (error || !blog) {
     return (
       <div className="min-h-screen bg-white">
+        <Seo
+          title={`Blog Yazisi Bulunamadi | ${SITE_NAME}`}
+          description="Aradiginiz blog yazisi bulunamadi."
+          path={slug ? `/blog/${slug}` : "/blog"}
+          noindex={true}
+        />
         <Navbar />
         <div className="flex flex-col justify-center items-center min-h-screen px-4">
           <h1 className="text-4xl font-bold text-primary-dark mb-4">
@@ -105,16 +112,63 @@ function BlogDetail() {
   const relatedBlogs = blogs
     .filter((b) => b.id !== blog.id && b.category === blog.category)
     .slice(0, 3);
+  const schema = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      headline: seoTitle,
+      description: seoDescription,
+      image: seoImage ? [getAbsoluteUrl(seoImage)] : undefined,
+      datePublished: blog.published_at || blog.created_at,
+      dateModified: blog.updated_at,
+      mainEntityOfPage: getAbsoluteUrl(`/blog/${blog.slug}`),
+      author: {
+        "@type": "Organization",
+        name: SITE_NAME,
+      },
+      publisher: {
+        "@type": "Organization",
+        name: SITE_NAME,
+        url: getAbsoluteUrl("/"),
+      },
+      articleSection: blog.category,
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Ana Sayfa",
+          item: getAbsoluteUrl("/"),
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Blog",
+          item: getAbsoluteUrl("/blog"),
+        },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: blog.title,
+          item: getAbsoluteUrl(`/blog/${blog.slug}`),
+        },
+      ],
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-white">
-      <Helmet>
-        <title>{seoTitle}</title>
-        <meta name="description" content={seoDescription} />
-        <meta property="og:title" content={seoTitle} />
-        <meta property="og:description" content={seoDescription} />
-        {seoImage ? <meta property="og:image" content={seoImage} /> : null}
-      </Helmet>
+      <Seo
+        title={seoTitle}
+        description={seoDescription}
+        path={`/blog/${blog.slug}`}
+        image={seoImage}
+        type="article"
+        schema={schema}
+      />
       <Navbar />
 
       <div

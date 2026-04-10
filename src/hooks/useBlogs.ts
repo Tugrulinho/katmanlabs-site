@@ -13,6 +13,7 @@ export function useBlogs() {
         const { data, error } = await supabase
           .from('blogs')
           .select('*')
+          .eq('status', 'published')
           .order('updated_at', { ascending: false })
           .order('created_at', { ascending: false });
 

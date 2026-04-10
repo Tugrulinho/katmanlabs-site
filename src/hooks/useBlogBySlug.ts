@@ -19,6 +19,7 @@ export function useBlogBySlug(slug: string | undefined) {
           .from('blogs')
           .select('*')
           .eq('slug', slug)
+          .eq('status', 'published')
           .maybeSingle();
 
         if (error) throw error;

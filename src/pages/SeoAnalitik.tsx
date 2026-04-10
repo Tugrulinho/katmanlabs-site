@@ -6,6 +6,8 @@ import Footer from '../components/Footer';
 import MeetingScheduler from '../components/MeetingScheduler';
 import CircularSeoProcess from '../components/CircularSeoProcess';
 import { useBlogsByCategory } from '../hooks/useBlogsByCategory';
+import Seo from '../components/Seo';
+import { getAbsoluteUrl, SITE_NAME } from '../lib/seo';
 
 interface SeoAnalitikProps {
   onBack: () => void;
@@ -15,6 +17,44 @@ function SeoAnalitik({ onBack }: SeoAnalitikProps) {
   const [isSchedulerOpen, setIsSchedulerOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
   const { blogs, loading } = useBlogsByCategory('SEO');
+
+  const title = `SEO ve Analitik | ${SITE_NAME}`;
+  const description =
+    'Teknik SEO, icerik yapisi, analitik kurulumlar ve organik gorunurlugu guclendiren surecler.';
+  const schema = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      name: "SEO ve Analitik",
+      serviceType: "SEO ve Analitik",
+      description,
+      provider: {
+        "@type": "Organization",
+        name: SITE_NAME,
+        url: getAbsoluteUrl('/'),
+      },
+      areaServed: "TR",
+      url: getAbsoluteUrl('/hizmet/seo-analitik'),
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Ana Sayfa",
+          item: getAbsoluteUrl('/'),
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "SEO ve Analitik",
+          item: getAbsoluteUrl('/hizmet/seo-analitik'),
+        },
+      ],
+    },
+  ];
 
   const sections = [
     { id: 'neden-gorunmez', label: 'Neden Görünmez?' },
@@ -61,6 +101,12 @@ function SeoAnalitik({ onBack }: SeoAnalitikProps) {
 
   return (
     <div className="min-h-screen bg-white">
+      <Seo
+        title={title}
+        description={description}
+        path="/hizmet/seo-analitik"
+        schema={schema}
+      />
       <Navbar />
 
       <div className="bg-[url('/images/seo-analitik-hero-mobile.png')] md:bg-[url('/images/seo-analitik-hero-desktop.png')] bg-cover bg-center text-white py-20 pt-32 min-h-[500px] flex items-center">

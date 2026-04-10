@@ -5,6 +5,8 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import MeetingScheduler from '../components/MeetingScheduler';
 import { useBlogsByCategory } from '../hooks/useBlogsByCategory';
+import Seo from '../components/Seo';
+import { getAbsoluteUrl, SITE_NAME } from '../lib/seo';
 
 interface DijitalPazarlamaProps {
   onBack: () => void;
@@ -14,6 +16,44 @@ function DijitalPazarlama({ onBack }: DijitalPazarlamaProps) {
   const [isSchedulerOpen, setIsSchedulerOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
   const { blogs, loading } = useBlogsByCategory('Dijital Pazarlama');
+
+  const title = `Dijital Pazarlama ve Reklam Yonetimi | ${SITE_NAME}`;
+  const description =
+    'Google Ads, Meta reklam yonetimi, donusum takibi ve olculebilir dijital pazarlama surecleri.';
+  const schema = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      name: "Dijital Pazarlama ve Reklam Yonetimi",
+      serviceType: "Dijital Pazarlama ve Reklam Yonetimi",
+      description,
+      provider: {
+        "@type": "Organization",
+        name: SITE_NAME,
+        url: getAbsoluteUrl('/'),
+      },
+      areaServed: "TR",
+      url: getAbsoluteUrl('/hizmet/dijital-pazarlama'),
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Ana Sayfa",
+          item: getAbsoluteUrl('/'),
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Dijital Pazarlama ve Reklam Yonetimi",
+          item: getAbsoluteUrl('/hizmet/dijital-pazarlama'),
+        },
+      ],
+    },
+  ];
 
   const sections = [
     { id: 'reklam-sureci', label: 'Reklam Süreci' },
@@ -57,6 +97,12 @@ function DijitalPazarlama({ onBack }: DijitalPazarlamaProps) {
 
   return (
     <div className="min-h-screen bg-white">
+      <Seo
+        title={title}
+        description={description}
+        path="/hizmet/dijital-pazarlama"
+        schema={schema}
+      />
       <Navbar />
       <div className="bg-[url('/images/dijital-pazarlama-hero-mobile.png')] md:bg-[url('/images/dijital-pazarlama-hero-desktop.png')] bg-cover bg-center text-white py-20 pt-32 min-h-[500px] flex items-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">

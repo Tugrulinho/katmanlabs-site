@@ -6,7 +6,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import Footer from "../components/Footer";
 import { useEffect, useState } from "react";
 import BlogCTA from "../components/BlogCTA";
-import { Helmet } from "react-helmet-async";
+import Seo from "../components/Seo";
+import { getAbsoluteUrl, SITE_NAME } from "../lib/seo";
 export default function Blog() {
   const { categorySlug } = useParams();
   const { blogs, loading } = useBlogs();
@@ -209,11 +210,21 @@ export default function Blog() {
   const seoCategoryName = activeCategory || fallbackCategoryName;
   const seoTitle = seoCategoryName
     ? `${seoCategoryName} Blog Yazilari | Katman Labs`
-    : null;
+    : `Blog Yazilari | ${SITE_NAME}`;
   const seoDescription = categorySlug
     ? categorySeoDescriptionMap[decodeURIComponent(categorySlug)] ||
       `${seoCategoryName || "Bu kategori"} icin hazirlanan blog yazilarini kesfedin.`
-    : null;
+    : "SEO, web tasarim, sosyal medya ve dijital pazarlama uzerine yayinlanan blog yazilarini inceleyin.";
+  const seoPath = categorySlug
+    ? `/blog/kategori/${decodeURIComponent(categorySlug)}`
+    : "/blog";
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: seoTitle,
+    description: seoDescription,
+    url: getAbsoluteUrl(seoPath),
+  };
   const filteredBlogs = categorySlug
     ? blogs.filter(
         (blog: any) =>
@@ -250,14 +261,12 @@ export default function Blog() {
 
   return (
     <>
-      {categorySlug && seoTitle && seoDescription ? (
-        <Helmet>
-          <title>{seoTitle}</title>
-          <meta name="description" content={seoDescription} />
-          <meta property="og:title" content={seoTitle} />
-          <meta property="og:description" content={seoDescription} />
-        </Helmet>
-      ) : null}
+      <Seo
+        title={seoTitle}
+        description={seoDescription}
+        path={seoPath}
+        schema={schema}
+      />
       <Navbar />
 
       <section className="relative pb-16 overflow-hidden">

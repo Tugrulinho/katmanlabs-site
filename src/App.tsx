@@ -62,6 +62,8 @@ import AdminPricing from "./pages/AdminPricing";
 import ScrollToTop from "./components/ScrollToTop";
 import TestimonialsSection from "./components/TestimonialsSection";
 import FaqSection from "./components/FaqSection";
+import Seo from "./components/Seo";
+import { getAbsoluteUrl, SITE_NAME } from "./lib/seo";
 function HomePage() {
   const navigate = useNavigate();
   const { blogs, loading } = useBlogs();
@@ -337,8 +339,45 @@ function HomePage() {
   const sortedClients = [...clients].sort(
     (a, b) => a.sort_order - b.sort_order,
   );
+  const seoTitle = `${SITE_NAME} | Sosyal Medya, Web Tasarim ve Dijital Buyume`;
+  const seoDescription =
+    "Katman Labs; sosyal medya yonetimi, web tasarim, SEO ve dijital pazarlama ile markalarin daha net ve olculebilir buyumesine yardimci olur.";
+  const homeSchema = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      name: SITE_NAME,
+      url: getAbsoluteUrl("/"),
+      logo: getAbsoluteUrl("/favicon.png"),
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: SITE_NAME,
+      url: getAbsoluteUrl("/"),
+      inLanguage: "tr-TR",
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: faq.answer,
+        },
+      })),
+    },
+  ];
   return (
     <div className="min-h-screen bg-white">
+      <Seo
+        title={seoTitle}
+        description={seoDescription}
+        path="/"
+        schema={homeSchema}
+      />
       <Navbar />
 
       <HeroSection content={content} scrollToSection={scrollToSection} />

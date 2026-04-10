@@ -2,12 +2,41 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ContactSection from "../components/ContactSection";
 import { useContent } from "../hooks/useContent";
+import Seo from "../components/Seo";
+import { getAbsoluteUrl, SITE_NAME } from "../lib/seo";
 
 export default function ContactPage() {
   const { content } = useContent("homepage");
+  const title = `Iletisim | ${SITE_NAME}`;
+  const description =
+    "Projeniz icin sosyal medya, web tasarim, SEO veya dijital pazarlama surecini birlikte planlayalim.";
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Ana Sayfa",
+        item: getAbsoluteUrl("/"),
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Iletisim",
+        item: getAbsoluteUrl("/iletisim"),
+      },
+    ],
+  };
 
   return (
     <div className="min-h-screen bg-[#0f172a]">
+      <Seo
+        title={title}
+        description={description}
+        path="/iletisim"
+        schema={schema}
+      />
       <Navbar />
       <section className="relative overflow-hidden pt-32 pb-20">
         {/* Gradient */}
