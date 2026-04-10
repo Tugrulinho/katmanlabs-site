@@ -24,16 +24,165 @@ export default function Blog() {
       .replace(/ç/g, "c")
       .replace(/\s+/g, "-");
 
-  const categoryColors: Record<string, string> = {
-    seo: "from-[#17385f] via-[#494880] to-[#9062ae]",
-    "dijital-pazarlama": "from-[#f97316] via-[#fb7185] to-[#f43f5e]",
-    "web-tasarim": "from-[#1e3a8a] via-[#3b82f6] to-[#93c5fd]",
-    "sosyal-medya-yonetimi": "from-[#7e22ce] via-[#a855f7] to-[#e9d5ff]",
+  const categoryHeroMap: Record<
+    string,
+    {
+      title: string;
+      description: string;
+      gradient: string;
+      icons: { src: string; className: string }[];
+    }
+  > = {
+    seo: {
+      title: "SEO Üzerine Net ve Uygulanabilir İçerikler",
+      description:
+        "Teknik SEO, içerik kurgusu ve arama niyeti üzerine pratik ve ölçülebilir yaklaşımlar.\nSıralama yerine sürdürülebilir görünürlük ve trafik kalitesine odaklanır.",
+      gradient: "from-[#17385f] via-[#494880] to-[#9062ae]",
+      icons: [
+        {
+          src: "/icons/lucide--line-chart.svg",
+          className:
+            "absolute left-[5%] top-[170px] w-[100px] opacity-10 blur-[2px] scale-90",
+        },
+        {
+          src: "/icons/lucide--monitor-play.svg",
+          className:
+            "absolute left-[15%] top-[130px] w-[110px] opacity-15 blur-[1px] scale-100",
+        },
+        {
+          src: "/icons/lucide--layout-grid.svg",
+          className:
+            "absolute right-[20%] top-[150px] w-[90px] opacity-20 scale-110",
+        },
+        {
+          src: "/icons/lucide--mouse-pointer-click.svg",
+          className:
+            "absolute right-[5%] top-[110px] w-[90px] opacity-15 blur-[1px] scale-100",
+        },
+      ],
+    },
+
+    "dijital-pazarlama": {
+      title: "Dijital Pazarlamada İşe Yarayan Yaklaşımlar",
+      description:
+        "Reklam bütçesini daha verimli kullanmak için strateji, hedefleme ve dönüşüm odaklı içerikler.\nDeneme-yanılma yerine ölçülebilir sonuçlara dayalı yaklaşımlar sunar.",
+      gradient: "from-[#f97316] via-[#fb7185] to-[#f43f5e]",
+      icons: [
+        {
+          src: "/icons/lucide--target.svg",
+          className:
+            "absolute left-[6%] top-[180px] w-[100px] opacity-10 blur-[2px] scale-90",
+        },
+        {
+          src: "/icons/lucide--badge-dollar-sign.svg",
+          className:
+            "absolute left-[18%] top-[130px] w-[95px] opacity-15 blur-[1px] scale-100",
+        },
+        {
+          src: "/icons/lucide--megaphone.svg",
+          className:
+            "absolute right-[20%] top-[150px] w-[95px] opacity-20 scale-110",
+        },
+        {
+          src: "/icons/lucide--mouse-pointer-click.svg",
+          className:
+            "absolute right-[6%] top-[110px] w-[90px] opacity-15 blur-[1px] scale-100",
+        },
+      ],
+    },
+
+    "web-tasarim": {
+      title: "Web Tasarımda Kullanıcı Odaklı Yaklaşımlar",
+      description:
+        "Kullanıcı deneyimi, performans ve sade arayüz kurgusu üzerine pratik bilgiler.\nZiyaretçiyi müşteriye dönüştüren yapıların nasıl kurulacağını ele alır.",
+      gradient: "from-[#1e3a8a] via-[#3b82f6] to-[#93c5fd]",
+      icons: [
+        {
+          src: "/icons/lucide--monitor.svg",
+          className:
+            "absolute left-[5%] top-[180px] w-[105px] opacity-10 blur-[2px] scale-90",
+        },
+        {
+          src: "/icons/lucide--panels-top-left.svg",
+          className:
+            "absolute left-[17%] top-[130px] w-[95px] opacity-15 blur-[1px] scale-100",
+        },
+        {
+          src: "/icons/lucide--layout-template.svg",
+          className:
+            "absolute right-[20%] top-[150px] w-[95px] opacity-20 scale-110",
+        },
+        {
+          src: "/icons/lucide--pen-tool.svg",
+          className:
+            "absolute right-[6%] top-[110px] w-[90px] opacity-15 blur-[1px] scale-100",
+        },
+      ],
+    },
+
+    "sosyal-medya-yonetimi": {
+      title: "Sosyal Medyada Düzenli ve Tutarlı Üretim",
+      description:
+        "İçerik planlama, görsel dil ve paylaşım düzeni üzerine sürdürülebilir sistemler.\nMarkanın dijitalde güven veren bir görünüm kazanmasına odaklanır.",
+      gradient: "from-[#7e22ce] via-[#a855f7] to-[#e9d5ff]",
+      icons: [
+        {
+          src: "/icons/lucide--instagram.svg",
+          className:
+            "absolute left-[5%] top-[180px] w-[100px] opacity-10 blur-[2px] scale-90",
+        },
+        {
+          src: "/icons/lucide--image.svg",
+          className:
+            "absolute left-[17%] top-[130px] w-[95px] opacity-15 blur-[1px] scale-100",
+        },
+        {
+          src: "/icons/lucide--clapperboard.svg",
+          className:
+            "absolute right-[20%] top-[150px] w-[95px] opacity-20 scale-110",
+        },
+        {
+          src: "/icons/lucide--sparkles.svg",
+          className:
+            "absolute right-[6%] top-[110px] w-[90px] opacity-15 blur-[1px] scale-100",
+        },
+      ],
+    },
+
+    default: {
+      title: "Tasarım ve Büyüme Üzerine Notlar",
+      description:
+        "Sosyal medya, web ve dijital reklam süreçlerini daha düzenli yürütmek isteyenler için içerikler.\nGerçek kullanım senaryoları, hatalar ve uygulanabilir çözümler üzerine odaklanır.",
+      gradient: "from-[#17385f] via-[#494880] to-[#9062ae]",
+      icons: [
+        {
+          src: "/icons/lucide--line-chart.svg",
+          className:
+            "absolute left-[5%] top-[170px] w-[100px] opacity-10 blur-[2px] scale-90",
+        },
+        {
+          src: "/icons/lucide--monitor-play.svg",
+          className:
+            "absolute left-[15%] top-[130px] w-[110px] opacity-15 blur-[1px] scale-100",
+        },
+        {
+          src: "/icons/lucide--layout-grid.svg",
+          className:
+            "absolute right-[20%] top-[150px] w-[90px] opacity-20 scale-110",
+        },
+        {
+          src: "/icons/lucide--mouse-pointer-click.svg",
+          className:
+            "absolute right-[5%] top-[110px] w-[90px] opacity-15 blur-[1px] scale-100",
+        },
+      ],
+    },
   };
-  const currentGradient =
-    categorySlug && categoryColors[categorySlug]
-      ? categoryColors[categorySlug]
-      : "from-[#17385f] via-[#494880] to-[#9062ae]";
+
+  const currentHero =
+    categorySlug && categoryHeroMap[categorySlug]
+      ? categoryHeroMap[categorySlug]
+      : categoryHeroMap["default"];
 
   const activeCategory = categorySlug
     ? blogs.find(
@@ -82,63 +231,38 @@ export default function Blog() {
       <section className="relative pb-16 overflow-hidden">
         {/* Hero background */}
         <div
-          className={`absolute inset-0 top-0 h-[340px] bg-gradient-to-br ${currentGradient}`}
+          className={`absolute inset-0 top-0 h-[340px] bg-gradient-to-br ${currentHero.gradient}`}
         >
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.16),transparent_28%),radial-gradient(circle_at_top_right,rgba(242,131,228,0.18),transparent_24%),radial-gradient(circle_at_bottom_center,rgba(255,255,255,0.08),transparent_30%)]" />
         </div>
 
-        <div
-          style={{ animation: "float-medium 7s ease-in-out infinite" }}
-          className="absolute right-[24%] top-[118px] text-white/35 z-20"
-        >
-          <img
-            src="/icons/lucide--target.svg"
-            className="absolute right-[10%] top-[80px] w-[120px] opacity-20"
-          />
-        </div>
-        <img
-          src="/icons/lucide--monitor-play.svg"
-          className="absolute left-[15%] top-[140px] w-[110px] opacity-15"
-        />
-
-        <img
-          src="/icons/lucide--layout-grid.svg"
-          className="absolute right-[25%] top-[160px] w-[90px] opacity-15"
-        />
-
-        <img
-          src="/icons/lucide--mouse-pointer-click.svg"
-          className="absolute right-[5%] top-[120px] w-[100px] opacity-15"
-        />
-
-        <img
-          src="/icons/lucide--line-chart.svg"
-          className="absolute left-[5%] top-[200px] w-[100px] opacity-15"
-        />
-        <div className="absolute right-[12%] top-[70px] h-40 w-40 rounded-full bg-white/10 blur-3xl animate-pulse" />
-        <div className="absolute left-[45%] top-[180px] h-24 w-24 rounded-full bg-white/8 blur-2xl animate-pulse" />
-
-        {/* Hero spacing */}
-        <div className="relative z-10 pt-32">
-          <div className="container mx-auto px-4">
-            <div className="h-[300px]" />
-          </div>
-        </div>
-
-        {/* Content */}
         <div className="relative z-10">
           <div className="container mx-auto px-4">
-            <div className="mb-10 text-center">
-              <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3">
-                SEO, Web ve Dijital Pazarlama Hakkında Blog İçerikleri
-              </h1>
-              <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-                SEO, dijital pazarlama, web tasarım ve içerik stratejileri
-                üzerine güncel yazılarımızla dijital dünyada öne çıkın.
-              </p>
-            </div>
+            <section className="relative h-[340px] overflow-hidden">
+              {currentHero.icons.map((icon, index) => (
+                <img
+                  key={index}
+                  src={icon.src}
+                  className={icon.className}
+                  alt=""
+                />
+              ))}
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+              <div className="absolute inset-x-0 bottom-0 z-10 flex justify-center text-center">
+                <div className="max-w-3xl px-4 pb-12">
+                  <h1 className="text-3xl md:text-4xl font-bold text-white">
+                    {currentHero.title}
+                  </h1>
+
+                  <p className="mt-4 text-white/80">
+                    {currentHero.description}
+                  </p>
+                </div>
+              </div>
+            </section>
+
+            {/* ALT İÇERİK */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 mt-16">
               <div className="lg:col-span-8">
                 <BlogSection
                   content={{}}
@@ -148,8 +272,8 @@ export default function Blog() {
                   getBlogBadgeColor={() => "bg-primary"}
                   hideHeader={true}
                 />
+
                 <div className="flex justify-center mt-10 gap-2 items-center">
-                  {/* Önceki */}
                   <button
                     disabled={currentPage === 1}
                     onClick={() =>
@@ -164,7 +288,6 @@ export default function Blog() {
                     ←
                   </button>
 
-                  {/* Sayılar */}
                   {Array.from({ length: totalPages }).map((_, index) => (
                     <button
                       key={index}
@@ -179,7 +302,6 @@ export default function Blog() {
                     </button>
                   ))}
 
-                  {/* Sonraki */}
                   <button
                     disabled={currentPage === totalPages}
                     onClick={() =>
@@ -194,6 +316,7 @@ export default function Blog() {
                     →
                   </button>
                 </div>
+
                 <BlogCTA gradient="from-[#17385f] to-[#9062ae]" />
               </div>
 
@@ -214,6 +337,7 @@ export default function Blog() {
           </div>
         </div>
       </section>
+
       <Footer />
     </>
   );
