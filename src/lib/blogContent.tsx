@@ -53,7 +53,24 @@ const blogRawModules = import.meta.glob("../content/blog/*.mdx", {
   eager: true,
   query: "?raw",
   import: "default",
-}) as Record<string, string>;
+}) as Record<string, unknown>;
+
+function normalizeRawFile(rawModule: unknown) {
+  if (typeof rawModule === "string") {
+    return rawModule;
+  }
+
+  if (
+    rawModule &&
+    typeof rawModule === "object" &&
+    "default" in rawModule &&
+    typeof (rawModule as { default?: unknown }).default === "string"
+  ) {
+    return (rawModule as { default: string }).default;
+  }
+
+  return "";
+}
 
 function stripFrontmatter(rawContent: string) {
   return rawContent.replace(/^---[\s\S]*?---\s*/, "").trim();
@@ -71,7 +88,7 @@ function getReadingMinutes(rawContent: string) {
 
 const allBlogs = Object.entries(blogModules)
   .map(([filePath, module]) => {
-    const rawFile = blogRawModules[filePath] || "";
+    const rawFile = normalizeRawFile(blogRawModules[filePath]);
     const contentBody = stripFrontmatter(rawFile);
 
     return {
