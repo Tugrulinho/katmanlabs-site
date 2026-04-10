@@ -7,6 +7,7 @@ import { useBlogs } from "../hooks/useBlogs";
 import BlogSidebar from "../components/BlogSidebar";
 import BlogCTA from "../components/BlogCTA";
 import { generateSlug } from "../lib/blogUtils";
+import { Helmet } from "react-helmet-async";
 function BlogDetail() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
@@ -98,12 +99,22 @@ function BlogDetail() {
 
   const colors = getCategoryColors(blog.category);
   const readingTime = calculateReadingTime(blog.content);
+  const seoTitle = blog.meta_title || blog.title;
+  const seoDescription = blog.meta_description || blog.excerpt || "";
+  const seoImage = blog.og_image_url || blog.featured_image_url || "";
   const relatedBlogs = blogs
     .filter((b) => b.id !== blog.id && b.category === blog.category)
     .slice(0, 3);
 
   return (
     <div className="min-h-screen bg-white">
+      <Helmet>
+        <title>{seoTitle}</title>
+        <meta name="description" content={seoDescription} />
+        <meta property="og:title" content={seoTitle} />
+        <meta property="og:description" content={seoDescription} />
+        <meta property="og:image" content={seoImage} />
+      </Helmet>
       <Navbar />
 
       <div
