@@ -113,7 +113,7 @@ function BlogDetail() {
         <meta name="description" content={seoDescription} />
         <meta property="og:title" content={seoTitle} />
         <meta property="og:description" content={seoDescription} />
-        <meta property="og:image" content={seoImage} />
+        {seoImage ? <meta property="og:image" content={seoImage} /> : null}
       </Helmet>
       <Navbar />
 
