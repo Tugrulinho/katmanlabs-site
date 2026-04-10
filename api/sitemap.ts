@@ -1,22 +1,36 @@
-import { createClient } from "@supabase/supabase-js";
+import fs from "node:fs";
+import path from "node:path";
+import matter from "gray-matter";
 import { generateSlug } from "../src/lib/blogUtils";
 
-export default async function handler(req: any, res: any) {
-  const supabase = createClient(
-    process.env.VITE_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  );
+type BlogFrontmatter = {
+  slug: string;
+  updatedAt: string;
+  category: string;
+  status: "draft" | "published";
+};
 
-  // blogları çek
-  const { data: blogs, error } = await supabase
-    .from("blogs")
-    .select("slug, updated_at, category")
-    .eq("status", "published");
+function getPublishedBlogs() {
+  const contentDirectory = path.resolve(process.cwd(), "src/content/blog");
 
-  if (error) {
-    return res.status(500).send("Error generating sitemap");
+  if (!fs.existsSync(contentDirectory)) {
+    return [];
   }
 
+  return fs
+    .readdirSync(contentDirectory)
+    .filter((fileName) => fileName.endsWith(".mdx"))
+    .map((fileName) => {
+      const fullPath = path.join(contentDirectory, fileName);
+      const fileContent = fs.readFileSync(fullPath, "utf8");
+      const { data } = matter(fileContent);
+      return data as BlogFrontmatter;
+    })
+    .filter((blog) => blog.status === "published");
+}
+
+export default async function handler(req: any, res: any) {
+  const blogs = getPublishedBlogs();
   const baseUrl = "https://www.katmanlabs.com";
 
   const staticPages = [
@@ -28,9 +42,10 @@ export default async function handler(req: any, res: any) {
     "/hizmet/seo-analitik",
     "/hizmet/sosyal-medya-tasarim",
   ];
+
   const categoryPages = Array.from(
     new Set(
-      (blogs || [])
+      blogs
         .map((blog) => blog.category)
         .filter(Boolean)
         .map((category) => `/blog/kategori/${generateSlug(category)}`),
@@ -39,28 +54,28 @@ export default async function handler(req: any, res: any) {
 
   const urls = [
     ...staticPages.map(
-      (path) => `
+      (pagePath) => `
       <url>
-        <loc>${baseUrl}${path}</loc>
+        <loc>${baseUrl}${pagePath}</loc>
         <changefreq>weekly</changefreq>
-        <priority>${path === "" ? "1.0" : "0.8"}</priority>
+        <priority>${pagePath === "" ? "1.0" : "0.8"}</priority>
       </url>
     `,
     ),
     ...categoryPages.map(
-      (path) => `
+      (pagePath) => `
       <url>
-        <loc>${baseUrl}${path}</loc>
+        <loc>${baseUrl}${pagePath}</loc>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
       </url>
     `,
     ),
-    ...(blogs || []).map(
+    ...blogs.map(
       (blog) => `
       <url>
         <loc>${baseUrl}/blog/${blog.slug}</loc>
-        <lastmod>${blog.updated_at}</lastmod>
+        <lastmod>${blog.updatedAt}</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
       </url>

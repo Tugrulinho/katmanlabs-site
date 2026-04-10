@@ -8,7 +8,9 @@ import BlogSidebar from "../components/BlogSidebar";
 import BlogCTA from "../components/BlogCTA";
 import { generateSlug } from "../lib/blogUtils";
 import Seo from "../components/Seo";
+import { BLOG_MDX_COMPONENTS } from "../lib/blogContent";
 import { getAbsoluteUrl, SITE_NAME } from "../lib/seo";
+
 function BlogDetail() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
@@ -45,24 +47,18 @@ function BlogDetail() {
         text: "text-gray-600",
       },
     };
+
     return colorSchemes[category] || colorSchemes["Genel"];
   };
 
   const formatDate = (dateString: string | null) => {
-    if (!dateString) return "Tarih belirtilmemiş";
-    const date = new Date(dateString);
-    return date.toLocaleDateString("tr-TR", {
+    if (!dateString) return "Tarih belirtilmedi";
+
+    return new Date(dateString).toLocaleDateString("tr-TR", {
       year: "numeric",
       month: "long",
       day: "numeric",
     });
-  };
-
-  const calculateReadingTime = (content: string | null) => {
-    if (!content) return 0;
-    const wordsPerMinute = 200;
-    const wordCount = content.split(/\s+/).length;
-    return Math.ceil(wordCount / wordsPerMinute);
   };
 
   if (loading) {
@@ -88,16 +84,16 @@ function BlogDetail() {
         <Navbar />
         <div className="flex flex-col justify-center items-center min-h-screen px-4">
           <h1 className="text-4xl font-bold text-primary-dark mb-4">
-            Blog yazısı bulunamadı
+            Blog yazisi bulunamadi
           </h1>
           <p className="text-gray-600 mb-8">
-            {error || "Bu blog yazısı mevcut değil."}
+            {error || "Bu blog yazisi mevcut degil."}
           </p>
           <button
             onClick={() => navigate("/")}
             className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
           >
-            Ana Sayfaya Dön
+            Ana Sayfaya Don
           </button>
         </div>
       </div>
@@ -105,12 +101,11 @@ function BlogDetail() {
   }
 
   const colors = getCategoryColors(blog.category);
-  const readingTime = calculateReadingTime(blog.content);
   const seoTitle = blog.meta_title || blog.title;
   const seoDescription = blog.meta_description || blog.excerpt || "";
   const seoImage = blog.og_image_url || blog.featured_image_url || "";
   const relatedBlogs = blogs
-    .filter((b) => b.id !== blog.id && b.category === blog.category)
+    .filter((item) => item.id !== blog.id && item.category === blog.category)
     .slice(0, 3);
   const schema = [
     {
@@ -159,6 +154,8 @@ function BlogDetail() {
     },
   ];
 
+  const Content = blog.Content;
+
   return (
     <div className="min-h-screen bg-white">
       <Seo
@@ -180,7 +177,7 @@ function BlogDetail() {
             className="flex items-center gap-2 text-accent-light hover:text-white transition-colors mb-8"
           >
             <ArrowLeft className="w-5 h-5" />
-            Ana Sayfaya Dön
+            Ana Sayfaya Don
           </button>
 
           <div className="max-w-4xl">
@@ -195,29 +192,27 @@ function BlogDetail() {
               {blog.title}
             </h1>
 
-            {blog.excerpt && (
+            {blog.excerpt ? (
               <p className="text-xl text-gray-200 mb-8 leading-relaxed">
                 {blog.excerpt}
               </p>
-            )}
+            ) : null}
 
             <div className="flex flex-wrap items-center gap-6 text-sm text-gray-300">
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4" />
                 <span>{formatDate(blog.published_at)}</span>
               </div>
-              {readingTime > 0 && (
-                <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4" />
-                  <span>{readingTime} dk okuma süresi</span>
-                </div>
-              )}
+              <div className="flex items-center gap-2">
+                <Clock className="w-4 h-4" />
+                <span>{blog.readingMinutes} dk okuma suresi</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      {blog.image_url && (
+      {blog.image_url ? (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12">
           <div
             className={`rounded-2xl overflow-hidden shadow-2xl border-4 ${colors.border}`}
@@ -229,18 +224,15 @@ function BlogDetail() {
             />
           </div>
         </div>
-      )}
+      ) : null}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid lg:grid-cols-3 gap-12">
           <div className="lg:col-span-2">
             <article className="max-w-3xl">
-              {blog.content ? (
-                <div
-                  className="blog-content text-gray-700 leading-relaxed"
-                  dangerouslySetInnerHTML={{ __html: blog.content }}
-                />
-              ) : null}
+              <div className="blog-content text-gray-700 leading-relaxed">
+                <Content components={BLOG_MDX_COMPONENTS} />
+              </div>
             </article>
 
             <BlogCTA gradient={colors.gradient} />
@@ -248,10 +240,10 @@ function BlogDetail() {
 
           <div className="lg:col-span-1">
             <div className="sticky top-24 space-y-8">
-              {relatedBlogs.length > 0 && (
+              {relatedBlogs.length > 0 ? (
                 <div className="bg-gray-50 rounded-2xl p-6">
                   <h3 className={`text-xl font-bold mb-6 ${colors.text}`}>
-                    İlgili Yazılar
+                    Ilgili Yazilar
                   </h3>
                   <div className="space-y-4">
                     {relatedBlogs.map((relatedBlog) => (
@@ -279,7 +271,7 @@ function BlogDetail() {
                     ))}
                   </div>
                 </div>
-              )}
+              ) : null}
 
               <div className={`p-6 rounded-2xl border-2 ${colors.border}`}>
                 <BlogSidebar

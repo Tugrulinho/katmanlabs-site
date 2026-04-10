@@ -1,39 +1,19 @@
-import { useState, useEffect } from 'react';
-import { supabase, Blog } from '../lib/supabase';
+import { getBlogBySlug } from "../lib/blogContent";
 
 export function useBlogBySlug(slug: string | undefined) {
-  const [blog, setBlog] = useState<Blog | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  if (!slug) {
+    return {
+      blog: null,
+      loading: false,
+      error: null,
+    };
+  }
 
-  useEffect(() => {
-    async function fetchBlog() {
-      if (!slug) {
-        setLoading(false);
-        return;
-      }
+  const blog = getBlogBySlug(slug);
 
-      try {
-        setLoading(true);
-        const { data, error } = await supabase
-          .from('blogs')
-          .select('*')
-          .eq('slug', slug)
-          .eq('status', 'published')
-          .maybeSingle();
-
-        if (error) throw error;
-
-        setBlog(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred');
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchBlog();
-  }, [slug]);
-
-  return { blog, loading, error };
+  return {
+    blog,
+    loading: false,
+    error: blog ? null : "Blog bulunamadi.",
+  };
 }

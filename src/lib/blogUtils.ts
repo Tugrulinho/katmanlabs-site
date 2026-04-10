@@ -1,32 +1,18 @@
 export const generateSlug = (title: string): string => {
-  const turkishMap: { [key: string]: string } = {
-    'ç': 'c',
-    'ğ': 'g',
-    'ı': 'i',
-    'İ': 'i',
-    'ö': 'o',
-    'ş': 's',
-    'ü': 'u',
-    'Ç': 'c',
-    'Ğ': 'g',
-    'Ö': 'o',
-    'Ş': 's',
-    'Ü': 'u',
-  };
-
   return title
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/ı/g, "i")
+    .replace(/İ/g, "i")
     .toLowerCase()
-    .split('')
-    .map((char) => turkishMap[char] || char)
-    .join('')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
 };
 
 export const formatDate = (dateString: string): string => {
-  return new Date(dateString).toLocaleDateString('tr-TR', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
+  return new Date(dateString).toLocaleDateString("tr-TR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   });
 };

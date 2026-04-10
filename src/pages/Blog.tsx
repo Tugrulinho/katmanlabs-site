@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import BlogCTA from "../components/BlogCTA";
 import Seo from "../components/Seo";
 import { getAbsoluteUrl, SITE_NAME } from "../lib/seo";
+import { generateSlug } from "../lib/blogUtils";
 export default function Blog() {
   const { categorySlug } = useParams();
   const { blogs, loading } = useBlogs();
@@ -15,16 +16,7 @@ export default function Blog() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const postsPerPage = 4;
   const navigate = useNavigate();
-  const slugifyCategory = (value: string) =>
-    value
-      .toLowerCase()
-      .replace(/ğ/g, "g")
-      .replace(/ü/g, "u")
-      .replace(/ş/g, "s")
-      .replace(/ı/g, "i")
-      .replace(/ö/g, "o")
-      .replace(/ç/g, "c")
-      .replace(/\s+/g, "-");
+  const slugifyCategory = (value: string) => generateSlug(value);
 
   const categoryHeroMap: Record<
     string,
