@@ -39,36 +39,40 @@ export default function ContactPage() {
       />
       <Navbar />
       <section className="relative overflow-hidden pt-32 pb-20">
-        {/* Gradient */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#17385f] via-[#2f4f8f] to-[#5c6fc4]" />
 
-        {/* Icon layer */}
         <div className="absolute inset-0 pointer-events-none">
           <img
-            src="/icons/lucide--mail.svg"
-            className="absolute left-[8%] top-[120px] w-[55px] opacity-20 blur-[1px]"
+            src="/icons/contact-hero/contact-email.svg"
+            alt=""
+            aria-hidden="true"
+            className="absolute left-[7%] top-[132px] w-[72px] opacity-15 blur-[1px]"
           />
           <img
-            src="/icons/lucide--phone.svg"
-            className="absolute left-[20%] top-[80px] w-[50px] opacity-15"
+            src="/icons/contact-hero/contact-phone.svg"
+            alt=""
+            aria-hidden="true"
+            className="absolute left-[19%] top-[88px] w-[70px] opacity-15"
           />
           <img
-            src="/icons/lucide--map-pin.svg"
-            className="absolute right-[18%] top-[100px] w-[55px] opacity-20"
+            src="/icons/contact-hero/contact-map.svg"
+            alt=""
+            aria-hidden="true"
+            className="absolute right-[18%] top-[96px] w-[70px] opacity-15"
           />
           <img
-            src="/icons/lucide--message-circle.svg"
-            className="absolute right-[8%] top-[140px] w-[50px] opacity-15 blur-[1px]"
+            src="/icons/contact-hero/contact-message.svg"
+            alt=""
+            aria-hidden="true"
+            className="absolute right-[7%] top-[142px] w-[72px] opacity-15 blur-[1px]"
           />
         </div>
 
-        {/* Light blobs */}
         <div className="absolute inset-0">
           <div className="absolute top-20 left-[10%] h-40 w-40 rounded-full bg-white/10 blur-3xl" />
           <div className="absolute bottom-10 right-[12%] h-52 w-52 rounded-full bg-pink-300/10 blur-3xl" />
         </div>
 
-        {/* Content */}
         <div className="relative z-10 mx-auto max-w-4xl px-4 text-center">
           <h1 className="text-4xl font-bold tracking-tight text-white md:text-5xl">
             İletişim
@@ -81,7 +85,6 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* CONTACT (MEVCUT SİSTEMİN) */}
       <div className="bg-gradient-to-b from-[#0f172a] to-[#111827]">
         <ContactSection content={content} />
       </div>

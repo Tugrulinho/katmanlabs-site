@@ -30,9 +30,9 @@ export default function Blog() {
     }
   > = {
     seo: {
-      title: "SEO Ãœzerine Net ve Uygulanabilir Ä°Ã§erikler",
+      title: "SEO Üzerine Net ve Uygulanabilir İçerikler",
       description:
-        "Teknik SEO, iÃ§erik kurgusu ve arama niyeti Ã¼zerine pratik ve Ã¶lÃ§Ã¼lebilir yaklaÅŸÄ±mlar.\nSÄ±ralama yerine sÃ¼rdÃ¼rÃ¼lebilir gÃ¶rÃ¼nÃ¼rlÃ¼k ve trafik kalitesine odaklanÄ±r.",
+        "Teknik SEO, içerik kurgusu ve arama niyeti üzerine pratik ve ölçülebilir yaklaşımlar.\nSıralama yerine sürdürülebilir görünürlük ve trafik kalitesine odaklanır.",
       gradient: "from-[#17385f] via-[#494880] to-[#9062ae]",
       icons: [
         {
@@ -59,9 +59,9 @@ export default function Blog() {
     },
 
     "dijital-pazarlama": {
-      title: "Dijital Pazarlamada Ä°ÅŸe Yarayan YaklaÅŸÄ±mlar",
+      title: "Dijital Pazarlamada İşe Yarayan Yaklaşımlar",
       description:
-        "Reklam bÃ¼tÃ§esini daha verimli kullanmak iÃ§in strateji, hedefleme ve dÃ¶nÃ¼ÅŸÃ¼m odaklÄ± iÃ§erikler.\nDeneme-yanÄ±lma yerine Ã¶lÃ§Ã¼lebilir sonuÃ§lara dayalÄ± yaklaÅŸÄ±mlar sunar.",
+        "Reklam bütçesini daha verimli kullanmak için strateji, hedefleme ve dönüşüm odaklı içerikler.\nDeneme-yanılma yerine ölçülebilir sonuçlara dayalı yaklaşımlar sunar.",
       gradient: "from-[#f97316] via-[#fb7185] to-[#f43f5e]",
       icons: [
         {
@@ -88,9 +88,9 @@ export default function Blog() {
     },
 
     "web-tasarim": {
-      title: "Web TasarÄ±mda KullanÄ±cÄ± OdaklÄ± YaklaÅŸÄ±mlar",
+      title: "Web Tasarımda Kullanıcı Odaklı Yaklaşımlar",
       description:
-        "KullanÄ±cÄ± deneyimi, performans ve sade arayÃ¼z kurgusu Ã¼zerine pratik bilgiler.\nZiyaretÃ§iyi mÃ¼ÅŸteriye dÃ¶nÃ¼ÅŸtÃ¼ren yapÄ±larÄ±n nasÄ±l kurulacaÄŸÄ±nÄ± ele alÄ±r.",
+        "Kullanıcı deneyimi, performans ve sade arayüz kurgusu üzerine pratik bilgiler.\nZiyaretçiyi müşteriye dönüştüren yapıların nasıl kurulacağını ele alır.",
       gradient: "from-[#1e3a8a] via-[#3b82f6] to-[#93c5fd]",
       icons: [
         {
@@ -122,9 +122,9 @@ export default function Blog() {
     },
 
     "sosyal-medya-yonetimi": {
-      title: "Sosyal Medyada DÃ¼zenli ve TutarlÄ± Ãœretim",
+      title: "Sosyal Medyada Düzenli ve Tutarlı Üretim",
       description:
-        "Ä°Ã§erik planlama, gÃ¶rsel dil ve paylaÅŸÄ±m dÃ¼zeni Ã¼zerine sÃ¼rdÃ¼rÃ¼lebilir sistemler.\nMarkanÄ±n dijitalde gÃ¼ven veren bir gÃ¶rÃ¼nÃ¼m kazanmasÄ±na odaklanÄ±r.",
+        "İçerik planlama, görsel dil ve paylaşım düzeni üzerine sürdürülebilir sistemler.\nMarkanın dijitalde güven veren bir görünüm kazanmasına odaklanır.",
       gradient: "from-[#7e22ce] via-[#a855f7] to-[#e9d5ff]",
       icons: [
         {
@@ -156,9 +156,9 @@ export default function Blog() {
     },
 
     default: {
-      title: "TasarÄ±m ve BÃ¼yÃ¼me Ãœzerine Notlar",
+      title: "Tasarım ve Büyüme Üzerine Notlar",
       description:
-        "Sosyal medya, web ve dijital reklam sÃ¼reÃ§lerini daha dÃ¼zenli yÃ¼rÃ¼tmek isteyenler iÃ§in iÃ§erikler.\nGerÃ§ek kullanÄ±m senaryolarÄ±, hatalar ve uygulanabilir Ã§Ã¶zÃ¼mler Ã¼zerine odaklanÄ±r.",
+        "Sosyal medya, web ve dijital reklam süreçlerini daha düzenli yürütmek isteyenler için içerikler.\nGerçek kullanım senaryoları, hatalar ve uygulanabilir çözümler üzerine odaklanır.",
       gradient: "from-[#17385f] via-[#494880] to-[#9062ae]",
       icons: [
         {
@@ -327,7 +327,7 @@ export default function Blog() {
                         : "bg-gray-100 hover:bg-gray-200"
                     }`}
                   >
-                    â†
+                    ←
                   </button>
 
                   {Array.from({ length: totalPages }).map((_, index) => (
@@ -355,7 +355,7 @@ export default function Blog() {
                         : "bg-gray-100 hover:bg-gray-200"
                     }`}
                   >
-                    â†’
+                    →
                   </button>
                 </div>
 
