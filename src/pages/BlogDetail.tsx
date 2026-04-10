@@ -6,7 +6,7 @@ import { useBlogBySlug } from "../hooks/useBlogBySlug";
 import { useBlogs } from "../hooks/useBlogs";
 import BlogSidebar from "../components/BlogSidebar";
 import BlogCTA from "../components/BlogCTA";
-
+import { generateSlug } from "../lib/blogUtils";
 function BlogDetail() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
@@ -222,9 +222,7 @@ function BlogDetail() {
                   currentCategory={blog.category}
                   onCategorySelect={(category: string | null) => {
                     if (category) {
-                      navigate(
-                        `/blog?category=${encodeURIComponent(category)}`,
-                      );
+                      navigate(`/blog/kategori/${generateSlug(category)}`);
                     } else {
                       navigate("/blog");
                     }
