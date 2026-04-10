@@ -4,6 +4,12 @@ import BlogImage from "../components/blog/BlogImage";
 import Callout from "../components/blog/Callout";
 import MdxBlogCTA from "../components/blog/MdxBlogCTA";
 import SmartLink from "../components/blog/SmartLink";
+import SectionIntro from "../components/blog/SectionIntro";
+import StatGrid from "../components/blog/StatGrid";
+import MiniChart from "../components/blog/MiniChart";
+import SplitShowcase from "../components/blog/SplitShowcase";
+import QuoteHighlight from "../components/blog/QuoteHighlight";
+import KeyTakeaways from "../components/blog/KeyTakeaways";
 
 type BlogFrontmatter = {
   title: string;
@@ -126,6 +132,12 @@ export const BLOG_MDX_COMPONENTS: MDXComponents = {
   BlogImage,
   Callout,
   BlogCTA: MdxBlogCTA,
+  SectionIntro,
+  StatGrid,
+  MiniChart,
+  SplitShowcase,
+  QuoteHighlight,
+  KeyTakeaways,
 };
 
 export function getAllBlogs() {
