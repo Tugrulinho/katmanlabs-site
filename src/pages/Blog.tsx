@@ -10,6 +10,7 @@ import Seo from "../components/Seo";
 import { getAbsoluteUrl, SITE_NAME } from "../lib/seo";
 import { generateSlug } from "../lib/blogUtils";
 import type { ContentBlog } from "../lib/blogContent";
+
 export default function Blog() {
   const { categorySlug } = useParams();
   const { blogs, loading } = useBlogs();
@@ -29,57 +30,57 @@ export default function Blog() {
     }
   > = {
     seo: {
-      title: "SEO Üzerine Net ve Uygulanabilir İçerikler",
+      title: "SEO Ãœzerine Net ve Uygulanabilir Ä°Ã§erikler",
       description:
-        "Teknik SEO, içerik kurgusu ve arama niyeti üzerine pratik ve ölçülebilir yaklaşımlar.\nSıralama yerine sürdürülebilir görünürlük ve trafik kalitesine odaklanır.",
+        "Teknik SEO, iÃ§erik kurgusu ve arama niyeti Ã¼zerine pratik ve Ã¶lÃ§Ã¼lebilir yaklaÅŸÄ±mlar.\nSÄ±ralama yerine sÃ¼rdÃ¼rÃ¼lebilir gÃ¶rÃ¼nÃ¼rlÃ¼k ve trafik kalitesine odaklanÄ±r.",
       gradient: "from-[#17385f] via-[#494880] to-[#9062ae]",
       icons: [
         {
-          src: "/icons/lucide--line-chart.svg",
+          src: "/icons/category-hero/seo-google.svg",
           className:
-            "absolute left-[5%] top-[170px] w-[100px] opacity-10 blur-[2px] scale-90",
+            "absolute left-[5%] top-[180px] w-[100px] opacity-10 blur-[2px] scale-90",
         },
         {
-          src: "/icons/lucide--monitor-play.svg",
+          src: "/icons/category-hero/seo-chart.svg",
           className:
-            "absolute left-[15%] top-[130px] w-[110px] opacity-15 blur-[1px] scale-100",
+            "absolute left-[17%] top-[130px] w-[95px] opacity-15 blur-[1px] scale-100",
         },
         {
-          src: "/icons/lucide--layout-grid.svg",
+          src: "/icons/category-hero/seo-pointer.svg",
           className:
-            "absolute right-[20%] top-[150px] w-[90px] opacity-20 scale-110",
+            "absolute right-[20%] top-[150px] w-[95px] opacity-20 scale-110",
         },
         {
-          src: "/icons/lucide--mouse-pointer-click.svg",
+          src: "/icons/category-hero/seo-gear.svg",
           className:
-            "absolute right-[5%] top-[110px] w-[90px] opacity-15 blur-[1px] scale-100",
+            "absolute right-[6%] top-[110px] w-[90px] opacity-15 blur-[1px] scale-100",
         },
       ],
     },
 
     "dijital-pazarlama": {
-      title: "Dijital Pazarlamada İşe Yarayan Yaklaşımlar",
+      title: "Dijital Pazarlamada Ä°ÅŸe Yarayan YaklaÅŸÄ±mlar",
       description:
-        "Reklam bütçesini daha verimli kullanmak için strateji, hedefleme ve dönüşüm odaklı içerikler.\nDeneme-yanılma yerine ölçülebilir sonuçlara dayalı yaklaşımlar sunar.",
+        "Reklam bÃ¼tÃ§esini daha verimli kullanmak iÃ§in strateji, hedefleme ve dÃ¶nÃ¼ÅŸÃ¼m odaklÄ± iÃ§erikler.\nDeneme-yanÄ±lma yerine Ã¶lÃ§Ã¼lebilir sonuÃ§lara dayalÄ± yaklaÅŸÄ±mlar sunar.",
       gradient: "from-[#f97316] via-[#fb7185] to-[#f43f5e]",
       icons: [
         {
-          src: "/icons/lucide--target.svg",
+          src: "/icons/category-hero/marketing-google.svg",
           className:
-            "absolute left-[6%] top-[180px] w-[100px] opacity-10 blur-[2px] scale-90",
+            "absolute left-[5%] top-[180px] w-[100px] opacity-10 blur-[2px] scale-90",
         },
         {
-          src: "/icons/lucide--badge-dollar-sign.svg",
+          src: "/icons/category-hero/marketing-cart.svg",
           className:
-            "absolute left-[18%] top-[130px] w-[95px] opacity-15 blur-[1px] scale-100",
+            "absolute left-[17%] top-[130px] w-[95px] opacity-15 blur-[1px] scale-100",
         },
         {
-          src: "/icons/lucide--megaphone.svg",
+          src: "/icons/category-hero/marketing-chart.svg",
           className:
             "absolute right-[20%] top-[150px] w-[95px] opacity-20 scale-110",
         },
         {
-          src: "/icons/lucide--mouse-pointer-click.svg",
+          src: "/icons/category-hero/marketing-trophy.svg",
           className:
             "absolute right-[6%] top-[110px] w-[90px] opacity-15 blur-[1px] scale-100",
         },
@@ -87,28 +88,33 @@ export default function Blog() {
     },
 
     "web-tasarim": {
-      title: "Web Tasarımda Kullanıcı Odaklı Yaklaşımlar",
+      title: "Web TasarÄ±mda KullanÄ±cÄ± OdaklÄ± YaklaÅŸÄ±mlar",
       description:
-        "Kullanıcı deneyimi, performans ve sade arayüz kurgusu üzerine pratik bilgiler.\nZiyaretçiyi müşteriye dönüştüren yapıların nasıl kurulacağını ele alır.",
+        "KullanÄ±cÄ± deneyimi, performans ve sade arayÃ¼z kurgusu Ã¼zerine pratik bilgiler.\nZiyaretÃ§iyi mÃ¼ÅŸteriye dÃ¶nÃ¼ÅŸtÃ¼ren yapÄ±larÄ±n nasÄ±l kurulacaÄŸÄ±nÄ± ele alÄ±r.",
       gradient: "from-[#1e3a8a] via-[#3b82f6] to-[#93c5fd]",
       icons: [
         {
-          src: "/icons/lucide--monitor.svg",
+          src: "/icons/category-hero/web-application.svg",
           className:
-            "absolute left-[5%] top-[180px] w-[105px] opacity-10 blur-[2px] scale-90",
+            "absolute left-[5%] top-[180px] w-[100px] opacity-10 blur-[2px] scale-90",
         },
         {
-          src: "/icons/lucide--panels-top-left.svg",
+          src: "/icons/category-hero/web-illustrator.svg",
           className:
             "absolute left-[17%] top-[130px] w-[95px] opacity-15 blur-[1px] scale-100",
         },
         {
-          src: "/icons/lucide--layout-template.svg",
+          src: "/icons/category-hero/web-wordpress.svg",
+          className:
+            "absolute left-[44%] top-[105px] w-[78px] opacity-10 scale-95",
+        },
+        {
+          src: "/icons/category-hero/web-woocommerce.svg",
           className:
             "absolute right-[20%] top-[150px] w-[95px] opacity-20 scale-110",
         },
         {
-          src: "/icons/lucide--pen-tool.svg",
+          src: "/icons/category-hero/web-globe.svg",
           className:
             "absolute right-[6%] top-[110px] w-[90px] opacity-15 blur-[1px] scale-100",
         },
@@ -116,28 +122,33 @@ export default function Blog() {
     },
 
     "sosyal-medya-yonetimi": {
-      title: "Sosyal Medyada Düzenli ve Tutarlı Üretim",
+      title: "Sosyal Medyada DÃ¼zenli ve TutarlÄ± Ãœretim",
       description:
-        "İçerik planlama, görsel dil ve paylaşım düzeni üzerine sürdürülebilir sistemler.\nMarkanın dijitalde güven veren bir görünüm kazanmasına odaklanır.",
+        "Ä°Ã§erik planlama, gÃ¶rsel dil ve paylaÅŸÄ±m dÃ¼zeni Ã¼zerine sÃ¼rdÃ¼rÃ¼lebilir sistemler.\nMarkanÄ±n dijitalde gÃ¼ven veren bir gÃ¶rÃ¼nÃ¼m kazanmasÄ±na odaklanÄ±r.",
       gradient: "from-[#7e22ce] via-[#a855f7] to-[#e9d5ff]",
       icons: [
         {
-          src: "/icons/lucide--instagram.svg",
+          src: "/icons/category-hero/social-instagram.svg",
           className:
             "absolute left-[5%] top-[180px] w-[100px] opacity-10 blur-[2px] scale-90",
         },
         {
-          src: "/icons/lucide--image.svg",
+          src: "/icons/category-hero/social-facebook.svg",
           className:
             "absolute left-[17%] top-[130px] w-[95px] opacity-15 blur-[1px] scale-100",
         },
         {
-          src: "/icons/lucide--clapperboard.svg",
+          src: "/icons/category-hero/social-linkedin.svg",
+          className:
+            "absolute left-[44%] top-[105px] w-[78px] opacity-10 scale-95",
+        },
+        {
+          src: "/icons/category-hero/social-thumbs-up.svg",
           className:
             "absolute right-[20%] top-[150px] w-[95px] opacity-20 scale-110",
         },
         {
-          src: "/icons/lucide--sparkles.svg",
+          src: "/icons/category-hero/social-email.svg",
           className:
             "absolute right-[6%] top-[110px] w-[90px] opacity-15 blur-[1px] scale-100",
         },
@@ -145,9 +156,9 @@ export default function Blog() {
     },
 
     default: {
-      title: "Tasarım ve Büyüme Üzerine Notlar",
+      title: "TasarÄ±m ve BÃ¼yÃ¼me Ãœzerine Notlar",
       description:
-        "Sosyal medya, web ve dijital reklam süreçlerini daha düzenli yürütmek isteyenler için içerikler.\nGerçek kullanım senaryoları, hatalar ve uygulanabilir çözümler üzerine odaklanır.",
+        "Sosyal medya, web ve dijital reklam sÃ¼reÃ§lerini daha dÃ¼zenli yÃ¼rÃ¼tmek isteyenler iÃ§in iÃ§erikler.\nGerÃ§ek kullanÄ±m senaryolarÄ±, hatalar ve uygulanabilir Ã§Ã¶zÃ¼mler Ã¼zerine odaklanÄ±r.",
       gradient: "from-[#17385f] via-[#494880] to-[#9062ae]",
       icons: [
         {
@@ -230,6 +241,7 @@ export default function Blog() {
     startIndex + postsPerPage,
   );
   const totalPages = Math.ceil(filteredBlogs.length / postsPerPage);
+
   useEffect(() => {
     if (categorySlug) {
       const decoded = decodeURIComponent(categorySlug);
@@ -238,15 +250,18 @@ export default function Blog() {
       setSelectedCategory(null);
     }
   }, [categorySlug]);
+
   useEffect(() => {
     setCurrentPage(1);
   }, [selectedCategory]);
+
   useEffect(() => {
     window.scrollTo({
       top: 300,
       behavior: "smooth",
     });
   }, [currentPage]);
+
   return (
     <>
       <Seo
@@ -258,7 +273,6 @@ export default function Blog() {
       <Navbar />
 
       <section className="relative pb-16 overflow-hidden">
-        {/* Hero background */}
         <div
           className={`absolute inset-0 top-0 h-[340px] bg-gradient-to-br ${currentHero.gradient}`}
         >
@@ -290,7 +304,6 @@ export default function Blog() {
               </div>
             </section>
 
-            {/* ALT İÇERİK */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 mt-16">
               <div className="lg:col-span-8">
                 <BlogSection
@@ -314,7 +327,7 @@ export default function Blog() {
                         : "bg-gray-100 hover:bg-gray-200"
                     }`}
                   >
-                    ←
+                    â†
                   </button>
 
                   {Array.from({ length: totalPages }).map((_, index) => (
@@ -342,7 +355,7 @@ export default function Blog() {
                         : "bg-gray-100 hover:bg-gray-200"
                     }`}
                   >
-                    →
+                    â†’
                   </button>
                 </div>
 
