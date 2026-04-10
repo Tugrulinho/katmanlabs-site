@@ -62,6 +62,7 @@ function normalizeHtmlForMdx(html) {
     .replace(/<br>/gi, "<br />")
     .replace(/<hr>/gi, "<hr />")
     .replace(/<img([^>]*?)(?<!\/)>/gi, "<img$1 />")
+    .replace(/\sstyle="[^"]*"/gi, "")
     .replace(/<a([^>]*)>/gi, normalizeAnchorTag);
 }
 
