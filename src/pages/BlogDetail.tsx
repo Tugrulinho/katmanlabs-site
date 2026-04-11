@@ -46,34 +46,47 @@ function normalizeHeadingText(text: string) {
 }
 
 function getNavigationLabel(text: string) {
-  const cleanedText = text
-    .replace(/^\d+\.\s*/, "")
+  const cleanedText = text.replace(/^\d+\.\s*/, "").trim();
+  const normalizedText = cleanedText
+    .toLocaleLowerCase("tr-TR")
     .replace(/[?!.:,;]/g, "")
     .trim();
 
-  const words = cleanedText.split(/\s+/).filter(Boolean);
-  const compactWords = words.filter(
-    (word) =>
-      ![
-        "ve",
-        "ama",
-        "ile",
-        "mi",
-        "mı",
-        "mu",
-        "mü",
-        "için",
-        "daha",
-        "nasıl",
-        "neden",
-        "hangi",
-      ].includes(word.toLowerCase()),
-  );
+  const labelRules: Array<{ test: (value: string) => boolean; label: string }> = [
+    { test: (value) => value.startsWith("asıl soru"), label: "Asıl soru" },
+    { test: (value) => value.includes("aynı sonucu"), label: "SEO vs Reklam" },
+    { test: (value) => value.startsWith("reklam ne sağlar"), label: "Reklam etkisi" },
+    { test: (value) => value.startsWith("seo ne sağlar"), label: "SEO etkisi" },
+    {
+      test: (value) => value.includes("hangi durumda") || value.includes("hangisi daha mantıklı"),
+      label: "Hangisi mantıklı?",
+    },
+    { test: (value) => value.includes("birlikte kullanmak"), label: "Hibrit yaklaşım" },
+    { test: (value) => value.includes("birlikte çalıştığında"), label: "Birlikte çalışınca" },
+    { test: (value) => value.includes("herkes ai"), label: "Sonuç farkı" },
+    { test: (value) => value.includes("kalite standardı"), label: "Kalite standardı" },
+    { test: (value) => value.includes("kazanan model"), label: "Kazanan model" },
+    { test: (value) => value.includes("yeni denklem"), label: "Yeni denklem" },
+    { test: (value) => value.includes("ziyaretçi ne yaptığını"), label: "Mesaj netliği" },
+    { test: (value) => value.includes("cta var"), label: "CTA sorunu" },
+    { test: (value) => value.includes("güven katmanı"), label: "Güven katmanı" },
+    { test: (value) => value.includes("trafik var ama niyet"), label: "Trafik niyeti" },
+    { test: (value) => value.includes("ölçüm yok"), label: "Ölçüm eksikliği" },
+    { test: (value) => value.includes("karar özeti"), label: "Karar özeti" },
+    { test: (value) => value.includes("kilit sonuç"), label: "Kilit sonuç" },
+  ];
 
-  const preferredWords = compactWords.length > 1 ? compactWords : words;
-  const shortLabel = preferredWords.slice(0, 3).join(" ");
+  const matchedRule = labelRules.find((rule) => rule.test(normalizedText));
+  if (matchedRule) {
+    return matchedRule.label;
+  }
 
-  return shortLabel || cleanedText;
+  const words = cleanedText
+    .replace(/[?!.:,;]/g, "")
+    .split(/\s+/)
+    .filter(Boolean);
+
+  return words.slice(0, 2).join(" ") || cleanedText;
 }
 
 export default function BlogDetail() {
@@ -104,6 +117,8 @@ export default function BlogDetail() {
 
     const offset = 96;
     const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+
+    setActiveHeadingId(id);
 
     window.scrollTo({
       top: elementPosition - offset,
@@ -151,45 +166,40 @@ export default function BlogDetail() {
   }, [blog]);
 
   useEffect(() => {
-    if (!blog) {
-      return;
-    }
-
-    const headingElements = Array.from(
-      document.querySelectorAll<HTMLElement>(".blog-content h2"),
-    );
-
-    if (!headingElements.length) {
+    if (!navigationHeadings.length) {
       setActiveHeadingId(null);
       return;
     }
 
-    setActiveHeadingId(headingElements[0]?.id || null);
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + 220;
+      let nextActiveId = navigationHeadings[0]?.id || null;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visibleEntries = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort(
-            (leftEntry, rightEntry) =>
-              leftEntry.boundingClientRect.top - rightEntry.boundingClientRect.top,
-          );
-
-        const currentEntry = visibleEntries[0];
-        if (currentEntry?.target instanceof HTMLElement) {
-          setActiveHeadingId(currentEntry.target.id);
+      for (const heading of navigationHeadings) {
+        const element = document.getElementById(heading.id);
+        if (!element) {
+          continue;
         }
-      },
-      {
-        rootMargin: "-18% 0px -62% 0px",
-        threshold: 0.12,
-      },
-    );
 
-    headingElements.forEach((element) => observer.observe(element));
+        const { offsetTop, offsetHeight } = element;
+        if (scrollPosition >= offsetTop) {
+          nextActiveId = heading.id;
+        }
 
-    return () => observer.disconnect();
-  }, [blog]);
+        if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+          nextActiveId = heading.id;
+          break;
+        }
+      }
+
+      setActiveHeadingId(nextActiveId);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [navigationHeadings]);
 
   const normalizedCategory = normalizeCategory(blog?.category || "Genel");
 
@@ -594,7 +604,8 @@ export default function BlogDetail() {
                     <button
                       key={heading.id}
                       onClick={() => scrollToSection(heading.id)}
-                      className={`block w-full rounded-lg px-4 py-2.5 text-left text-sm font-medium transition-all ${
+                      title={heading.text}
+                      className={`block w-full truncate rounded-lg px-4 py-2.5 text-left text-sm font-medium transition-all ${
                         activeHeadingId === heading.id
                       ? colors.navActive
                       : `text-gray-600 hover:bg-gray-100 ${colors.navHover}`
