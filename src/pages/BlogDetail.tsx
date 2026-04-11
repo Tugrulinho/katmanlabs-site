@@ -45,48 +45,13 @@ function normalizeHeadingText(text: string) {
     .trim();
 }
 
-function extractHeadings(rawContent: string) {
-  const headings: HeadingItem[] = [];
-  const htmlHeadingPattern = /<h([23])[^>]*>([\s\S]*?)<\/h\1>/gi;
-  const markdownHeadingPattern = /^(##|###)\s+(.+)$/gm;
-
-  let htmlMatch: RegExpExecArray | null;
-  while ((htmlMatch = htmlHeadingPattern.exec(rawContent))) {
-    const text = normalizeHeadingText(htmlMatch[2] || "");
-    if (!text) {
-      continue;
-    }
-
-    headings.push({
-      level: Number(htmlMatch[1]) as 2 | 3,
-      text,
-      id: generateSlug(text),
-    });
-  }
-
-  let markdownMatch: RegExpExecArray | null;
-  while ((markdownMatch = markdownHeadingPattern.exec(rawContent))) {
-    const text = normalizeHeadingText(markdownMatch[2] || "");
-    if (!text || headings.some((heading) => heading.text === text)) {
-      continue;
-    }
-
-    headings.push({
-      level: markdownMatch[1] === "##" ? 2 : 3,
-      text,
-      id: generateSlug(text),
-    });
-  }
-
-  return headings;
-}
-
 export default function BlogDetail() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const { blog, loading, error } = useBlogBySlug(slug);
   const { blogs } = useBlogs();
   const [activeHeadingId, setActiveHeadingId] = useState<string | null>(null);
+  const [navigationHeadings, setNavigationHeadings] = useState<HeadingItem[]>([]);
 
   const formatDate = (dateString: string | null) => {
     if (!dateString) {
@@ -109,14 +74,32 @@ export default function BlogDetail() {
       document.querySelectorAll<HTMLElement>(".blog-content h2, .blog-content h3"),
     );
 
+    const collectedHeadings: HeadingItem[] = [];
+
     headingElements.forEach((element) => {
       const text = normalizeHeadingText(element.textContent || "");
       if (!text) {
         return;
       }
 
-      element.id = generateSlug(text);
+      const id = generateSlug(text);
+      const level = Number(element.tagName.replace("H", "")) as 2 | 3;
+
+      element.id = id;
+      collectedHeadings.push({
+        level,
+        text,
+        id,
+      });
     });
+
+    setNavigationHeadings(
+      collectedHeadings.filter(
+        (heading, index, list) =>
+          heading.level === 2 &&
+          list.findIndex((item) => item.id === heading.id) === index,
+      ),
+    );
   }, [blog]);
 
   useEffect(() => {
@@ -265,8 +248,6 @@ export default function BlogDetail() {
   const seoTitle = blog.meta_title || blog.title;
   const seoDescription = blog.meta_description || blog.excerpt || "";
   const seoImage = blog.og_image_url || blog.featured_image_url || "";
-  const headings = extractHeadings(blog.content);
-  const navigationHeadings = headings.filter((item) => item.level === 2);
   const relatedBlogs = blogs
     .filter(
       (item) =>
@@ -444,7 +425,7 @@ export default function BlogDetail() {
       </div>
 
       <div className="mx-auto max-w-[1440px] px-4 pb-16 sm:px-6 lg:px-8">
-        <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_300px]">
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_300px]">
           <div className="min-w-0">
             <article className="max-w-none">
               <div className="blog-content leading-relaxed text-gray-700">
