@@ -10,6 +10,11 @@ import MiniChart from "../components/blog/MiniChart";
 import SplitShowcase from "../components/blog/SplitShowcase";
 import QuoteHighlight from "../components/blog/QuoteHighlight";
 import KeyTakeaways from "../components/blog/KeyTakeaways";
+import MediaFeature from "../components/blog/MediaFeature";
+import FeatureCards from "../components/blog/FeatureCards";
+import StepCards from "../components/blog/StepCards";
+import BulletPanel from "../components/blog/BulletPanel";
+import PullQuote from "../components/blog/PullQuote";
 
 type BlogFrontmatter = {
   title: string;
@@ -138,6 +143,11 @@ export const BLOG_MDX_COMPONENTS: MDXComponents = {
   SplitShowcase,
   QuoteHighlight,
   KeyTakeaways,
+  MediaFeature,
+  FeatureCards,
+  StepCards,
+  BulletPanel,
+  PullQuote,
 };
 
 export function getAllBlogs() {
