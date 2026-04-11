@@ -384,6 +384,7 @@
 
 .blog-content h2 {
   position: relative;
+  scroll-margin-top: 7.5rem;
   margin-top: 4rem;
   margin-bottom: 1.15rem;
   padding-top: 0.25rem;
@@ -394,6 +395,7 @@
 }
 
 .blog-content h3 {
+  scroll-margin-top: 7.5rem;
   margin-top: 2rem;
   margin-bottom: 0.9rem;
   font-size: 1.42rem;
@@ -510,6 +512,20 @@
 
 .blog-content strong {
   color: #0f172a;
+  font-weight: 700;
+}
+
+.blog-content mark {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0) 54%,
+    rgba(207, 153, 250, 0.28) 54%,
+    rgba(207, 153, 250, 0.28) 100%
+  );
+  color: inherit;
+  padding: 0 0.12em;
+  border-radius: 0.2em;
 }
 
 @media (max-width: 767px) {
