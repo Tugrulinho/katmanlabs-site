@@ -19,9 +19,6 @@ import Seo from "../components/Seo";
 import { BLOG_MDX_COMPONENTS } from "../lib/blogContent";
 import { getAbsoluteUrl, SITE_NAME } from "../lib/seo";
 import SectionIntro from "../components/blog/SectionIntro";
-import StatGrid from "../components/blog/StatGrid";
-import MiniChart from "../components/blog/MiniChart";
-import KeyTakeaways from "../components/blog/KeyTakeaways";
 
 type HeadingItem = {
   level: 2 | 3;
@@ -81,25 +78,6 @@ function extractHeadings(rawContent: string) {
   }
 
   return headings;
-}
-
-function countExternalLinks(rawContent: string) {
-  const urlPattern = /href=["'](https?:\/\/[^"']+)["']/gi;
-  const urls = new Set<string>();
-
-  let match: RegExpExecArray | null;
-  while ((match = urlPattern.exec(rawContent))) {
-    try {
-      const parsedUrl = new URL(match[1]);
-      if (!["katmanlabs.com", "www.katmanlabs.com"].includes(parsedUrl.hostname)) {
-        urls.add(match[1]);
-      }
-    } catch {
-      continue;
-    }
-  }
-
-  return urls.size;
 }
 
 function BlogDetail() {
@@ -224,8 +202,6 @@ function BlogDetail() {
   const seoDescription = blog.meta_description || blog.excerpt || "";
   const seoImage = blog.og_image_url || blog.featured_image_url || "";
   const headings = extractHeadings(blog.content);
-  const externalLinkCount = countExternalLinks(blog.content);
-  const takeawayItems = headings.filter((item) => item.level === 2).slice(0, 4);
   const relatedBlogs = blogs
     .filter(
       (item) =>
@@ -326,7 +302,7 @@ function BlogDetail() {
       <Navbar />
 
       <div className={`bg-gradient-to-br ${colors.gradient} py-20 pt-32 text-white`}>
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
           <button
             onClick={() => navigate("/blog")}
             className="mb-8 flex items-center gap-2 text-accent-light transition-colors hover:text-white"
@@ -372,7 +348,7 @@ function BlogDetail() {
       </div>
 
       {blog.image_url ? (
-        <div className="mx-auto -mt-12 max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto -mt-12 max-w-[1440px] px-4 sm:px-6 lg:px-8">
           <div
             className={`overflow-hidden rounded-[28px] border-4 shadow-2xl ${colors.border}`}
           >
@@ -385,79 +361,25 @@ function BlogDetail() {
         </div>
       ) : null}
 
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="grid gap-6 lg:grid-cols-[1.3fr_0.9fr]">
-          <SectionIntro
-            eyebrow="Yazinin Cekirdegi"
-            title="Bu yazi ne anlatiyor?"
-            description={blog.excerpt || "Bu yazinin ana fikrini hizli tarama icin ozetler."}
-          >
-            <p className="max-w-3xl text-base leading-8 text-slate-600">
-              Bu yazi, konuyu uzun bir metin duvari gibi degil; karar almaya
-              yardimci olacak ana bolumler halinde ele aliyor. Asagidaki ozet
-              ve bolum yapisi sayesinde yaziyi tarayarak da takip edebilirsin.
-            </p>
-          </SectionIntro>
-
-          <StatGrid
-            title="Hizli Bakis"
-            items={[
-              {
-                label: "Okuma",
-                value: blog.readingMinutes,
-                suffix: " dk",
-                note: "Yazinin tahmini okuma suresi",
-              },
-              {
-                label: "Bolum",
-                value: headings.length || 1,
-                note: "Ana anlatim basliklarinin sayisi",
-              },
-              {
-                label: "Kaynak",
-                value: externalLinkCount,
-                note: "Yazida gecen harici kaynak sayisi",
-              },
-            ]}
-          />
-        </div>
-
-        {takeawayItems.length > 0 ? (
-          <KeyTakeaways
-            title="Yazida Neler Var?"
-            items={takeawayItems.map((item) => item.text)}
-          />
-        ) : null}
-
-        <MiniChart
-          title="Yazi Ritmi"
-          items={[
-            {
-              label: "Bolum Yogunlugu",
-              value: headings.length || 1,
-              helper: "Basliklarin parcali yapisini gosterir.",
-              colorClass: "from-[#17385f] to-[#2f4f8f]",
-            },
-            {
-              label: "Kaynak Kullanimi",
-              value: Math.max(externalLinkCount, 1),
-              helper: "Harici referans sayisina gore olculur.",
-              colorClass: "from-[#9062ae] to-[#cf99fa]",
-            },
-            {
-              label: "Okuma Derinligi",
-              value: blog.readingMinutes,
-              helper: "Tahmini okuma suresi ile olculur.",
-              colorClass: "from-[#0ea5e9] to-[#22c55e]",
-            },
-          ]}
-        />
+      <div className="mx-auto max-w-[1440px] px-4 py-12 sm:px-6 lg:px-8">
+        <SectionIntro
+          eyebrow="Yazinin Cekirdegi"
+          title="Bu yazi ne anlatiyor?"
+          description={blog.excerpt || "Bu yazinin ana fikrini hizli tarama icin ozetler."}
+        >
+          <p className="max-w-4xl text-base leading-8 text-slate-600">
+            Bu sayfada metin akisini gereksiz kutularla bolmeden, ana fikri tek
+            noktada topluyoruz. Asagida yer alan bolumler ve sagdaki kisa gecis
+            alani sayesinde istersen tum yaziyi okuyabilir, istersen de
+            dogrudan ihtiyacin olan kisma gecebilirsin.
+          </p>
+        </SectionIntro>
       </div>
 
-      <div className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8">
-        <div className="grid gap-12 lg:grid-cols-3">
-          <div className="lg:col-span-2">
-            <article className="max-w-3xl">
+      <div className="mx-auto max-w-[1440px] px-4 pb-16 sm:px-6 lg:px-8">
+        <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_320px]">
+          <div className="min-w-0">
+            <article className="max-w-none">
               <div className="blog-content text-gray-700 leading-relaxed">
                 <Content components={BLOG_MDX_COMPONENTS} />
               </div>
@@ -486,7 +408,7 @@ function BlogDetail() {
             ) : null}
           </div>
 
-          <div className="lg:col-span-1">
+          <div className="min-w-0">
             <div className="sticky top-24 space-y-6">
               {headings.length > 0 ? (
                 <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_18px_50px_-32px_rgba(15,23,42,0.35)]">

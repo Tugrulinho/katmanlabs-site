@@ -19,12 +19,15 @@ export default function KeyTakeaways({
             className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-5"
           >
             <div className="flex items-start gap-4">
-              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#17385f] to-[#9062ae] text-sm font-bold text-white">
-                {String(index + 1).padStart(2, "0")}
+              <div className="mt-2 h-3 w-3 flex-shrink-0 rounded-full bg-gradient-to-br from-[#17385f] to-[#9062ae]" />
+              <div className="min-w-0">
+                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+                  Ozet Nokta
+                </div>
+                <p className="mt-2 text-sm font-medium leading-7 text-slate-700">
+                  {item}
+                </p>
               </div>
-              <p className="pt-1 text-sm font-medium leading-7 text-slate-700">
-                {item}
-              </p>
             </div>
           </div>
         ))}
