@@ -45,6 +45,37 @@ function normalizeHeadingText(text: string) {
     .trim();
 }
 
+function getNavigationLabel(text: string) {
+  const cleanedText = text
+    .replace(/^\d+\.\s*/, "")
+    .replace(/[?!.:,;]/g, "")
+    .trim();
+
+  const words = cleanedText.split(/\s+/).filter(Boolean);
+  const compactWords = words.filter(
+    (word) =>
+      ![
+        "ve",
+        "ama",
+        "ile",
+        "mi",
+        "mı",
+        "mu",
+        "mü",
+        "için",
+        "daha",
+        "nasıl",
+        "neden",
+        "hangi",
+      ].includes(word.toLowerCase()),
+  );
+
+  const preferredWords = compactWords.length > 1 ? compactWords : words;
+  const shortLabel = preferredWords.slice(0, 3).join(" ");
+
+  return shortLabel || cleanedText;
+}
+
 export default function BlogDetail() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
@@ -109,11 +140,13 @@ export default function BlogDetail() {
     });
 
     setNavigationHeadings(
-      collectedHeadings.filter(
-        (heading, index, list) =>
-          heading.level === 2 &&
-          list.findIndex((item) => item.id === heading.id) === index,
-      ),
+      collectedHeadings
+        .filter(
+          (heading, index, list) =>
+            heading.level === 2 &&
+            list.findIndex((item) => item.id === heading.id) === index,
+        )
+        .slice(0, 6),
     );
   }, [blog]);
 
@@ -557,20 +590,20 @@ export default function BlogDetail() {
         <div className="hidden lg:block fixed right-8 top-1/2 -translate-y-1/2 z-40">
           <nav className="w-[176px] rounded-2xl border border-gray-200 bg-white p-4 shadow-2xl">
             <div className="space-y-2">
-              {navigationHeadings.map((heading) => (
-                <button
-                  key={heading.id}
-                  onClick={() => scrollToSection(heading.id)}
-                  className={`block w-full rounded-lg px-4 py-2.5 text-left text-sm font-medium transition-all ${
-                    activeHeadingId === heading.id
+                  {navigationHeadings.map((heading) => (
+                    <button
+                      key={heading.id}
+                      onClick={() => scrollToSection(heading.id)}
+                      className={`block w-full rounded-lg px-4 py-2.5 text-left text-sm font-medium transition-all ${
+                        activeHeadingId === heading.id
                       ? colors.navActive
                       : `text-gray-600 hover:bg-gray-100 ${colors.navHover}`
                   }`}
                 >
-                  {heading.text}
-                </button>
-              ))}
-            </div>
+                      {getNavigationLabel(heading.text)}
+                    </button>
+                  ))}
+                </div>
           </nav>
         </div>
       ) : null}
