@@ -26,133 +26,150 @@ status: published
   description="Bu yazı, SEO ve reklamı karşı karşıya koymak için değil; hangi durumda hangisinin daha mantıklı olduğunu netleştirmek için okunmalı."
 />
 
-<StatGrid
-  title="Bu Yazının Yapısı"
-  items={[
-    {
-      label: "Ana kanal",
-      value: 2,
-      note: "SEO ve reklam ayrı mantıklarla çalışır.",
-    },
-    {
-      label: "Karar filtresi",
-      value: 3,
-      note: "Hız, maliyet ve sürdürülebilirlik birlikte düşünülmeli.",
-    },
-    {
-      label: "En sağlıklı model",
-      value: 1,
-      note: "Uzun vadede hibrit kurgu genelde en verimlisidir.",
-    },
-  ]}
-/>
-
-## SEO ve reklam aynı şey değildir
-
-SEO ve reklam çoğu zaman aynı amaç için kullanılır: web sitesine trafik getirmek. Ancak bu iki yöntem tamamen farklı şekilde çalışır.
+SEO ve reklam çoğu zaman aynı amaç için kullanılır: web sitesine trafik getirmek. Ama çalışma mantıkları, maliyet yapıları ve zaman etkileri tamamen farklıdır.
 
 Reklam verdiğinizde, bütçe harcadığınız sürece görünür olursunuz. Trafik hızlı gelir ama bütçe durduğunda akış kesilir.
 
-SEO ise farklıdır. Doğru kurulduğunda içerikleriniz zamanla Google’da görünür hale gelir ve sürekli trafik üretmeye başlar. Yani etkisi daha yavaş başlar ama daha kalıcıdır.
+SEO ise daha yavaş işler. Doğru kurulduğunda içerikleriniz zamanla görünür hale gelir ve düzenli trafik üretmeye başlar. Etkisi daha geç başlar ama daha kalıcıdır.
 
-Bu yüzden “SEO mu reklam mı” sorusu aslında hangisinin daha iyi olduğu ile ilgili değil, **hangi ihtiyaca hangi çözümün uygun olduğu** ile ilgilidir.
+Bu yüzden doğru soru “hangisi daha iyi” değil, “şu anki hedefim için hangisi daha mantıklı” sorusudur.
 
-<QuoteHighlight
-  quote="Hız mı istiyorsunuz, yoksa sürdürülebilirlik mi?"
-  author="Katman Labs bakış açısı"
+<FeatureCards
+  eyebrow="İki Ayrı Mantık"
+  title="SEO ve reklam aynı sonucu hedefler, ama aynı şekilde çalışmaz"
+  description="Birini hız, diğerini birikim olarak düşünebilirsin. Çoğu işletme için karar bu farkı doğru okumakta başlar."
+  items={[
+    {
+      title: "Reklam hız kazandırır",
+      description: "Yeni site, kampanya dönemi veya hızlı talep ihtiyacı olduğunda görünürlüğü aynı gün içinde artırabilir.",
+      accent: "orange",
+      icon: "zap",
+      bullets: [
+        "Anında trafik üretir",
+        "Test etmek için hızlı veri toplar",
+        "Bütçe durduğunda etkisi de durur",
+      ],
+    },
+    {
+      title: "SEO birikim üretir",
+      description: "Arama görünürlüğü zamanla güçlenir ve doğru kurulduğunda reklama daha az bağımlı bir yapı oluşturur.",
+      accent: "blue",
+      icon: "search",
+      bullets: [
+        "Uzun vadeli görünürlük sağlar",
+        "Hizmet arayan kullanıcıyı yakalar",
+        "Sonuç almak için sabır gerektirir",
+      ],
+    },
+    {
+      title: "Hibrit model en sağlıklısıdır",
+      description: "Birçok işletme için reklam kısa vadede veri sağlar, SEO ise bu veriyi uzun vadeli sisteme dönüştürür.",
+      accent: "green",
+      icon: "target",
+      bullets: [
+        "Reklam hız verir",
+        "SEO kalıcılık sağlar",
+        "Birlikte kullanıldığında verim artar",
+      ],
+    },
+  ]}
 />
 
 ## Reklam ne sağlar, ne sağlamaz
 
 Reklamın en büyük avantajı hızdır. Doğru kurulduğunda aynı gün içinde trafik ve potansiyel müşteri getirebilir.
 
-Özellikle:
+Özellikle yeni açılan sitelerde, hızlı sonuç gereken kampanyalarda veya belirli bir ürünü öne çıkarmak istediğiniz durumlarda reklam güçlü bir araçtır.
 
-- yeni açılan sitelerde
-- hızlı sonuç gereken kampanyalarda
-- belirli bir ürünü öne çıkarmak istediğiniz durumlarda
-
-reklam güçlü bir araçtır.
-
-Ancak reklamın sınırları da nettir.
+Ancak reklamın sınırları da nettir:
 
 - bütçe bittiğinde trafik durur
 - sürekli maliyet gerektirir
 - uzun vadeli bir varlık oluşturmaz
 
-Kısaca reklam, **kısa vadeli görünürlük sağlar ama kalıcı bir yapı kurmaz.**
+Kısaca reklam, kısa vadeli görünürlük sağlar ama tek başına kalıcı bir yapı kurmaz.
 
-<Callout title="Kısa vadeli güç" tone="warning">
-  Reklam hız kazandırır ama kendi başına kalıcı görünürlük üretmez. Bu yüzden
-  çoğu zaman sonuç değil, ivme aracıdır.
-</Callout>
+<PullQuote
+  eyebrow="Karar Filtresi"
+  quote="Hız mı istiyorsunuz, yoksa sürdürülebilirlik mi?"
+/>
 
 ## SEO ne sağlar, ne sağlamaz
 
-SEO’nun en büyük avantajı sürdürülebilir olmasıdır. Doğru yapılan bir SEO çalışması, zaman içinde sitenize düzenli trafik getirir.
+SEO'nun en büyük avantajı sürdürülebilir olmasıdır. Doğru yapılan bir SEO çalışması zaman içinde sitenize düzenli trafik getirir.
 
-Özellikle:
+Özellikle hizmet arayan kullanıcıları yakalamak, uzun vadeli görünürlük oluşturmak ve reklama bağımlılığı azaltmak için kritik rol oynar.
 
-- hizmet arayan kullanıcıları yakalamak
-- uzun vadeli görünürlük oluşturmak
-- reklama bağımlılığı azaltmak
+Ancak SEO da tek seferlik bir işlem değildir. Sabır ve süreklilik ister. Hızlı sonuç vermez ama uzun vadede çok daha güçlü bir birikim üretir.
 
-için SEO kritik rol oynar.
-
-Ancak SEO’nun da sınırları vardır.
-
-- sonuç almak zaman alır
-- sabır ve süreklilik gerektirir
-- tek seferlik bir işlem değildir
-
-Yani SEO hızlı değil ama kalıcıdır.
-
-**SEO, bir kampanya değil; bir sistemdir.**
-
-<SplitShowcase
+<MediaFeature
   eyebrow="Kalıcı Yapı"
   title="SEO neden daha yavaş ama daha güçlü birikim üretir?"
   description="SEO bir anda patlayan trafik değil, zamanla güçlenen görünürlüktür. Bu yüzden kısa vadede sabır, orta ve uzun vadede ise sistem avantajı ister."
   image="https://ooakxmqbbezjvvwzrvdw.supabase.co/storage/v1/object/public/seo-mu-reklem-mi/seo-mu-reklam-mi.webp"
   imageAlt="SEO ve reklam karşılaştırmasını temsil eden görsel"
   imageCaption="Kısa vadeli hız ile uzun vadeli birikim aynı şey değildir."
+  bullets={[
+    "Reklam kampanya bazlı görünürlük sağlar.",
+    "SEO düzenli arama talebini zamanla toplamaya başlar.",
+    "Uzun vadede reklama bağımlılığı azaltan katman SEO tarafında kurulur.",
+  ]}
 />
 
 ## Hangi durumda hangisi daha mantıklı?
 
-Burada net konuşmak lazım. Her işletme için tek doğru yoktur.
+Her işletme için tek bir doğru yoktur. Kararı hedef belirler.
 
-Şu durumlarda reklam daha mantıklıdır:
+Reklam daha mantıklıdır, eğer:
 
-- yeni bir site açtıysanız
-- hemen müşteri kazanmanız gerekiyorsa
-- kısa vadeli bir kampanya yürütüyorsanız
+- yeni bir site açtıysan
+- hemen müşteri kazanman gerekiyorsa
+- kısa vadeli bir kampanya yürütüyorsan
 
-Şu durumlarda SEO daha mantıklıdır:
+SEO daha mantıklıdır, eğer:
 
-- uzun vadeli büyüme hedefliyorsanız
-- belirli hizmetlerde sürekli görünür olmak istiyorsanız
-- reklam maliyetini düşürmek istiyorsanız
+- uzun vadeli büyüme hedefliyorsan
+- belirli hizmetlerde sürekli görünür olmak istiyorsan
+- reklam maliyetini zamanla düşürmek istiyorsan
 
-Yani karar, hedefinize göre değişir.
+<StepCards
+  eyebrow="Pratik Karar"
+  title="Hangi tarafta başlaman gerektiğini üç adımda düşün"
+  steps={[
+    {
+      title: "Hız ihtiyacını ölç",
+      description: "Hemen talep üretmen gerekiyorsa reklam öne çıkar. Özellikle yeni başlayan yapılar için ilk veri çoğu zaman reklamdan gelir.",
+    },
+    {
+      title: "Bütçe yapını değerlendir",
+      description: "Sürekli reklam bütçesi taşıyamayan işletmeler için SEO tarafında daha kalıcı bir zemin kurmak zamanla kritik hale gelir.",
+    },
+    {
+      title: "Uzun vadeli hedefi seç",
+      description: "Sadece bugünü değil birkaç ay sonrasını da düşün. Güçlü yapı çoğu zaman reklamın hızını SEO'nun birikimiyle birleştirir.",
+    },
+  ]}
+/>
 
-**Hız mı istiyorsunuz, yoksa sürdürülebilirlik mi?**
+## En doğru yaklaşım: SEO ve reklamı birlikte kullanmak
 
-### En doğru yaklaşım: SEO ve reklamı birlikte kullanmak
+En sağlıklı yapı, bu iki yöntemi karşı karşıya koymak değil; birlikte kullanmaktır.
 
-En sağlıklı yapı, bu iki yöntemi karşı karşıya koymak değil, birlikte kullanmaktır.
+Reklam kısa vadede trafik getirir ve hızlı veri sağlar. SEO ise bu veriyi kullanarak uzun vadeli bir yapı kurar. Örneğin reklamla hangi kelimelerin dönüşüm getirdiğini görür, bu bilgiyi SEO içeriklerine ve sayfa yapısına aktarabilirsin.
 
-Reklam, kısa vadede trafik getirir ve hızlı veri sağlar.  
-SEO ise bu veriyi kullanarak uzun vadeli bir yapı kurar.
+Bu sayede hem hızlı sonuç alır hem de zamanla reklama daha az bağımlı hale gelirsin.
 
-Örneğin:
-
-- reklamla hangi anahtar kelimelerin dönüşüm getirdiğini görürsünüz
-- bu verileri SEO içeriklerine aktarabilirsiniz
-
-Böylece hem hızlı sonuç alır hem de zamanla reklama daha az bağımlı hale gelirsiniz.
-
-Profesyonel bir dijital strateji, tek kanala bağlı kalmaz.
+<BulletPanel
+  eyebrow="Hibrit Yapı"
+  title="SEO ve reklam birlikte çalıştığında ne kazanırsın?"
+  description="İkisini rakip gibi değil, birbirini besleyen iki katman gibi düşünmek daha sağlıklıdır."
+  items={[
+    "Reklam hangi mesaj ve tekliflerin çalıştığını daha hızlı gösterir.",
+    "SEO bu veriyi uzun vadeli içerik ve görünürlük sistemine dönüştürür.",
+    "Trafik akışı yalnızca bütçeye bağlı kalmaz.",
+    "Karar süreci hem kısa vadede hem uzun vadede daha verimli hale gelir.",
+  ]}
+/>
 
 <KeyTakeaways
   title="Karar Özeti"
@@ -160,21 +177,6 @@ Profesyonel bir dijital strateji, tek kanala bağlı kalmaz.
     "Hız gerekiyorsa reklam öne çıkar.",
     "Kalıcı görünürlük gerekiyorsa SEO daha mantıklıdır.",
     "En güçlü yapı, reklamdan gelen veriyi SEO sistemine aktarmaktır.",
-    "Doğru soru hangisinin daha iyi olduğu değil, senin mevcut hedefin için hangisinin daha mantıklı olduğudur.",
+    "Doğru soru hangisinin daha iyi olduğu değil, mevcut hedefin için hangisinin daha mantıklı olduğudur.",
   ]}
 />
-
-## Doğru soru “hangisi daha iyi” değil
-
-SEO mu reklam mı sorusu çoğu zaman yanlış sorulur.
-
-Doğru soru şudur:
-
-👉 “Benim mevcut durumumda hangisi daha mantıklı?”
-
-Eğer hızlı sonuç istiyorsanız reklam,  
-kalıcı bir yapı kurmak istiyorsanız SEO ön plana çıkar.
-
-Ancak en verimli senaryoda bu iki yöntem birlikte çalışır.
-
-Bu yüzden karar verirken sadece bugünü değil, birkaç ay sonrasını da düşünmek gerekir.
