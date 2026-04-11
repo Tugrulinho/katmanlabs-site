@@ -65,6 +65,21 @@ export default function BlogDetail() {
     });
   };
 
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (!element) {
+      return;
+    }
+
+    const offset = 96;
+    const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+
+    window.scrollTo({
+      top: elementPosition - offset,
+      behavior: "smooth",
+    });
+  };
+
   useEffect(() => {
     if (!blog) {
       return;
@@ -483,29 +498,6 @@ export default function BlogDetail() {
 
           <div className="min-w-0">
             <div className="sticky top-24 space-y-6">
-              {navigationHeadings.length > 0 ? (
-                <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_18px_50px_-32px_rgba(15,23,42,0.35)]">
-                  <div className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
-                    Bölüm geçişi
-                  </div>
-                  <div className="mt-5 space-y-3">
-                    {navigationHeadings.map((heading) => (
-                      <a
-                        key={heading.id}
-                        href={`#${heading.id}`}
-                        className={`block rounded-2xl border px-4 py-3 transition-all ${
-                          activeHeadingId === heading.id
-                            ? colors.navActive
-                            : `border-slate-200 bg-white text-slate-700 ${colors.navHover}`
-                        }`}
-                      >
-                        <div className="text-sm font-semibold">{heading.text}</div>
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              ) : null}
-
               {relatedBlogs.length > 0 ? (
                 <div className="rounded-[28px] bg-gray-50 p-6">
                   <h3 className={`mb-6 text-xl font-bold ${colors.text}`}>
@@ -560,6 +552,28 @@ export default function BlogDetail() {
           </div>
         </div>
       </div>
+
+      {navigationHeadings.length > 0 ? (
+        <div className="hidden lg:block fixed right-8 top-1/2 -translate-y-1/2 z-40">
+          <nav className="w-[176px] rounded-2xl border border-gray-200 bg-white p-4 shadow-2xl">
+            <div className="space-y-2">
+              {navigationHeadings.map((heading) => (
+                <button
+                  key={heading.id}
+                  onClick={() => scrollToSection(heading.id)}
+                  className={`block w-full rounded-lg px-4 py-2.5 text-left text-sm font-medium transition-all ${
+                    activeHeadingId === heading.id
+                      ? colors.navActive
+                      : `text-gray-600 hover:bg-gray-100 ${colors.navHover}`
+                  }`}
+                >
+                  {heading.text}
+                </button>
+              ))}
+            </div>
+          </nav>
+        </div>
+      ) : null}
 
       <Footer />
     </div>
