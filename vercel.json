@@ -1,14 +1,44 @@
 {
-  "routes": [
+  "redirects": [
     {
-      "src": "/sitemap.xml",
-      "dest": "/api/sitemap"
+      "source": "/dijital-pazarlama",
+      "destination": "/hizmet/dijital-pazarlama",
+      "permanent": true
+    },
+    {
+      "source": "/web-tasarim",
+      "destination": "/hizmet/web-tasarim",
+      "permanent": true
+    },
+    {
+      "source": "/seo-analitik",
+      "destination": "/hizmet/seo-analitik",
+      "permanent": true
+    },
+    {
+      "source": "/sosyal-medya-tasarim",
+      "destination": "/hizmet/sosyal-medya-tasarim",
+      "permanent": true
+    },
+    {
+      "source": "/sosyal-medya-yonetimi",
+      "destination": "/hizmet/sosyal-medya-tasarim",
+      "permanent": true
     }
   ],
   "rewrites": [
     {
+      "source": "/sitemap.xml",
+      "destination": "/api/sitemap"
+    },
+    {
       "source": "/(.*)",
       "destination": "/"
     }
-  ]
+  ],
+  "functions": {
+    "api/sitemap.ts": {
+      "includeFiles": "src/content/blog/**"
+    }
+  }
 }

@@ -1,7 +1,7 @@
 import FloatingMeetingButton from "./components/FloatingMeetingButton";
 import { Suspense, lazy, useEffect, useState } from "react";
 import { supabase } from "./lib/supabase";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Navigate, Routes, Route, useNavigate } from "react-router-dom";
 import {
   Layers,
   Globe,
@@ -368,6 +368,26 @@ function App() {
       <Suspense fallback={<RouteFallback />}>
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route
+            path="/dijital-pazarlama"
+            element={<Navigate to="/hizmet/dijital-pazarlama" replace />}
+          />
+          <Route
+            path="/web-tasarim"
+            element={<Navigate to="/hizmet/web-tasarim" replace />}
+          />
+          <Route
+            path="/seo-analitik"
+            element={<Navigate to="/hizmet/seo-analitik" replace />}
+          />
+          <Route
+            path="/sosyal-medya-tasarim"
+            element={<Navigate to="/hizmet/sosyal-medya-tasarim" replace />}
+          />
+          <Route
+            path="/sosyal-medya-yonetimi"
+            element={<Navigate to="/hizmet/sosyal-medya-tasarim" replace />}
+          />
           <Route
             path="/hizmet/sosyal-medya-tasarim"
             element={<SosyalMedyaTasarim onBack={() => navigate("/")} />}

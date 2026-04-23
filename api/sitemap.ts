@@ -1,7 +1,5 @@
 import fs from "node:fs";
 import path from "node:path";
-import matter from "gray-matter";
-import { generateSlug } from "../src/lib/blogUtils";
 import type { ApiRequest, ApiResponse } from "./_types";
 
 type BlogFrontmatter = {
@@ -11,7 +9,57 @@ type BlogFrontmatter = {
   status: "draft" | "published";
 };
 
-function getPublishedBlogs() {
+function generateSlug(title: string): string {
+  return title
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\u0131/g, "i")
+    .replace(/\u0130/g, "i")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function cleanFrontmatterValue(value: string): string {
+  return value.trim().replace(/^["']|["']$/g, "");
+}
+
+function parseBlogFrontmatter(fileContent: string): Partial<BlogFrontmatter> {
+  const frontmatterMatch = fileContent.match(/^---\s*\r?\n([\s\S]*?)\r?\n---/);
+
+  if (!frontmatterMatch) {
+    return {};
+  }
+
+  return frontmatterMatch[1].split(/\r?\n/).reduce<Partial<BlogFrontmatter>>(
+    (blog, line) => {
+      const fieldMatch = line.match(/^([A-Za-z0-9_-]+):\s*(.*)$/);
+
+      if (!fieldMatch) {
+        return blog;
+      }
+
+      const [, key, rawValue] = fieldMatch;
+
+      if (
+        key === "slug" ||
+        key === "updatedAt" ||
+        key === "category" ||
+        key === "status"
+      ) {
+        return {
+          ...blog,
+          [key]: cleanFrontmatterValue(rawValue),
+        };
+      }
+
+      return blog;
+    },
+    {},
+  );
+}
+
+function getPublishedBlogs(): BlogFrontmatter[] {
   const contentDirectory = path.resolve(process.cwd(), "src/content/blog");
 
   if (!fs.existsSync(contentDirectory)) {
@@ -24,15 +72,28 @@ function getPublishedBlogs() {
     .map((fileName) => {
       const fullPath = path.join(contentDirectory, fileName);
       const fileContent = fs.readFileSync(fullPath, "utf8");
-      const { data } = matter(fileContent);
-      return data as BlogFrontmatter;
+      return parseBlogFrontmatter(fileContent);
     })
-    .filter((blog) => blog.status === "published");
+    .filter(
+      (blog): blog is BlogFrontmatter =>
+        blog.status === "published" &&
+        Boolean(blog.slug) &&
+        Boolean(blog.updatedAt),
+    );
+}
+
+function escapeXml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
 }
 
 export default async function handler(_req: ApiRequest, res: ApiResponse) {
-  const blogs = getPublishedBlogs();
   const baseUrl = "https://www.katmanlabs.com";
+  const blogs = getPublishedBlogs();
 
   const staticPages = [
     "",
@@ -57,7 +118,7 @@ export default async function handler(_req: ApiRequest, res: ApiResponse) {
     ...staticPages.map(
       (pagePath) => `
       <url>
-        <loc>${baseUrl}${pagePath}</loc>
+        <loc>${escapeXml(`${baseUrl}${pagePath}`)}</loc>
         <changefreq>weekly</changefreq>
         <priority>${pagePath === "" ? "1.0" : "0.8"}</priority>
       </url>
@@ -66,7 +127,7 @@ export default async function handler(_req: ApiRequest, res: ApiResponse) {
     ...categoryPages.map(
       (pagePath) => `
       <url>
-        <loc>${baseUrl}${pagePath}</loc>
+        <loc>${escapeXml(`${baseUrl}${pagePath}`)}</loc>
         <changefreq>weekly</changefreq>
         <priority>0.7</priority>
       </url>
@@ -75,8 +136,8 @@ export default async function handler(_req: ApiRequest, res: ApiResponse) {
     ...blogs.map(
       (blog) => `
       <url>
-        <loc>${baseUrl}/blog/${blog.slug}</loc>
-        <lastmod>${blog.updatedAt}</lastmod>
+        <loc>${escapeXml(`${baseUrl}/blog/${blog.slug}`)}</loc>
+        <lastmod>${escapeXml(blog.updatedAt)}</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
       </url>
@@ -85,11 +146,10 @@ export default async function handler(_req: ApiRequest, res: ApiResponse) {
   ];
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-  <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     ${urls.join("")}
-  </urlset>`;
+</urlset>`;
 
-  res.setHeader("Content-Type", "text/xml");
-  res.write(sitemap);
-  res.end();
+  res.setHeader("Content-Type", "application/xml; charset=utf-8");
+  res.status(200).end(sitemap);
 }
