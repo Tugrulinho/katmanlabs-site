@@ -8,11 +8,7 @@ import { useBlogsByCategory } from '../hooks/useBlogsByCategory';
 import Seo from '../components/Seo';
 import { getAbsoluteUrl, SITE_NAME } from '../lib/seo';
 
-interface DijitalPazarlamaProps {
-  onBack: () => void;
-}
-
-function DijitalPazarlama({ onBack }: DijitalPazarlamaProps) {
+function DijitalPazarlama() {
   const [isSchedulerOpen, setIsSchedulerOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
   const { blogs, loading } = useBlogsByCategory('Dijital Pazarlama');
@@ -106,13 +102,13 @@ function DijitalPazarlama({ onBack }: DijitalPazarlamaProps) {
       <Navbar />
       <div className="bg-[url('/images/dijital-pazarlama-hero-mobile.png')] md:bg-[url('/images/dijital-pazarlama-hero-desktop.png')] bg-cover bg-center text-white py-20 pt-32 min-h-[500px] flex items-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          <button
-            onClick={onBack}
+          <Link
+            to="/"
             className="flex items-center gap-2 text-accent-light hover:text-white transition-colors mb-8"
           >
             <ArrowLeft className="w-5 h-5" />
             Ana Sayfaya Dön
-          </button>
+          </Link>
 
           <div className="flex items-center gap-4 mb-6">
             <div className="w-16 h-16 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center">

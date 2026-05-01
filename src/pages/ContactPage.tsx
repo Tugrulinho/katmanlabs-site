@@ -1,12 +1,12 @@
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ContactSection from "../components/ContactSection";
-import { useContent } from "../hooks/useContent";
 import Seo from "../components/Seo";
+import { getHomepageContent } from "../lib/publicSite";
 import { getAbsoluteUrl, SITE_NAME } from "../lib/seo";
 
 export default function ContactPage() {
-  const { content } = useContent("homepage");
+  const content = getHomepageContent();
   const title = `Iletisim | ${SITE_NAME}`;
   const description =
     "Projeniz icin sosyal medya, web tasarim, SEO veya dijital pazarlama surecini birlikte planlayalim.";

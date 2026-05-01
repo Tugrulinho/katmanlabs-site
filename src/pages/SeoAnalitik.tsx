@@ -9,11 +9,7 @@ import { useBlogsByCategory } from '../hooks/useBlogsByCategory';
 import Seo from '../components/Seo';
 import { getAbsoluteUrl, SITE_NAME } from '../lib/seo';
 
-interface SeoAnalitikProps {
-  onBack: () => void;
-}
-
-function SeoAnalitik({ onBack }: SeoAnalitikProps) {
+function SeoAnalitik() {
   const [isSchedulerOpen, setIsSchedulerOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
   const { blogs, loading } = useBlogsByCategory('SEO');
@@ -111,13 +107,13 @@ function SeoAnalitik({ onBack }: SeoAnalitikProps) {
 
       <div className="bg-[url('/images/seo-analitik-hero-mobile.png')] md:bg-[url('/images/seo-analitik-hero-desktop.png')] bg-cover bg-center text-white py-20 pt-32 min-h-[500px] flex items-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          <button
-            onClick={onBack}
+          <RouterLink
+            to="/"
             className="flex items-center gap-2 text-accent-light hover:text-white transition-colors mb-8"
           >
             <ArrowLeft className="w-5 h-5" />
             Ana Sayfaya Dön
-          </button>
+          </RouterLink>
 
           <div className="flex items-center gap-4 mb-6">
             <div className="w-16 h-16 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center">

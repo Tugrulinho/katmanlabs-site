@@ -582,13 +582,6 @@ export default function BlogDetail() {
                 <BlogSidebar
                   blogs={blogs}
                   currentCategory={normalizedCategory}
-                  onCategorySelect={(category: string | null) => {
-                    if (category) {
-                      navigate(`/blog/kategori/${generateSlug(category)}`);
-                    } else {
-                      navigate("/blog");
-                    }
-                  }}
                 />
               </div>
             </div>

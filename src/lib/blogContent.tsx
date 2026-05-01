@@ -15,6 +15,8 @@ import FeatureCards from "../components/blog/FeatureCards";
 import StepCards from "../components/blog/StepCards";
 import BulletPanel from "../components/blog/BulletPanel";
 import PullQuote from "../components/blog/PullQuote";
+import publicSiteSnapshot from "../generated/publicSiteSnapshot";
+import type { BlogIndexEntry } from "../types/publicSite";
 
 type BlogFrontmatter = {
   title: string;
@@ -35,38 +37,47 @@ type BlogModule = {
   frontmatter: BlogFrontmatter;
 };
 
-export interface ContentBlog {
-  id: string;
-  title: string;
-  slug: string;
-  excerpt: string;
+export interface ContentBlog extends BlogIndexEntry {
   content: string;
-  image_url: string;
-  featured_image_url: string;
-  meta_title: string;
-  meta_description: string;
-  og_image_url: string;
-  status: "draft" | "published";
-  category: string;
-  published_at: string;
-  created_at: string;
-  updated_at: string;
-  readingMinutes: number;
-  Content: ComponentType<{ components?: MDXComponents }>;
   filePath: string;
+  Content: ComponentType<{ components?: MDXComponents }>;
 }
 
-const blogModules = import.meta.glob("../content/blog/*.mdx", {
-  eager: true,
-}) as Record<string, BlogModule>;
+const eagerBlogModules = import.meta.env.SSR
+  ? (import.meta.glob("../content/blog/*.mdx", {
+      eager: true,
+    }) as Record<string, BlogModule>)
+  : {};
 
-const blogRawModules = import.meta.glob("../content/blog/*.mdx", {
-  eager: true,
+const eagerRawBlogModules = import.meta.env.SSR
+  ? (import.meta.glob("../content/blog/*.mdx", {
+      eager: true,
+      query: "?raw",
+      import: "default",
+    }) as Record<string, string>)
+  : {};
+
+const lazyBlogModules = import.meta.glob("../content/blog/*.mdx") as Record<
+  string,
+  () => Promise<BlogModule>
+>;
+
+const lazyRawBlogModules = import.meta.glob("../content/blog/*.mdx", {
   query: "?raw",
   import: "default",
-}) as Record<string, unknown>;
+}) as Record<string, () => Promise<string>>;
 
-function normalizeRawFile(rawModule: unknown) {
+const blogSummaryBySlug = new Map(
+  publicSiteSnapshot.blogIndex.map((blog) => [blog.slug, blog]),
+);
+const blogCache = new Map<string, ContentBlog>();
+
+function findModulePathBySlug<T>(registry: Record<string, T>, slug: string) {
+  const expectedSuffix = `/${slug}.mdx`;
+  return Object.keys(registry).find((filePath) => filePath.endsWith(expectedSuffix)) || null;
+}
+
+function normalizeRawBlogModule(rawModule: unknown) {
   if (typeof rawModule === "string") {
     return rawModule;
   }
@@ -87,48 +98,51 @@ function stripFrontmatter(rawContent: string) {
   return rawContent.replace(/^---[\s\S]*?---\s*/, "").trim();
 }
 
-function getReadingMinutes(rawContent: string) {
-  const plainText = rawContent
-    .replace(/<[^>]+>/g, " ")
-    .replace(/\{[^}]+\}/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-  const wordCount = plainText ? plainText.split(" ").length : 0;
-  return Math.max(1, Math.ceil(wordCount / 200));
+function createContentBlog(
+  summary: BlogIndexEntry,
+  filePath: string,
+  module: BlogModule,
+  rawContent: string,
+) {
+  return {
+    ...summary,
+    content: rawContent ? stripFrontmatter(rawContent) : "",
+    filePath,
+    Content: module.default,
+  } satisfies ContentBlog;
 }
 
-const allBlogs = Object.entries(blogModules)
-  .map(([filePath, module]) => {
-    const rawFile = normalizeRawFile(blogRawModules[filePath]);
-    const contentBody = stripFrontmatter(rawFile);
+function createSummaryFallback(summary: BlogIndexEntry) {
+  return {
+    ...summary,
+    content: "",
+    filePath: summary.file_path,
+    Content: () => null,
+  } satisfies ContentBlog;
+}
 
-    return {
-      id: module.frontmatter.slug,
-      title: module.frontmatter.title,
-      slug: module.frontmatter.slug,
-      excerpt: module.frontmatter.excerpt,
-      content: contentBody,
-      image_url: module.frontmatter.coverImage,
-      featured_image_url: module.frontmatter.coverImage,
-      meta_title: module.frontmatter.metaTitle,
-      meta_description: module.frontmatter.metaDescription,
-      og_image_url: module.frontmatter.ogImage,
-      status: module.frontmatter.status,
-      category: module.frontmatter.category,
-      published_at: module.frontmatter.publishedAt,
-      created_at: module.frontmatter.publishedAt,
-      updated_at: module.frontmatter.updatedAt,
-      readingMinutes: getReadingMinutes(contentBody),
-      Content: module.default,
-      filePath,
-    } satisfies ContentBlog;
-  })
-  .sort((leftBlog, rightBlog) => {
-    return (
-      new Date(rightBlog.updated_at).getTime() -
-      new Date(leftBlog.updated_at).getTime()
-    );
-  });
+function getServerBlogBySlug(slug: string) {
+  if (blogCache.has(slug)) {
+    return blogCache.get(slug) || null;
+  }
+
+  const summary = blogSummaryBySlug.get(slug);
+  if (!summary) {
+    return null;
+  }
+
+  const modulePath = findModulePathBySlug(eagerBlogModules, slug) || summary.file_path;
+  const module = eagerBlogModules[modulePath];
+  const rawContent = normalizeRawBlogModule(eagerRawBlogModules[modulePath]);
+
+  if (!module) {
+    return createSummaryFallback(summary);
+  }
+
+  const blog = createContentBlog(summary, modulePath, module, rawContent);
+  blogCache.set(slug, blog);
+  return blog;
+}
 
 export const BLOG_MDX_COMPONENTS: MDXComponents = {
   a: SmartLink,
@@ -151,13 +165,48 @@ export const BLOG_MDX_COMPONENTS: MDXComponents = {
 };
 
 export function getAllBlogs() {
-  return allBlogs;
+  return publicSiteSnapshot.blogIndex;
 }
 
 export function getPublishedBlogs() {
-  return allBlogs.filter((blog) => blog.status === "published");
+  return publicSiteSnapshot.blogIndex.filter((blog) => blog.status === "published");
 }
 
 export function getBlogBySlug(slug: string) {
-  return getPublishedBlogs().find((blog) => blog.slug === slug) || null;
+  if (import.meta.env.SSR) {
+    return getServerBlogBySlug(slug);
+  }
+
+  return blogCache.get(slug) || null;
+}
+
+export async function loadBlogBySlug(slug: string) {
+  if (blogCache.has(slug)) {
+    return blogCache.get(slug) || null;
+  }
+
+  const summary = blogSummaryBySlug.get(slug);
+  if (!summary) {
+    return null;
+  }
+
+  if (import.meta.env.SSR) {
+    return getServerBlogBySlug(slug);
+  }
+
+  const modulePath = findModulePathBySlug(lazyBlogModules, slug) || summary.file_path;
+  const loadModule = lazyBlogModules[modulePath];
+  const loadRawModule = lazyRawBlogModules[modulePath];
+
+  if (!loadModule) {
+    return createSummaryFallback(summary);
+  }
+
+  const [module, rawContent] = await Promise.all([
+    loadModule(),
+    loadRawModule ? loadRawModule() : Promise.resolve(""),
+  ]);
+  const blog = createContentBlog(summary, modulePath, module, rawContent);
+  blogCache.set(slug, blog);
+  return blog;
 }

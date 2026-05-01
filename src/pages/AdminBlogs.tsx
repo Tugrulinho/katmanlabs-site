@@ -168,7 +168,7 @@ export default function AdminBlogs() {
                       </div>
                     </td>
                     <td className="px-6 py-4 text-sm text-slate-500">
-                      {blog.filePath.replace("../content/blog/", "src/content/blog/")}
+                      {blog.file_path.replace("../content/blog/", "src/content/blog/")}
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex justify-end">

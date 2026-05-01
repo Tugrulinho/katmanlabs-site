@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, BookOpen } from "lucide-react";
-import type { ContentBlog } from "../lib/blogContent";
+import type { BlogIndexEntry } from "../types/publicSite";
 import type { ContentMap } from "../types/site";
 
 type BlogSectionProps = {
   content: ContentMap;
-  blogs: ContentBlog[];
+  blogs: BlogIndexEntry[];
   loading: boolean;
   isMobile: boolean;
   getBlogBadgeColor: (category: string) => string;

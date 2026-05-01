@@ -1,7 +1,7 @@
-import { getPublishedBlogs } from "../lib/blogContent";
+import { getPublishedBlogIndex } from "../lib/publicSite";
 
 export function useBlogsByCategory(category: string) {
-  const blogs = getPublishedBlogs().filter((blog) =>
+  const blogs = getPublishedBlogIndex().filter((blog) =>
     blog.category.toLowerCase().includes(category.trim().toLowerCase()),
   );
 

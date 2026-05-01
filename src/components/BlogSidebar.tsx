@@ -1,14 +1,15 @@
-import type { ContentBlog } from "../lib/blogContent";
+import { Link } from "react-router-dom";
+import { generateSlug } from "../lib/blogUtils";
+import type { BlogIndexEntry } from "../types/publicSite";
 
 type BlogSidebarProps = {
-  blogs: ContentBlog[];
+  blogs: BlogIndexEntry[];
   currentCategory: string | null;
-  onCategorySelect?: (category: string | null) => void;
 };
 
 const CATEGORY_LABELS: Record<string, string> = {
-  "Web TasarÄ±m": "Web Tasarım",
-  "Sosyal Medya YÃ¶netimi": "Sosyal Medya Yönetimi",
+  "Web TasarÃ„Â±m": "Web TasarÄ±m",
+  "Sosyal Medya YÃƒÂ¶netimi": "Sosyal Medya YÃ¶netimi",
 };
 
 function normalizeCategory(category: string) {
@@ -18,10 +19,11 @@ function normalizeCategory(category: string) {
 export default function BlogSidebar({
   blogs,
   currentCategory,
-  onCategorySelect,
 }: BlogSidebarProps) {
   const categories = Array.from(
-    new Set((blogs || []).map((blog) => normalizeCategory(blog.category)).filter(Boolean)),
+    new Set(
+      (blogs || []).map((blog) => normalizeCategory(blog.category)).filter(Boolean),
+    ),
   ) as string[];
 
   return (
@@ -30,23 +32,21 @@ export default function BlogSidebar({
         <h3 className="mb-4 text-lg font-bold text-primary-dark">Kategoriler</h3>
 
         <div className="space-y-2">
-          <button
-            type="button"
-            onClick={() => onCategorySelect?.(null)}
+          <Link
+            to="/blog"
             className={`block w-full rounded-lg px-4 py-2 text-left transition-colors ${
               currentCategory === null
                 ? "bg-primary text-white"
                 : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
           >
-            Tüm Yazılar
-          </button>
+            TÃ¼m YazÄ±lar
+          </Link>
 
           {categories.map((cat) => (
-            <button
+            <Link
               key={cat}
-              type="button"
-              onClick={() => onCategorySelect?.(cat)}
+              to={`/blog/kategori/${generateSlug(cat)}`}
               className={`block w-full rounded-lg px-4 py-2 text-left transition-colors ${
                 cat === currentCategory
                   ? "bg-primary text-white"
@@ -54,7 +54,7 @@ export default function BlogSidebar({
               }`}
             >
               {cat}
-            </button>
+            </Link>
           ))}
         </div>
       </div>

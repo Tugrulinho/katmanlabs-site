@@ -38,7 +38,7 @@
   ],
   "functions": {
     "api/sitemap.ts": {
-      "includeFiles": "src/content/blog/**"
+      "includeFiles": "src/generated/publicSiteSnapshot.json"
     }
   }
 }

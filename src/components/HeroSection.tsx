@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, useState } from "react";
+import { Suspense, lazy, useEffect, useRef, useState } from "react";
 import {
   ArrowRight,
   ChevronDown,
@@ -21,24 +21,61 @@ type HeroSectionProps = {
 
 function HeroSection({ content, scrollToSection }: HeroSectionProps) {
   const [showSpline, setShowSpline] = useState(false);
+  const sectionRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (window.innerWidth < 768) {
       return;
     }
 
-    const timer = window.setTimeout(() => {
-      setShowSpline(true);
-    }, 250);
+    let cancelled = false;
+    let idleTimer = 0;
 
-    return () => window.clearTimeout(timer);
+    const scheduleSplineLoad = () => {
+      if (cancelled) {
+        return;
+      }
+
+      idleTimer = window.setTimeout(() => {
+        if (!cancelled) {
+          setShowSpline(true);
+        }
+      }, 1200);
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          observer.disconnect();
+          if ("requestIdleCallback" in window) {
+            window.requestIdleCallback?.(scheduleSplineLoad, { timeout: 2500 });
+            return;
+          }
+          scheduleSplineLoad();
+        }
+      },
+      { rootMargin: "200px 0px" },
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      cancelled = true;
+      observer.disconnect();
+      window.clearTimeout(idleTimer);
+    };
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center bg-gradient-hero overflow-hidden">
+    <section
+      ref={sectionRef}
+      className="relative min-h-screen flex items-center justify-center bg-gradient-hero overflow-hidden"
+    >
       <div className="absolute inset-0 opacity-10 pointer-events-none">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-accent-light rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-secondary rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-accent-light rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-secondary rounded-full blur-3xl animate-pulse delay-1000" />
       </div>
 
       <div className="absolute inset-0 pointer-events-none z-5 overflow-hidden">
@@ -47,7 +84,7 @@ function HeroSection({ content, scrollToSection }: HeroSectionProps) {
           style={{ animationDelay: "1s" }}
         >
           <div className="relative">
-            <div className="absolute inset-0 bg-blue-600 rounded-2xl opacity-30 blur-xl animate-pulse-glow"></div>
+            <div className="absolute inset-0 bg-blue-600 rounded-2xl opacity-30 blur-xl animate-pulse-glow" />
             <div className="relative bg-white/10 backdrop-blur-sm p-4 rounded-2xl border border-white/20">
               <Facebook className="w-12 h-12 text-blue-600" />
             </div>
@@ -59,7 +96,7 @@ function HeroSection({ content, scrollToSection }: HeroSectionProps) {
           style={{ animationDelay: "2s" }}
         >
           <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-2xl opacity-30 blur-xl animate-pulse-glow"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-2xl opacity-30 blur-xl animate-pulse-glow" />
             <div className="relative bg-white/10 backdrop-blur-sm p-3 rounded-2xl border border-white/20">
               <Layers className="w-8 h-8 text-blue-400" />
             </div>
@@ -71,7 +108,7 @@ function HeroSection({ content, scrollToSection }: HeroSectionProps) {
           style={{ animationDelay: "3s" }}
         >
           <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-br from-red-500 via-yellow-500 to-green-500 rounded-full opacity-30 blur-xl animate-pulse-glow"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-red-500 via-yellow-500 to-green-500 rounded-full opacity-30 blur-xl animate-pulse-glow" />
             <div className="relative bg-white/10 backdrop-blur-sm p-3 rounded-full border border-white/20">
               <Search className="w-9 h-9 text-blue-500" />
             </div>
@@ -83,7 +120,7 @@ function HeroSection({ content, scrollToSection }: HeroSectionProps) {
           style={{ animationDelay: "1.5s" }}
         >
           <div className="relative">
-            <div className="absolute inset-0 bg-blue-700 rounded-2xl opacity-30 blur-xl animate-pulse-glow"></div>
+            <div className="absolute inset-0 bg-blue-700 rounded-2xl opacity-30 blur-xl animate-pulse-glow" />
             <div className="relative bg-white/10 backdrop-blur-sm p-4 rounded-2xl border border-white/20">
               <Linkedin className="w-10 h-10 text-blue-700" />
             </div>
@@ -95,7 +132,7 @@ function HeroSection({ content, scrollToSection }: HeroSectionProps) {
           style={{ animationDelay: "2.5s" }}
         >
           <div className="relative">
-            <div className="absolute inset-0 bg-red-600 rounded-2xl opacity-30 blur-xl animate-pulse-glow"></div>
+            <div className="absolute inset-0 bg-red-600 rounded-2xl opacity-30 blur-xl animate-pulse-glow" />
             <div className="relative bg-white/10 backdrop-blur-sm p-3 rounded-2xl border border-white/20">
               <Youtube className="w-11 h-11 text-red-600" />
             </div>
@@ -107,7 +144,7 @@ function HeroSection({ content, scrollToSection }: HeroSectionProps) {
           style={{ animationDelay: "0.5s" }}
         >
           <div className="relative">
-            <div className="absolute inset-0 bg-green-500 rounded-2xl opacity-30 blur-xl animate-pulse-glow"></div>
+            <div className="absolute inset-0 bg-green-500 rounded-2xl opacity-30 blur-xl animate-pulse-glow" />
             <div className="relative bg-white/10 backdrop-blur-sm p-3 rounded-2xl border border-white/20">
               <MessageCircle className="w-9 h-9 text-green-500" />
             </div>
@@ -162,21 +199,21 @@ function HeroSection({ content, scrollToSection }: HeroSectionProps) {
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-accent-light mb-8">
             <Layers className="w-4 h-4" />
             <span className="text-sm font-medium">
-              {content.hero_badge_text || "Dijital Başarı İçin 4 Güçlü Hizmet"}
+              {content.hero_badge_text || "Dijital BaÃ…Å¸arÃ„Â± Ã„Â°ÃƒÂ§in 4 GÃƒÂ¼ÃƒÂ§lÃƒÂ¼ Hizmet"}
             </span>
           </div>
 
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6">
-            {content.hero_title_line1 || "Dijital Dünyada"}
+            {content.hero_title_line1 || "Dijital DÃƒÂ¼nyada"}
             <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-light to-accent">
-              {content.hero_title_line2 || "Markanızı Büyütün"}
+              {content.hero_title_line2 || "MarkanÃ„Â±zÃ„Â± BÃƒÂ¼yÃƒÂ¼tÃƒÂ¼n"}
             </span>
           </h1>
 
           <p className="text-lg md:text-xl text-accent-light/90 mb-12 max-w-2xl mx-auto lg:mx-0">
             {content.hero_description ||
-              "Sosyal medya, web tasarım, dijital pazarlama ve SEO hizmetleriyle markanızın dijital varlığını güçlendiriyoruz."}
+              "Sosyal medya, web tasarÃ„Â±m, dijital pazarlama ve SEO hizmetleriyle markanÃ„Â±zÃ„Â±n dijital varlÃ„Â±Ã„Å¸Ã„Â±nÃ„Â± gÃƒÂ¼ÃƒÂ§lendiriyoruz."}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center pointer-events-auto">
@@ -184,21 +221,20 @@ function HeroSection({ content, scrollToSection }: HeroSectionProps) {
               onClick={() => scrollToSection("contact")}
               className="px-8 py-4 bg-gradient-cta text-white rounded-full font-semibold hover:scale-105 transition-transform shadow-lg flex items-center justify-center gap-2"
             >
-              {content.hero_cta_primary || "Hemen Başla"}{" "}
-              <ArrowRight className="w-5 h-5" />
+              {content.hero_cta_primary || "Hemen BaÃ…Å¸la"} <ArrowRight className="w-5 h-5" />
             </button>
             <button
               onClick={() => scrollToSection("services")}
               className="px-8 py-4 border-2 border-white text-white rounded-full font-semibold hover:bg-white hover:text-primary transition-colors"
             >
-              {content.hero_cta_secondary || "Hizmetleri Keşfet"}
+              {content.hero_cta_secondary || "Hizmetleri KeÃ…Å¸fet"}
             </button>
             <div
               className="hidden lg:block animate-float"
               style={{ marginLeft: "100px", animationDelay: "0s" }}
             >
               <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-pink-500 to-purple-600 rounded-2xl opacity-30 blur-xl animate-pulse-glow"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-pink-500 to-purple-600 rounded-2xl opacity-30 blur-xl animate-pulse-glow" />
                 <div className="relative bg-white/10 backdrop-blur-sm p-4 rounded-2xl border border-white/20">
                   <Instagram className="w-10 h-10 text-pink-500" />
                 </div>
