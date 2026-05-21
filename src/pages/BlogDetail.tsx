@@ -15,7 +15,7 @@ import { useBlogs } from "../hooks/useBlogs";
 import BlogSidebar from "../components/BlogSidebar";
 import Seo from "../components/Seo";
 import SectionIntro from "../components/blog/SectionIntro";
-import { BLOG_MDX_COMPONENTS } from "../lib/blogContent";
+import { BLOG_MDX_COMPONENTS, isHydrated } from "../lib/blogContent";
 import { generateSlug } from "../lib/blogUtils";
 import { getAbsoluteUrl, SITE_NAME } from "../lib/seo";
 
@@ -511,6 +511,11 @@ export default function BlogDetail() {
                   <div className="h-10 w-10 animate-spin rounded-full border-b-2 border-primary" />
                   <p className="mt-4 text-sm text-gray-400">İçerik yükleniyor...</p>
                 </div>
+              ) : isHydrated(blog) ? (
+                <div
+                  className="blog-content leading-relaxed text-gray-700"
+                  dangerouslySetInnerHTML={{ __html: blog.content }}
+                />
               ) : (
                 <div className="blog-content leading-relaxed text-gray-700">
                   <Content components={BLOG_MDX_COMPONENTS} />

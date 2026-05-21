@@ -126,6 +126,10 @@ export function isSummaryFallback(blog: ContentBlog) {
   return !!(blog as ContentBlog & { _summaryFallback?: boolean })._summaryFallback;
 }
 
+export function isHydrated(blog: ContentBlog) {
+  return !!(blog as ContentBlog & { _hydrated?: boolean })._hydrated;
+}
+
 function getServerBlogBySlug(slug: string) {
   if (blogCache.has(slug)) {
     return blogCache.get(slug) || null;
@@ -238,17 +242,20 @@ export function hydrateBlogCacheFromDom() {
     if (!summary || blogCache.has(slug)) return;
 
     try {
-      const contentHtml = atob(base64Content.trim());
-      const HydratedContent = () => (
-        <div dangerouslySetInnerHTML={{ __html: contentHtml }} />
-      );
+      const binary = atob(base64Content.trim());
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) {
+        bytes[i] = binary.charCodeAt(i);
+      }
+      const contentHtml = new TextDecoder("utf-8").decode(bytes);
 
       blogCache.set(slug, {
         ...summary,
         content: contentHtml,
         filePath: summary.file_path,
-        Content: HydratedContent,
-      });
+        Content: () => null,
+        _hydrated: true,
+      } as ContentBlog & { _hydrated: boolean });
     } catch {
       // Base64 decode failed, skip silently
     }

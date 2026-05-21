@@ -1,7 +1,7 @@
 import type { PublicSiteSnapshot } from "../types/publicSite";
 
 const publicSiteSnapshot: PublicSiteSnapshot = {
-  "generatedAt": "2026-05-21T01:25:29.115Z",
+  "generatedAt": "2026-05-21T01:39:58.526Z",
   "homepageContent": {
     "stat_1_number": "150+",
     "stat_2_number": "%300",
