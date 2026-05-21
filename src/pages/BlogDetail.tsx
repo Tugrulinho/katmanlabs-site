@@ -15,7 +15,7 @@ import { useBlogs } from "../hooks/useBlogs";
 import BlogSidebar from "../components/BlogSidebar";
 import Seo from "../components/Seo";
 import SectionIntro from "../components/blog/SectionIntro";
-import { BLOG_MDX_COMPONENTS, isHydrated } from "../lib/blogContent";
+import { BLOG_MDX_COMPONENTS } from "../lib/blogContent";
 import { generateSlug } from "../lib/blogUtils";
 import { getAbsoluteUrl, SITE_NAME } from "../lib/seo";
 
@@ -45,54 +45,10 @@ function normalizeHeadingText(text: string) {
     .trim();
 }
 
-function getNavigationLabel(text: string) {
-  const cleanedText = text.replace(/^\d+\.\s*/, "").trim();
-  const normalizedText = cleanedText
-    .toLocaleLowerCase("tr-TR")
-    .replace(/[?!.:,;]/g, "")
-    .trim();
-
-  const labelRules: Array<{ test: (value: string) => boolean; label: string }> = [
-    { test: (value) => value.startsWith("asıl soru"), label: "Asıl soru" },
-    { test: (value) => value.includes("aynı sonucu"), label: "SEO vs Reklam" },
-    { test: (value) => value.startsWith("reklam ne sağlar"), label: "Reklam etkisi" },
-    { test: (value) => value.startsWith("seo ne sağlar"), label: "SEO etkisi" },
-    {
-      test: (value) => value.includes("hangi durumda") || value.includes("hangisi daha mantıklı"),
-      label: "Hangisi mantıklı?",
-    },
-    { test: (value) => value.includes("birlikte kullanmak"), label: "Hibrit yaklaşım" },
-    { test: (value) => value.includes("birlikte çalıştığında"), label: "Birlikte çalışınca" },
-    { test: (value) => value.includes("herkes ai"), label: "Sonuç farkı" },
-    { test: (value) => value.includes("kalite standardı"), label: "Kalite standardı" },
-    { test: (value) => value.includes("kazanan model"), label: "Kazanan model" },
-    { test: (value) => value.includes("yeni denklem"), label: "Yeni denklem" },
-    { test: (value) => value.includes("ziyaretçi ne yaptığını"), label: "Mesaj netliği" },
-    { test: (value) => value.includes("cta var"), label: "CTA sorunu" },
-    { test: (value) => value.includes("güven katmanı"), label: "Güven katmanı" },
-    { test: (value) => value.includes("trafik var ama niyet"), label: "Trafik niyeti" },
-    { test: (value) => value.includes("ölçüm yok"), label: "Ölçüm eksikliği" },
-    { test: (value) => value.includes("karar özeti"), label: "Karar özeti" },
-    { test: (value) => value.includes("kilit sonuç"), label: "Kilit sonuç" },
-  ];
-
-  const matchedRule = labelRules.find((rule) => rule.test(normalizedText));
-  if (matchedRule) {
-    return matchedRule.label;
-  }
-
-  const words = cleanedText
-    .replace(/[?!.:,;]/g, "")
-    .split(/\s+/)
-    .filter(Boolean);
-
-  return words.slice(0, 2).join(" ") || cleanedText;
-}
-
 export default function BlogDetail() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
-  const { blog, loading, error, contentLoading } = useBlogBySlug(slug);
+  const { blog, loading, error } = useBlogBySlug(slug);
   const { blogs } = useBlogs();
   const [activeHeadingId, setActiveHeadingId] = useState<string | null>(null);
   const [navigationHeadings, setNavigationHeadings] = useState<HeadingItem[]>([]);
@@ -106,23 +62,6 @@ export default function BlogDetail() {
       year: "numeric",
       month: "long",
       day: "numeric",
-    });
-  };
-
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (!element) {
-      return;
-    }
-
-    const offset = 96;
-    const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-
-    setActiveHeadingId(id);
-
-    window.scrollTo({
-      top: elementPosition - offset,
-      behavior: "smooth",
     });
   };
 
@@ -166,40 +105,45 @@ export default function BlogDetail() {
   }, [blog]);
 
   useEffect(() => {
-    if (!navigationHeadings.length) {
+    if (!blog) {
+      return;
+    }
+
+    const headingElements = Array.from(
+      document.querySelectorAll<HTMLElement>(".blog-content h2"),
+    );
+
+    if (!headingElements.length) {
       setActiveHeadingId(null);
       return;
     }
 
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY + 220;
-      let nextActiveId = navigationHeadings[0]?.id || null;
+    setActiveHeadingId(headingElements[0]?.id || null);
 
-      for (const heading of navigationHeadings) {
-        const element = document.getElementById(heading.id);
-        if (!element) {
-          continue;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleEntries = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort(
+            (leftEntry, rightEntry) =>
+              leftEntry.boundingClientRect.top - rightEntry.boundingClientRect.top,
+          );
+
+        const currentEntry = visibleEntries[0];
+        if (currentEntry?.target instanceof HTMLElement) {
+          setActiveHeadingId(currentEntry.target.id);
         }
+      },
+      {
+        rootMargin: "-18% 0px -62% 0px",
+        threshold: 0.12,
+      },
+    );
 
-        const { offsetTop, offsetHeight } = element;
-        if (scrollPosition >= offsetTop) {
-          nextActiveId = heading.id;
-        }
+    headingElements.forEach((element) => observer.observe(element));
 
-        if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-          nextActiveId = heading.id;
-          break;
-        }
-      }
-
-      setActiveHeadingId(nextActiveId);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    handleScroll();
-
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [navigationHeadings]);
+    return () => observer.disconnect();
+  }, [blog]);
 
   const normalizedCategory = normalizeCategory(blog?.category || "Genel");
 
@@ -275,7 +219,7 @@ export default function BlogDetail() {
     );
   }
 
-  if (!blog) {
+  if (error || !blog) {
     return (
       <div className="min-h-screen bg-white">
         <Seo
@@ -290,7 +234,7 @@ export default function BlogDetail() {
             Blog yazısı bulunamadı
           </h1>
           <p className="mb-8 text-gray-600">
-            Bu blog yazısı mevcut değil.
+            {error || "Bu blog yazısı mevcut değil."}
           </p>
           <button
             onClick={() => navigate("/")}
@@ -409,23 +353,13 @@ export default function BlogDetail() {
 
       <div className={`bg-gradient-to-br ${colors.gradient} py-20 pt-32 text-white`}>
         <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
-          <nav className="mb-8 flex items-center gap-2 text-sm text-gray-300">
-            <button
-              onClick={() => navigate("/")}
-              className="transition-colors hover:text-white"
-            >
-              Ana Sayfa
-            </button>
-            <span className="text-gray-500">/</span>
-            <button
-              onClick={() => navigate("/blog")}
-              className="transition-colors hover:text-white"
-            >
-              Blog
-            </button>
-            <span className="text-gray-500">/</span>
-            <span className="text-accent-light truncate">{blog.title}</span>
-          </nav>
+          <button
+            onClick={() => navigate("/blog")}
+            className="mb-8 flex items-center gap-2 text-accent-light transition-colors hover:text-white"
+          >
+            <ArrowLeft className="h-5 w-5" />
+            Bloga dön
+          </button>
 
           <div className="max-w-4xl">
             <div
@@ -493,34 +427,12 @@ export default function BlogDetail() {
       </div>
 
       <div className="mx-auto max-w-[1440px] px-4 pb-16 sm:px-6 lg:px-8">
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_300px]">
+        <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_300px]">
           <div className="min-w-0">
             <article className="max-w-none">
-              {error ? (
-                <div className="flex flex-col items-center justify-center rounded-2xl border border-red-200 bg-red-50 py-16">
-                  <p className="mb-4 text-red-600">{error}</p>
-                  <button
-                    onClick={() => window.location.reload()}
-                    className="rounded-lg bg-red-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-red-700"
-                  >
-                    Sayfayı Yenile
-                  </button>
-                </div>
-              ) : contentLoading ? (
-                <div className="flex flex-col items-center justify-center py-20">
-                  <div className="h-10 w-10 animate-spin rounded-full border-b-2 border-primary" />
-                  <p className="mt-4 text-sm text-gray-400">İçerik yükleniyor...</p>
-                </div>
-              ) : isHydrated(blog) ? (
-                <div
-                  className="blog-content leading-relaxed text-gray-700"
-                  dangerouslySetInnerHTML={{ __html: blog.content }}
-                />
-              ) : (
-                <div className="blog-content leading-relaxed text-gray-700">
-                  <Content components={BLOG_MDX_COMPONENTS} />
-                </div>
-              )}
+              <div className="blog-content leading-relaxed text-gray-700">
+                <Content components={BLOG_MDX_COMPONENTS} />
+              </div>
             </article>
 
             <div
@@ -573,6 +485,29 @@ export default function BlogDetail() {
 
           <div className="min-w-0">
             <div className="sticky top-24 space-y-6">
+              {navigationHeadings.length > 0 ? (
+                <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_18px_50px_-32px_rgba(15,23,42,0.35)]">
+                  <div className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+                    Bölüm geçişi
+                  </div>
+                  <div className="mt-5 space-y-3">
+                    {navigationHeadings.map((heading) => (
+                      <a
+                        key={heading.id}
+                        href={`#${heading.id}`}
+                        className={`block rounded-2xl border px-4 py-3 transition-all ${
+                          activeHeadingId === heading.id
+                            ? colors.navActive
+                            : `border-slate-200 bg-white text-slate-700 ${colors.navHover}`
+                        }`}
+                      >
+                        <div className="text-sm font-semibold">{heading.text}</div>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+
               {relatedBlogs.length > 0 ? (
                 <div className="rounded-[28px] bg-gray-50 p-6">
                   <h3 className={`mb-6 text-xl font-bold ${colors.text}`}>
@@ -614,35 +549,20 @@ export default function BlogDetail() {
                 <BlogSidebar
                   blogs={blogs}
                   currentCategory={normalizedCategory}
+                  embedded={true}
+                  onCategorySelect={(category: string | null) => {
+                    if (category) {
+                      navigate(`/blog/kategori/${generateSlug(category)}`);
+                    } else {
+                      navigate("/blog");
+                    }
+                  }}
                 />
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      {navigationHeadings.length > 0 ? (
-        <div className="hidden lg:block fixed right-8 top-1/2 -translate-y-1/2 z-40">
-          <nav className="w-[176px] rounded-2xl border border-gray-200 bg-white p-4 shadow-2xl">
-            <div className="space-y-2">
-                  {navigationHeadings.map((heading) => (
-                    <button
-                      key={heading.id}
-                      onClick={() => scrollToSection(heading.id)}
-                      title={heading.text}
-                      className={`block w-full truncate rounded-lg px-4 py-2.5 text-left text-sm font-medium transition-all ${
-                        activeHeadingId === heading.id
-                      ? colors.navActive
-                      : `text-gray-600 hover:bg-gray-100 ${colors.navHover}`
-                  }`}
-                >
-                      {getNavigationLabel(heading.text)}
-                    </button>
-                  ))}
-                </div>
-          </nav>
-        </div>
-      ) : null}
 
       <Footer />
     </div>

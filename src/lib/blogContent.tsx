@@ -15,8 +15,6 @@ import FeatureCards from "../components/blog/FeatureCards";
 import StepCards from "../components/blog/StepCards";
 import BulletPanel from "../components/blog/BulletPanel";
 import PullQuote from "../components/blog/PullQuote";
-import publicSiteSnapshot from "../generated/publicSiteSnapshot";
-import type { BlogIndexEntry } from "../types/publicSite";
 
 type BlogFrontmatter = {
   title: string;
@@ -37,47 +35,39 @@ type BlogModule = {
   frontmatter: BlogFrontmatter;
 };
 
-export interface ContentBlog extends BlogIndexEntry {
+export interface ContentBlog {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
   content: string;
-  filePath: string;
+  image_url: string;
+  featured_image_url: string;
+  meta_title: string;
+  meta_description: string;
+  og_image_url: string;
+  status: "draft" | "published";
+  category: string;
+  published_at: string;
+  created_at: string;
+  updated_at: string;
+  readingMinutes: number;
   Content: ComponentType<{ components?: MDXComponents }>;
+  file_path: string;
+  filePath: string;
 }
 
-const eagerBlogModules = import.meta.env.SSR
-  ? (import.meta.glob("../content/blog/*.mdx", {
-      eager: true,
-    }) as Record<string, BlogModule>)
-  : {};
+const blogModules = import.meta.glob("../content/blog/*.mdx", {
+  eager: true,
+}) as Record<string, BlogModule>;
 
-const eagerRawBlogModules = import.meta.env.SSR
-  ? (import.meta.glob("../content/blog/*.mdx", {
-      eager: true,
-      query: "?raw",
-      import: "default",
-    }) as Record<string, string>)
-  : {};
-
-const lazyBlogModules = import.meta.glob("../content/blog/*.mdx") as Record<
-  string,
-  () => Promise<BlogModule>
->;
-
-const lazyRawBlogModules = import.meta.glob("../content/blog/*.mdx", {
+const blogRawModules = import.meta.glob("../content/blog/*.mdx", {
+  eager: true,
   query: "?raw",
   import: "default",
-}) as Record<string, () => Promise<string>>;
+}) as Record<string, unknown>;
 
-const blogSummaryBySlug = new Map(
-  publicSiteSnapshot.blogIndex.map((blog) => [blog.slug, blog]),
-);
-const blogCache = new Map<string, ContentBlog>();
-
-function findModulePathBySlug<T>(registry: Record<string, T>, slug: string) {
-  const expectedSuffix = `/${slug}.mdx`;
-  return Object.keys(registry).find((filePath) => filePath.endsWith(expectedSuffix)) || null;
-}
-
-function normalizeRawBlogModule(rawModule: unknown) {
+function normalizeRawFile(rawModule: unknown) {
   if (typeof rawModule === "string") {
     return rawModule;
   }
@@ -98,60 +88,49 @@ function stripFrontmatter(rawContent: string) {
   return rawContent.replace(/^---[\s\S]*?---\s*/, "").trim();
 }
 
-function createContentBlog(
-  summary: BlogIndexEntry,
-  filePath: string,
-  module: BlogModule,
-  rawContent: string,
-) {
-  return {
-    ...summary,
-    content: rawContent ? stripFrontmatter(rawContent) : "",
-    filePath,
-    Content: module.default,
-  } satisfies ContentBlog;
+function getReadingMinutes(rawContent: string) {
+  const plainText = rawContent
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\{[^}]+\}/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  const wordCount = plainText ? plainText.split(" ").length : 0;
+  return Math.max(1, Math.ceil(wordCount / 200));
 }
 
-function createSummaryFallback(summary: BlogIndexEntry): ContentBlog {
-  return {
-    ...summary,
-    content: "",
-    filePath: summary.file_path,
-    Content: () => null,
-    _summaryFallback: true,
-  } as ContentBlog & { _summaryFallback: true };
-}
+const allBlogs = Object.entries(blogModules)
+  .map(([filePath, module]) => {
+    const rawFile = normalizeRawFile(blogRawModules[filePath]);
+    const contentBody = stripFrontmatter(rawFile);
 
-export function isSummaryFallback(blog: ContentBlog) {
-  return !!(blog as ContentBlog & { _summaryFallback?: boolean })._summaryFallback;
-}
-
-export function isHydrated(blog: ContentBlog) {
-  return !!(blog as ContentBlog & { _hydrated?: boolean })._hydrated;
-}
-
-function getServerBlogBySlug(slug: string) {
-  if (blogCache.has(slug)) {
-    return blogCache.get(slug) || null;
-  }
-
-  const summary = blogSummaryBySlug.get(slug);
-  if (!summary) {
-    return null;
-  }
-
-  const modulePath = findModulePathBySlug(eagerBlogModules, slug) || summary.file_path;
-  const module = eagerBlogModules[modulePath];
-  const rawContent = normalizeRawBlogModule(eagerRawBlogModules[modulePath]);
-
-  if (!module) {
-    return createSummaryFallback(summary);
-  }
-
-  const blog = createContentBlog(summary, modulePath, module, rawContent);
-  blogCache.set(slug, blog);
-  return blog;
-}
+    return {
+      id: module.frontmatter.slug,
+      title: module.frontmatter.title,
+      slug: module.frontmatter.slug,
+      excerpt: module.frontmatter.excerpt,
+      content: contentBody,
+      image_url: module.frontmatter.coverImage,
+      featured_image_url: module.frontmatter.coverImage,
+      meta_title: module.frontmatter.metaTitle,
+      meta_description: module.frontmatter.metaDescription,
+      og_image_url: module.frontmatter.ogImage,
+      status: module.frontmatter.status,
+      category: module.frontmatter.category,
+      published_at: module.frontmatter.publishedAt,
+      created_at: module.frontmatter.publishedAt,
+      updated_at: module.frontmatter.updatedAt,
+      readingMinutes: getReadingMinutes(contentBody),
+      Content: module.default,
+      file_path: filePath,
+      filePath,
+    } satisfies ContentBlog;
+  })
+  .sort((leftBlog, rightBlog) => {
+    return (
+      new Date(rightBlog.updated_at).getTime() -
+      new Date(leftBlog.updated_at).getTime()
+    );
+  });
 
 export const BLOG_MDX_COMPONENTS: MDXComponents = {
   a: SmartLink,
@@ -174,90 +153,13 @@ export const BLOG_MDX_COMPONENTS: MDXComponents = {
 };
 
 export function getAllBlogs() {
-  return publicSiteSnapshot.blogIndex;
+  return allBlogs;
 }
 
 export function getPublishedBlogs() {
-  return publicSiteSnapshot.blogIndex.filter((blog) => blog.status === "published");
+  return allBlogs.filter((blog) => blog.status === "published");
 }
 
 export function getBlogBySlug(slug: string) {
-  if (import.meta.env.SSR) {
-    return getServerBlogBySlug(slug);
-  }
-
-  const cached = blogCache.get(slug);
-  if (cached) return cached;
-
-  const summary = blogSummaryBySlug.get(slug);
-  if (summary) return createSummaryFallback(summary);
-
-  return null;
-}
-
-export async function loadBlogBySlug(slug: string) {
-  if (blogCache.has(slug)) {
-    return blogCache.get(slug) || null;
-  }
-
-  const summary = blogSummaryBySlug.get(slug);
-  if (!summary) {
-    return null;
-  }
-
-  if (import.meta.env.SSR) {
-    return getServerBlogBySlug(slug);
-  }
-
-  const modulePath = findModulePathBySlug(lazyBlogModules, slug) || summary.file_path;
-  const loadModule = lazyBlogModules[modulePath];
-  const loadRawModule = lazyRawBlogModules[modulePath];
-
-  if (!loadModule) {
-    return createSummaryFallback(summary);
-  }
-
-  const [module, rawContent] = await Promise.all([
-    loadModule(),
-    loadRawModule ? loadRawModule() : Promise.resolve(""),
-  ]);
-  const blog = createContentBlog(summary, modulePath, module, rawContent);
-  blogCache.set(slug, blog);
-  return blog;
-}
-
-export function hydrateBlogCacheFromDom() {
-  if (import.meta.env.SSR) return;
-
-  const scripts = document.querySelectorAll<HTMLScriptElement>(
-    "script[data-blog-content]",
-  );
-
-  scripts.forEach((script) => {
-    const slug = script.getAttribute("data-blog-content");
-    const base64Content = script.textContent;
-    if (!slug || !base64Content) return;
-
-    const summary = blogSummaryBySlug.get(slug);
-    if (!summary || blogCache.has(slug)) return;
-
-    try {
-      const binary = atob(base64Content.trim());
-      const bytes = new Uint8Array(binary.length);
-      for (let i = 0; i < binary.length; i++) {
-        bytes[i] = binary.charCodeAt(i);
-      }
-      const contentHtml = new TextDecoder("utf-8").decode(bytes);
-
-      blogCache.set(slug, {
-        ...summary,
-        content: contentHtml,
-        filePath: summary.file_path,
-        Content: () => null,
-        _hydrated: true,
-      } as ContentBlog & { _hydrated: boolean });
-    } catch {
-      // Base64 decode failed, skip silently
-    }
-  });
+  return getPublishedBlogs().find((blog) => blog.slug === slug) || null;
 }

@@ -1,15 +1,15 @@
-import { Link } from "react-router-dom";
-import { generateSlug } from "../lib/blogUtils";
-import type { BlogIndexEntry } from "../types/publicSite";
+import type { ContentBlog } from "../lib/blogContent";
 
 type BlogSidebarProps = {
-  blogs: BlogIndexEntry[];
+  blogs: ContentBlog[];
   currentCategory: string | null;
+  onCategorySelect?: (category: string | null) => void;
+  embedded?: boolean;
 };
 
 const CATEGORY_LABELS: Record<string, string> = {
-  "Web TasarÃ„Â±m": "Web TasarÄ±m",
-  "Sosyal Medya YÃƒÂ¶netimi": "Sosyal Medya YÃ¶netimi",
+  "Web TasarÄ±m": "Web Tasarım",
+  "Sosyal Medya YÃ¶netimi": "Sosyal Medya Yönetimi",
 };
 
 function normalizeCategory(category: string) {
@@ -19,44 +19,56 @@ function normalizeCategory(category: string) {
 export default function BlogSidebar({
   blogs,
   currentCategory,
+  onCategorySelect,
+  embedded = false,
 }: BlogSidebarProps) {
   const categories = Array.from(
-    new Set(
-      (blogs || []).map((blog) => normalizeCategory(blog.category)).filter(Boolean),
-    ),
+    new Set((blogs || []).map((blog) => normalizeCategory(blog.category)).filter(Boolean)),
   ) as string[];
 
-  return (
-    <div className="sticky top-24 space-y-6">
-      <div className="rounded-2xl border border-white/10 bg-white p-6 shadow-sm">
-        <h3 className="mb-4 text-lg font-bold text-primary-dark">Kategoriler</h3>
+  const categoryList = (
+    <>
+      <h3 className="mb-4 text-lg font-bold text-primary-dark">Kategoriler</h3>
 
-        <div className="space-y-2">
-          <Link
-            to="/blog"
+      <div className="space-y-2">
+        <button
+          type="button"
+          onClick={() => onCategorySelect?.(null)}
+          className={`block w-full rounded-lg px-4 py-2 text-left transition-colors ${
+            currentCategory === null
+              ? "bg-primary text-white"
+              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+          }`}
+        >
+          Tüm Yazılar
+        </button>
+
+        {categories.map((cat) => (
+          <button
+            key={cat}
+            type="button"
+            onClick={() => onCategorySelect?.(cat)}
             className={`block w-full rounded-lg px-4 py-2 text-left transition-colors ${
-              currentCategory === null
+              cat === currentCategory
                 ? "bg-primary text-white"
                 : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
           >
-            TÃ¼m YazÄ±lar
-          </Link>
+            {cat}
+          </button>
+        ))}
+      </div>
+    </>
+  );
 
-          {categories.map((cat) => (
-            <Link
-              key={cat}
-              to={`/blog/kategori/${generateSlug(cat)}`}
-              className={`block w-full rounded-lg px-4 py-2 text-left transition-colors ${
-                cat === currentCategory
-                  ? "bg-primary text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-              }`}
-            >
-              {cat}
-            </Link>
-          ))}
-        </div>
+  if (embedded) {
+    return categoryList;
+  }
+
+  return (
+    <div className="sticky top-24 space-y-6">
+      <div className="rounded-2xl border border-white/10 bg-white p-6 shadow-sm">
+        {categoryList}
       </div>
     </div>
   );

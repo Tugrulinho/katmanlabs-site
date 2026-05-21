@@ -2,19 +2,22 @@ import Navbar from "../components/Navbar";
 import BlogSection from "../components/BlogSection";
 import { useBlogs } from "../hooks/useBlogs";
 import BlogSidebar from "../components/BlogSidebar";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Footer from "../components/Footer";
 import { useEffect, useState } from "react";
 import BlogCTA from "../components/BlogCTA";
 import Seo from "../components/Seo";
 import { getAbsoluteUrl, SITE_NAME } from "../lib/seo";
 import { generateSlug } from "../lib/blogUtils";
+import type { ContentBlog } from "../lib/blogContent";
 
 export default function Blog() {
   const { categorySlug } = useParams();
   const { blogs, loading } = useBlogs();
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const postsPerPage = 4;
+  const navigate = useNavigate();
   const slugifyCategory = (value: string) => generateSlug(value);
 
   const categoryHeroMap: Record<
@@ -189,7 +192,7 @@ export default function Blog() {
 
   const activeCategory = categorySlug
     ? blogs.find(
-        (blog) =>
+        (blog: ContentBlog) =>
           slugifyCategory(blog.category) === decodeURIComponent(categorySlug),
       )?.category || null
     : null;
@@ -228,7 +231,7 @@ export default function Blog() {
   };
   const filteredBlogs = categorySlug
     ? blogs.filter(
-        (blog) =>
+        (blog: ContentBlog) =>
           slugifyCategory(blog.category) === decodeURIComponent(categorySlug),
       )
     : blogs;
@@ -240,8 +243,17 @@ export default function Blog() {
   const totalPages = Math.ceil(filteredBlogs.length / postsPerPage);
 
   useEffect(() => {
-    setCurrentPage(1);
+    if (categorySlug) {
+      const decoded = decodeURIComponent(categorySlug);
+      setSelectedCategory(decoded);
+    } else {
+      setSelectedCategory(null);
+    }
   }, [categorySlug]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedCategory]);
 
   useEffect(() => {
     window.scrollTo({
@@ -354,6 +366,13 @@ export default function Blog() {
                 <BlogSidebar
                   blogs={blogs}
                   currentCategory={activeCategory}
+                  onCategorySelect={(category: string | null) => {
+                    if (category) {
+                      navigate(`/blog/kategori/${slugifyCategory(category)}`);
+                    } else {
+                      navigate("/blog");
+                    }
+                  }}
                 />
               </aside>
             </div>

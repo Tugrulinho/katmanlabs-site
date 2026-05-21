@@ -1,8 +1,8 @@
-import { getPublishedBlogIndex } from "../lib/publicSite";
+import { getPublishedBlogs } from "../lib/blogContent";
 
 export function useBlogs() {
   return {
-    blogs: getPublishedBlogIndex(),
+    blogs: getPublishedBlogs(),
     loading: false,
     error: null,
   };
