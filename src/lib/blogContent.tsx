@@ -112,13 +112,18 @@ function createContentBlog(
   } satisfies ContentBlog;
 }
 
-function createSummaryFallback(summary: BlogIndexEntry) {
+function createSummaryFallback(summary: BlogIndexEntry): ContentBlog {
   return {
     ...summary,
     content: "",
     filePath: summary.file_path,
     Content: () => null,
-  } satisfies ContentBlog;
+    _summaryFallback: true,
+  } as ContentBlog & { _summaryFallback: true };
+}
+
+export function isSummaryFallback(blog: ContentBlog) {
+  return !!(blog as ContentBlog & { _summaryFallback?: boolean })._summaryFallback;
 }
 
 function getServerBlogBySlug(slug: string) {
@@ -177,7 +182,13 @@ export function getBlogBySlug(slug: string) {
     return getServerBlogBySlug(slug);
   }
 
-  return blogCache.get(slug) || null;
+  const cached = blogCache.get(slug);
+  if (cached) return cached;
+
+  const summary = blogSummaryBySlug.get(slug);
+  if (summary) return createSummaryFallback(summary);
+
+  return null;
 }
 
 export async function loadBlogBySlug(slug: string) {

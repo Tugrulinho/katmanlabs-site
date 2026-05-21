@@ -92,7 +92,7 @@ function getNavigationLabel(text: string) {
 export default function BlogDetail() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
-  const { blog, loading, error } = useBlogBySlug(slug);
+  const { blog, loading, error, contentLoading } = useBlogBySlug(slug);
   const { blogs } = useBlogs();
   const [activeHeadingId, setActiveHeadingId] = useState<string | null>(null);
   const [navigationHeadings, setNavigationHeadings] = useState<HeadingItem[]>([]);
@@ -409,13 +409,23 @@ export default function BlogDetail() {
 
       <div className={`bg-gradient-to-br ${colors.gradient} py-20 pt-32 text-white`}>
         <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
-          <button
-            onClick={() => navigate("/blog")}
-            className="mb-8 flex items-center gap-2 text-accent-light transition-colors hover:text-white"
-          >
-            <ArrowLeft className="h-5 w-5" />
-            Bloga dön
-          </button>
+          <nav className="mb-8 flex items-center gap-2 text-sm text-gray-300">
+            <button
+              onClick={() => navigate("/")}
+              className="transition-colors hover:text-white"
+            >
+              Ana Sayfa
+            </button>
+            <span className="text-gray-500">/</span>
+            <button
+              onClick={() => navigate("/blog")}
+              className="transition-colors hover:text-white"
+            >
+              Blog
+            </button>
+            <span className="text-gray-500">/</span>
+            <span className="text-accent-light truncate">{blog.title}</span>
+          </nav>
 
           <div className="max-w-4xl">
             <div
@@ -486,9 +496,16 @@ export default function BlogDetail() {
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_300px]">
           <div className="min-w-0">
             <article className="max-w-none">
-              <div className="blog-content leading-relaxed text-gray-700">
-                <Content components={BLOG_MDX_COMPONENTS} />
-              </div>
+              {contentLoading ? (
+                <div className="flex flex-col items-center justify-center py-20">
+                  <div className="h-10 w-10 animate-spin rounded-full border-b-2 border-primary" />
+                  <p className="mt-4 text-sm text-gray-400">İçerik yükleniyor...</p>
+                </div>
+              ) : (
+                <div className="blog-content leading-relaxed text-gray-700">
+                  <Content components={BLOG_MDX_COMPONENTS} />
+                </div>
+              )}
             </article>
 
             <div

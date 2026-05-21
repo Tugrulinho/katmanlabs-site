@@ -31,6 +31,7 @@ import Blog from "../pages/Blog";
 import BlogDetail from "../pages/BlogDetail";
 import ContactPage from "../pages/ContactPage";
 import DijitalPazarlama from "../pages/DijitalPazarlama";
+import NotFound from "../pages/NotFound";
 import SeoAnalitik from "../pages/SeoAnalitik";
 import SosyalMedyaTasarim from "../pages/SosyalMedyaTasarim";
 import WebTasarim from "../pages/WebTasarim";
@@ -350,6 +351,7 @@ export default function PublicRoutes() {
       <Route path="/blog/kategori/:categorySlug" element={<Blog />} />
       <Route path="/blog/:slug" element={<BlogDetail />} />
       <Route path="/iletisim" element={<ContactPage />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }

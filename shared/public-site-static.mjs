@@ -73,11 +73,15 @@ export function createSitemapXml(snapshot, baseUrl = BASE_URL) {
   const categoryRoutes = getPublishedBlogCategories(snapshot).map(
     (category) => `/blog/kategori/${category.slug}`,
   );
+  const now = snapshot.generatedAt
+    ? new Date(snapshot.generatedAt).toISOString()
+    : new Date().toISOString();
 
   const urls = [
     ...["", "/blog", "/iletisim", ...SERVICE_ROUTE_PATHS].map(
       (routePath) => `  <url>
     <loc>${escapeXml(`${baseUrl}${routePath}`)}</loc>
+    <lastmod>${escapeXml(now)}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>${routePath === "" ? "1.0" : "0.8"}</priority>
   </url>`,
@@ -85,22 +89,30 @@ export function createSitemapXml(snapshot, baseUrl = BASE_URL) {
     ...categoryRoutes.map(
       (routePath) => `  <url>
     <loc>${escapeXml(`${baseUrl}${routePath}`)}</loc>
+    <lastmod>${escapeXml(now)}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>`,
     ),
     ...publishedBlogs.map(
-      (blog) => `  <url>
+      (blog) => {
+        const imageTag = blog.image_url
+          ? `\n    <image:image>\n      <image:loc>${escapeXml(blog.image_url)}</image:loc>\n    </image:image>`
+          : "";
+
+        return `  <url>
     <loc>${escapeXml(`${baseUrl}/blog/${blog.slug}`)}</loc>
     <lastmod>${escapeXml(blog.updated_at)}</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>`,
+    <priority>0.7</priority>${imageTag}
+  </url>`;
+      },
     ),
   ];
 
   return `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 ${urls.join("\n")}
 </urlset>
 `;

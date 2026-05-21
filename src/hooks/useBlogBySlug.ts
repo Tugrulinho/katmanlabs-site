@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import { getBlogBySlug, loadBlogBySlug, type ContentBlog } from "../lib/blogContent";
+import { getBlogBySlug, isSummaryFallback, loadBlogBySlug, type ContentBlog } from "../lib/blogContent";
 
 export function useBlogBySlug(slug: string | undefined) {
   const [blog, setBlog] = useState<ContentBlog | null>(() =>
     slug ? getBlogBySlug(slug) : null,
   );
-  const [loading, setLoading] = useState(Boolean(slug) && !blog);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [contentLoading, setContentLoading] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -14,6 +15,7 @@ export function useBlogBySlug(slug: string | undefined) {
     if (!slug) {
       setBlog(null);
       setLoading(false);
+      setContentLoading(false);
       setError(null);
       return () => {
         isMounted = false;
@@ -21,19 +23,24 @@ export function useBlogBySlug(slug: string | undefined) {
     }
 
     const cachedBlog = getBlogBySlug(slug);
-    if (cachedBlog) {
+    if (cachedBlog && !isSummaryFallback(cachedBlog)) {
       setBlog(cachedBlog);
       setError(null);
-
-      if (cachedBlog.Content && cachedBlog.content) {
-        setLoading(false);
-        return () => {
-          isMounted = false;
-        };
-      }
+      setLoading(false);
+      setContentLoading(false);
+      return () => {
+        isMounted = false;
+      };
     }
 
-    setLoading(!cachedBlog);
+    if (cachedBlog && isSummaryFallback(cachedBlog)) {
+      setBlog(cachedBlog);
+      setContentLoading(true);
+      setError(null);
+    } else {
+      setLoading(true);
+    }
+
     loadBlogBySlug(slug)
       .then((resolvedBlog) => {
         if (!isMounted) {
@@ -55,6 +62,7 @@ export function useBlogBySlug(slug: string | undefined) {
       .finally(() => {
         if (isMounted) {
           setLoading(false);
+          setContentLoading(false);
         }
       });
 
@@ -68,6 +76,7 @@ export function useBlogBySlug(slug: string | undefined) {
       blog: null,
       loading: false,
       error: null,
+      contentLoading: false,
     };
   }
 
@@ -75,5 +84,6 @@ export function useBlogBySlug(slug: string | undefined) {
     blog,
     loading,
     error,
+    contentLoading,
   };
 }

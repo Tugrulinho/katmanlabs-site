@@ -35,11 +35,14 @@ export default function Seo({
       <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow"} />
       <link rel="canonical" href={canonicalUrl} />
 
+      <meta property="og:locale" content="tr_TR" />
       <meta property="og:site_name" content={SITE_NAME} />
       <meta property="og:type" content={type} />
       <meta property="og:url" content={canonicalUrl} />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
+
+      <link rel="alternate" href={canonicalUrl} hrefLang="tr" />
 
       <meta
         name="twitter:card"
