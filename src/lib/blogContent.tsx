@@ -221,3 +221,36 @@ export async function loadBlogBySlug(slug: string) {
   blogCache.set(slug, blog);
   return blog;
 }
+
+export function hydrateBlogCacheFromDom() {
+  if (import.meta.env.SSR) return;
+
+  const scripts = document.querySelectorAll<HTMLScriptElement>(
+    "script[data-blog-content]",
+  );
+
+  scripts.forEach((script) => {
+    const slug = script.getAttribute("data-blog-content");
+    const base64Content = script.textContent;
+    if (!slug || !base64Content) return;
+
+    const summary = blogSummaryBySlug.get(slug);
+    if (!summary || blogCache.has(slug)) return;
+
+    try {
+      const contentHtml = atob(base64Content.trim());
+      const HydratedContent = () => (
+        <div dangerouslySetInnerHTML={{ __html: contentHtml }} />
+      );
+
+      blogCache.set(slug, {
+        ...summary,
+        content: contentHtml,
+        filePath: summary.file_path,
+        Content: HydratedContent,
+      });
+    } catch {
+      // Base64 decode failed, skip silently
+    }
+  });
+}
