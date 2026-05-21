@@ -47,8 +47,12 @@ export function useBlogBySlug(slug: string | undefined) {
           return;
         }
 
-        setBlog(resolvedBlog);
-        setError(resolvedBlog ? null : "Blog bulunamadi.");
+        if (resolvedBlog) {
+          setBlog(resolvedBlog);
+          setError(null);
+        } else {
+          setError("Blog bulunamadi.");
+        }
       })
       .catch((loadError) => {
         if (!isMounted) {
@@ -56,8 +60,7 @@ export function useBlogBySlug(slug: string | undefined) {
         }
 
         console.error(loadError);
-        setBlog(null);
-        setError("Blog yuklenemedi.");
+        setError("Icerik yuklenemedi, sayfayi yenilemeyi deneyin.");
       })
       .finally(() => {
         if (isMounted) {

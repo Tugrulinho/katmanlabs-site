@@ -275,7 +275,7 @@ export default function BlogDetail() {
     );
   }
 
-  if (error || !blog) {
+  if (!blog) {
     return (
       <div className="min-h-screen bg-white">
         <Seo
@@ -290,7 +290,7 @@ export default function BlogDetail() {
             Blog yazısı bulunamadı
           </h1>
           <p className="mb-8 text-gray-600">
-            {error || "Bu blog yazısı mevcut değil."}
+            Bu blog yazısı mevcut değil.
           </p>
           <button
             onClick={() => navigate("/")}
@@ -496,7 +496,17 @@ export default function BlogDetail() {
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_300px]">
           <div className="min-w-0">
             <article className="max-w-none">
-              {contentLoading ? (
+              {error ? (
+                <div className="flex flex-col items-center justify-center rounded-2xl border border-red-200 bg-red-50 py-16">
+                  <p className="mb-4 text-red-600">{error}</p>
+                  <button
+                    onClick={() => window.location.reload()}
+                    className="rounded-lg bg-red-600 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-red-700"
+                  >
+                    Sayfayı Yenile
+                  </button>
+                </div>
+              ) : contentLoading ? (
                 <div className="flex flex-col items-center justify-center py-20">
                   <div className="h-10 w-10 animate-spin rounded-full border-b-2 border-primary" />
                   <p className="mt-4 text-sm text-gray-400">İçerik yükleniyor...</p>
