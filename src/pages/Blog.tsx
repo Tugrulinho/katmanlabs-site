@@ -1,7 +1,8 @@
 import Navbar from "../components/Navbar";
 import BlogSection from "../components/BlogSection";
 import { useBlogs } from "../hooks/useBlogs";
-import { useParams } from "react-router-dom";
+import BlogSidebar from "../components/BlogSidebar";
+import { useNavigate, useParams } from "react-router-dom";
 import Footer from "../components/Footer";
 import { useEffect, useState } from "react";
 import BlogCTA from "../components/BlogCTA";
@@ -16,6 +17,7 @@ export default function Blog() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const postsPerPage = 4;
+  const navigate = useNavigate();
   const slugifyCategory = (value: string) => generateSlug(value);
 
   const categoryHeroMap: Record<
@@ -302,8 +304,8 @@ export default function Blog() {
               </div>
             </section>
 
-            <div className="mx-auto mt-16 max-w-5xl">
-              <div>
+            <div className="mt-16 grid grid-cols-1 gap-10 lg:grid-cols-12">
+              <div className="lg:col-span-8">
                 <BlogSection
                   content={{}}
                   blogs={paginatedBlogs}
@@ -360,6 +362,19 @@ export default function Blog() {
                 <BlogCTA gradient="from-[#17385f] to-[#9062ae]" />
               </div>
 
+              <aside className="self-start lg:col-span-4">
+                <BlogSidebar
+                  blogs={blogs}
+                  currentCategory={activeCategory}
+                  onCategorySelect={(category: string | null) => {
+                    if (category) {
+                      navigate(`/blog/kategori/${slugifyCategory(category)}`);
+                    } else {
+                      navigate("/blog");
+                    }
+                  }}
+                />
+              </aside>
             </div>
           </div>
         </div>

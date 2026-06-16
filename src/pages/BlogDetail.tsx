@@ -9,9 +9,12 @@ import {
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useBlogBySlug } from "../hooks/useBlogBySlug";
+import { useBlogs } from "../hooks/useBlogs";
+import BlogSidebar from "../components/BlogSidebar";
 import Seo from "../components/Seo";
 import SectionIntro from "../components/blog/SectionIntro";
 import { BLOG_MDX_COMPONENTS } from "../lib/blogContent";
+import { generateSlug } from "../lib/blogUtils";
 import { getAbsoluteUrl, SITE_NAME } from "../lib/seo";
 
 const CATEGORY_ALIASES: Record<string, string> = {
@@ -29,6 +32,7 @@ export default function BlogDetail() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const { blog, loading, error } = useBlogBySlug(slug);
+  const { blogs } = useBlogs();
 
   const formatDate = (dateString: string | null) => {
     if (!dateString) {
@@ -125,6 +129,13 @@ export default function BlogDetail() {
   const seoTitle = blog.meta_title || blog.title;
   const seoDescription = blog.meta_description || blog.excerpt || "";
   const seoImage = blog.og_image_url || blog.featured_image_url || "";
+  const relatedBlogs = blogs
+    .filter(
+      (item) =>
+        item.id !== blog.id &&
+        normalizeCategory(item.category) === normalizedCategory,
+    )
+    .slice(0, 3);
 
   const relatedServiceMap: Record<
     string,
@@ -290,7 +301,8 @@ export default function BlogDetail() {
       </div>
 
       <div className="mx-auto max-w-[1440px] px-4 pb-16 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-5xl">
+        <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_300px]">
+          <div className="min-w-0">
             <article className="max-w-none">
               <div className="blog-content leading-relaxed text-gray-700">
                 <Content components={BLOG_MDX_COMPONENTS} />
@@ -343,6 +355,57 @@ export default function BlogDetail() {
                 </section>
               ) : null}
             </div>
+          </div>
+
+          <aside className="min-w-0">
+            <div className="sticky top-24 space-y-6">
+              {relatedBlogs.length > 0 ? (
+                <div className="rounded-2xl bg-gray-50 p-5">
+                  <h3 className="mb-6 text-xl font-bold text-primary-dark">
+                    İlgili Yazılar
+                  </h3>
+                  <div className="space-y-4">
+                    {relatedBlogs.map((relatedBlog) => (
+                      <Link
+                        key={relatedBlog.id}
+                        to={`/blog/${relatedBlog.slug}`}
+                        className="group block"
+                      >
+                        <div className="flex gap-4 rounded-2xl p-3 transition-colors hover:bg-white">
+                          <img
+                            src={relatedBlog.image_url}
+                            alt={relatedBlog.title}
+                            className="h-20 w-20 flex-shrink-0 rounded-xl object-cover"
+                          />
+                          <div className="min-w-0 flex-1">
+                            <h4 className="mb-1 line-clamp-2 text-sm font-semibold text-primary-dark transition-colors group-hover:text-primary">
+                              {relatedBlog.title}
+                            </h4>
+                            <p className="text-xs text-gray-500">
+                              {formatDate(relatedBlog.published_at)}
+                            </p>
+                          </div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+
+              <BlogSidebar
+                blogs={blogs}
+                currentCategory={normalizedCategory}
+                embedded={true}
+                onCategorySelect={(category: string | null) => {
+                  if (category) {
+                    navigate(`/blog/kategori/${generateSlug(category)}`);
+                  } else {
+                    navigate("/blog");
+                  }
+                }}
+              />
+            </div>
+          </aside>
         </div>
       </div>
 
