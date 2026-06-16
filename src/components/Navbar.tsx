@@ -304,12 +304,6 @@ function Navbar() {
             </div>
 
             <button
-              onClick={() => scrollToSection("fiyatlar")}
-              className="nav-link-hover px-3 py-2 text-gray-300 text-sm font-medium"
-            >
-              Fiyatlar
-            </button>
-            <button
               onClick={() => navigate("/iletisim")}
               className="px-6 py-2 bg-gradient-to-r from-accent-light to-accent text-white rounded-lg hover:shadow-lg hover:shadow-accent/50 hover:scale-105 transition-all duration-300 text-sm font-semibold"
             >
@@ -360,12 +354,6 @@ function Navbar() {
                   className="block w-full text-left px-4 py-2 text-white hover:bg-gradient-to-r hover:from-accent-light/20 hover:to-accent/20 rounded-lg transition-all duration-300"
                 >
                   Blog
-                </button>
-                <button
-                  onClick={() => scrollToSection("fiyatlar")}
-                  className="block w-full text-left px-4 py-2 text-white hover:bg-gradient-to-r hover:from-accent-light/20 hover:to-accent/20 rounded-lg transition-all duration-300"
-                >
-                  Fiyatlar
                 </button>
                 <button
                   onClick={() => scrollToSection("contact-form")}

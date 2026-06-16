@@ -1,29 +1,18 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   ArrowLeft,
   Calendar,
   Clock,
-  ExternalLink,
-  Layers3,
   Tag,
 } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useBlogBySlug } from "../hooks/useBlogBySlug";
-import { useBlogs } from "../hooks/useBlogs";
-import BlogSidebar from "../components/BlogSidebar";
 import Seo from "../components/Seo";
 import SectionIntro from "../components/blog/SectionIntro";
 import { BLOG_MDX_COMPONENTS } from "../lib/blogContent";
-import { generateSlug } from "../lib/blogUtils";
 import { getAbsoluteUrl, SITE_NAME } from "../lib/seo";
-
-type HeadingItem = {
-  level: 2 | 3;
-  text: string;
-  id: string;
-};
 
 const CATEGORY_ALIASES: Record<string, string> = {
   "Web TasarÄ±m": "Web Tasarım",
@@ -36,22 +25,10 @@ function normalizeCategory(category: string) {
   return CATEGORY_ALIASES[category] || category;
 }
 
-function normalizeHeadingText(text: string) {
-  return text
-    .replace(/<[^>]+>/g, " ")
-    .replace(/&nbsp;/g, " ")
-    .replace(/&amp;/g, "&")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
 export default function BlogDetail() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const { blog, loading, error } = useBlogBySlug(slug);
-  const { blogs } = useBlogs();
-  const [activeHeadingId, setActiveHeadingId] = useState<string | null>(null);
-  const [navigationHeadings, setNavigationHeadings] = useState<HeadingItem[]>([]);
 
   const formatDate = (dateString: string | null) => {
     if (!dateString) {
@@ -65,86 +42,6 @@ export default function BlogDetail() {
     });
   };
 
-  useEffect(() => {
-    if (!blog) {
-      return;
-    }
-
-    const headingElements = Array.from(
-      document.querySelectorAll<HTMLElement>(".blog-content h2, .blog-content h3"),
-    );
-
-    const collectedHeadings: HeadingItem[] = [];
-
-    headingElements.forEach((element) => {
-      const text = normalizeHeadingText(element.textContent || "");
-      if (!text) {
-        return;
-      }
-
-      const id = generateSlug(text);
-      const level = Number(element.tagName.replace("H", "")) as 2 | 3;
-
-      element.id = id;
-      collectedHeadings.push({
-        level,
-        text,
-        id,
-      });
-    });
-
-    setNavigationHeadings(
-      collectedHeadings
-        .filter(
-          (heading, index, list) =>
-            heading.level === 2 &&
-            list.findIndex((item) => item.id === heading.id) === index,
-        )
-        .slice(0, 6),
-    );
-  }, [blog]);
-
-  useEffect(() => {
-    if (!blog) {
-      return;
-    }
-
-    const headingElements = Array.from(
-      document.querySelectorAll<HTMLElement>(".blog-content h2"),
-    );
-
-    if (!headingElements.length) {
-      setActiveHeadingId(null);
-      return;
-    }
-
-    setActiveHeadingId(headingElements[0]?.id || null);
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visibleEntries = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort(
-            (leftEntry, rightEntry) =>
-              leftEntry.boundingClientRect.top - rightEntry.boundingClientRect.top,
-          );
-
-        const currentEntry = visibleEntries[0];
-        if (currentEntry?.target instanceof HTMLElement) {
-          setActiveHeadingId(currentEntry.target.id);
-        }
-      },
-      {
-        rootMargin: "-18% 0px -62% 0px",
-        threshold: 0.12,
-      },
-    );
-
-    headingElements.forEach((element) => observer.observe(element));
-
-    return () => observer.disconnect();
-  }, [blog]);
-
   const normalizedCategory = normalizeCategory(blog?.category || "Genel");
 
   const colors = useMemo(() => {
@@ -154,54 +51,32 @@ export default function BlogDetail() {
         gradient: string;
         border: string;
         tag: string;
-        text: string;
-        navActive: string;
-        navHover: string;
       }
     > = {
       "Web Tasarım": {
         gradient: "from-primary via-primary-dark to-zinc-900",
         border: "border-primary",
         tag: "bg-primary/20 text-primary border-primary/30",
-        text: "text-primary",
-        navActive: "border-primary bg-primary text-white shadow-lg shadow-primary/20",
-        navHover: "hover:border-primary/30 hover:bg-primary/5",
       },
       "Dijital Pazarlama": {
         gradient: "from-secondary via-purple-800 to-zinc-900",
         border: "border-secondary",
         tag: "bg-secondary/20 text-secondary border-secondary/30",
-        text: "text-secondary",
-        navActive:
-          "border-secondary bg-secondary text-white shadow-lg shadow-secondary/20",
-        navHover: "hover:border-secondary/30 hover:bg-secondary/5",
       },
       SEO: {
         gradient: "from-accent via-purple-700 to-zinc-900",
         border: "border-accent",
         tag: "bg-accent/20 text-accent border-accent/30",
-        text: "text-accent",
-        navActive:
-          "border-emerald-500 bg-emerald-500 text-white shadow-lg shadow-emerald-500/20",
-        navHover: "hover:border-emerald-200 hover:bg-emerald-50",
       },
       "Sosyal Medya Yönetimi": {
         gradient: "from-pink-500 via-purple-700 to-zinc-900",
         border: "border-pink-400",
         tag: "bg-pink-500/20 text-pink-200 border-pink-400/30",
-        text: "text-pink-400",
-        navActive:
-          "border-pink-500 bg-pink-500 text-white shadow-lg shadow-pink-500/20",
-        navHover: "hover:border-pink-200 hover:bg-pink-50",
       },
       Genel: {
         gradient: "from-gray-700 via-gray-800 to-zinc-900",
         border: "border-gray-600",
         tag: "bg-gray-500/20 text-gray-300 border-gray-500/30",
-        text: "text-gray-600",
-        navActive:
-          "border-slate-900 bg-slate-900 text-white shadow-lg shadow-slate-900/10",
-        navHover: "hover:border-slate-300 hover:bg-slate-50",
       },
     };
 
@@ -250,13 +125,6 @@ export default function BlogDetail() {
   const seoTitle = blog.meta_title || blog.title;
   const seoDescription = blog.meta_description || blog.excerpt || "";
   const seoImage = blog.og_image_url || blog.featured_image_url || "";
-  const relatedBlogs = blogs
-    .filter(
-      (item) =>
-        item.id !== blog.id &&
-        normalizeCategory(item.category) === normalizedCategory,
-    )
-    .slice(0, 3);
 
   const relatedServiceMap: Record<
     string,
@@ -388,10 +256,6 @@ export default function BlogDetail() {
                 <Clock className="h-4 w-4" />
                 <span>{blog.readingMinutes} dk okuma süresi</span>
               </div>
-              <div className="flex items-center gap-2">
-                <Layers3 className="h-4 w-4" />
-                <span>{navigationHeadings.length || 1} ana bölüm</span>
-              </div>
             </div>
           </div>
         </div>
@@ -419,16 +283,14 @@ export default function BlogDetail() {
         >
           <p className="max-w-4xl text-base leading-8 text-slate-600">
             Bu sayfada içeriği gereksiz kutularla bölmek yerine, ana akışı daha
-            rahat taranabilir hale getiriyoruz. Aşağıdaki önemli başlıklar ve
-            sağdaki kısa geçiş alanı sayesinde istersen tüm yazıyı okuyabilir,
-            istersen doğrudan ihtiyacın olan bölüme geçebilirsin.
+            rahat taranabilir halde tutuyoruz. İçerik tek kolon içinde
+            kesintisiz okunabilir.
           </p>
         </SectionIntro>
       </div>
 
       <div className="mx-auto max-w-[1440px] px-4 pb-16 sm:px-6 lg:px-8">
-        <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_300px]">
-          <div className="min-w-0">
+        <div className="mx-auto max-w-5xl">
             <article className="max-w-none">
               <div className="blog-content leading-relaxed text-gray-700">
                 <Content components={BLOG_MDX_COMPONENTS} />
@@ -481,86 +343,6 @@ export default function BlogDetail() {
                 </section>
               ) : null}
             </div>
-          </div>
-
-          <div className="min-w-0">
-            <div className="sticky top-24 space-y-6">
-              {navigationHeadings.length > 0 ? (
-                <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_18px_50px_-32px_rgba(15,23,42,0.35)]">
-                  <div className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
-                    Bölüm geçişi
-                  </div>
-                  <div className="mt-5 space-y-3">
-                    {navigationHeadings.map((heading) => (
-                      <a
-                        key={heading.id}
-                        href={`#${heading.id}`}
-                        className={`block rounded-2xl border px-4 py-3 transition-all ${
-                          activeHeadingId === heading.id
-                            ? colors.navActive
-                            : `border-slate-200 bg-white text-slate-700 ${colors.navHover}`
-                        }`}
-                      >
-                        <div className="text-sm font-semibold">{heading.text}</div>
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              ) : null}
-
-              {relatedBlogs.length > 0 ? (
-                <div className="rounded-[28px] bg-gray-50 p-6">
-                  <h3 className={`mb-6 text-xl font-bold ${colors.text}`}>
-                    İlgili Yazılar
-                  </h3>
-                  <div className="space-y-4">
-                    {relatedBlogs.map((relatedBlog) => (
-                      <Link
-                        key={relatedBlog.id}
-                        to={`/blog/${relatedBlog.slug}`}
-                        className="group block"
-                      >
-                        <div className="flex gap-4 rounded-2xl p-3 transition-colors hover:bg-white">
-                          <img
-                            src={relatedBlog.image_url}
-                            alt={relatedBlog.title}
-                            className="h-20 w-20 flex-shrink-0 rounded-xl object-cover"
-                          />
-                          <div className="min-w-0 flex-1">
-                            <h4 className="mb-1 line-clamp-2 text-sm font-semibold text-primary-dark transition-colors group-hover:text-primary">
-                              {relatedBlog.title}
-                            </h4>
-                            <p className="text-xs text-gray-500">
-                              {formatDate(relatedBlog.published_at)}
-                            </p>
-                          </div>
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              ) : null}
-
-              <div className="rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_18px_50px_-32px_rgba(15,23,42,0.35)]">
-                <div className="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
-                  <ExternalLink className="h-4 w-4" />
-                  Kategori geçişi
-                </div>
-                <BlogSidebar
-                  blogs={blogs}
-                  currentCategory={normalizedCategory}
-                  embedded={true}
-                  onCategorySelect={(category: string | null) => {
-                    if (category) {
-                      navigate(`/blog/kategori/${generateSlug(category)}`);
-                    } else {
-                      navigate("/blog");
-                    }
-                  }}
-                />
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 

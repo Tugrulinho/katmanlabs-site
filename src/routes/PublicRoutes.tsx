@@ -21,7 +21,6 @@ import FaqSection from "../components/FaqSection";
 import Footer from "../components/Footer";
 import HeroSection from "../components/HeroSection";
 import Navbar from "../components/Navbar";
-import PricingSection from "../components/PricingSection";
 import ProcessSection from "../components/ProcessSection";
 import Seo from "../components/Seo";
 import ServicesSection from "../components/ServicesSection";
@@ -39,7 +38,6 @@ import { getAbsoluteUrl, SITE_NAME } from "../lib/seo";
 import {
   getActiveClients,
   getHomepageContent,
-  getPricingCards,
   getPublishedBlogIndex,
   getServiceCards,
 } from "../lib/publicSite";
@@ -60,7 +58,6 @@ function HomePage() {
   const blogs = getPublishedBlogIndex();
   const content = getHomepageContent();
   const dbServices = getServiceCards();
-  const dbPackages = getPricingCards();
   const [isMobile, setIsMobile] = useState(false);
   const [clients, setClients] = useState<ClientRecord[]>(getActiveClients());
 
@@ -214,7 +211,7 @@ function HomePage() {
     {
       question: "Fiyatlandirma nasil calisiyor?",
       answer:
-        "Her projenin ihtiyaclari farklidir. Baslangic paketi 5.000 EUR'dan baslar. Detayli fiyatlandirma icin paketlerimizi inceleyebilir veya ozel teklif alabilirsiniz.",
+        "Her projenin ihtiyaclari farklidir. Detayli fiyatlandirma icin proje kapsamimizi birlikte netlestirip size ozel teklif hazirliyoruz.",
       icon: HelpCircle,
       gradient: "from-teal-500/20 to-cyan-500/20",
       iconColor: "text-teal-500",
@@ -298,12 +295,6 @@ function HomePage() {
         loading={false}
         isMobile={isMobile}
         getBlogBadgeColor={getBlogBadgeColor}
-      />
-      <PricingSection
-        content={content}
-        packages={dbPackages}
-        packagesLoading={false}
-        scrollToSection={scrollToSection}
       />
       <TestimonialsSection content={content} clients={sortedClients} />
       <FaqSection content={content} faqs={faqs} />

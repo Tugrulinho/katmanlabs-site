@@ -69,14 +69,6 @@ function Footer() {
                 </a>
               </li>
               <li>
-                <a
-                  href="/#fiyatlar"
-                  className="text-gray-300 hover:text-accent transition-colors"
-                >
-                  Fiyatlar
-                </a>
-              </li>
-              <li>
                 <Link
                   to="/iletisim"
                   className="text-gray-300 hover:text-accent transition-colors"
